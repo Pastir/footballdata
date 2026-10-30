@@ -1095,7 +1095,9 @@
     mcVenue.textContent = match.VenueName || 'Стадион';
     mcReferee.textContent = match.RefereeName ? `Судья: ${match.RefereeName}` : (match.StateShort === 'FT' ? 'Матч завершён' : 'Матч ожидает начала');
 
-    const isPreMatch = match.StateShort !== 'FT';
+    const isLive = ['1st', '2nd', 'HT', 'ET', 'PEN', 'LIVE'].includes(match.StateShort);
+    const isFinished = ['FT', 'AET', 'FTP'].includes(match.StateShort);
+    const isPreMatch = !isLive && !isFinished;
     currentTab = isPreMatch ? 'fixtures' : 'results';
 
     // Синхронизируем состояние верхних табов навигации
@@ -1111,10 +1113,6 @@
     }
 
     const overviewBtn = document.querySelector('[data-subtab="overview"]');
-
-    const isLive = ['1st', '2nd', 'HT', 'ET', 'PEN', 'LIVE'].includes(match.StateShort);
-    const isFinished = ['FT', 'AET', 'FTP'].includes(match.StateShort);
-    const isPreMatch = !isLive && !isFinished;
 
     if (isPreMatch) {
       mcScore.textContent = formatMatchTime(match.FixtureStart);
