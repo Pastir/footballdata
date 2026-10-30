@@ -9,7 +9,6 @@ import (
 	"github.com/Pastir/footballdata/api/statistics"
 	"github.com/Pastir/footballdata/config"
 	"github.com/Pastir/footballdata/db"
-	"github.com/Pastir/footballdata/db/ch"
 	"github.com/Pastir/footballdata/logs"
 	"go.uber.org/zap"
 )
@@ -20,7 +19,6 @@ func main() {
 	mServer.AddService(&logs.Logs)
 	mServer.AddService(&db.DBx)
 	mServer.AddService(&db.Prov)
-	mServer.AddService(&ch.CHgo)
 
 	err := mServer.InitServices()
 	if err != nil {
