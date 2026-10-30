@@ -1,0 +1,45 @@
+# === Скомпилированные бинарники (ведущий слэш важен, чтобы не игнорировать cmd/lab/) ===
+/lab
+/cmd/lab/lab
+/prematch
+/footballdata
+/bin/
+/pkg/
+*.exe
+*.test
+
+# === Секреты и конфигурации ===
+config.yaml
+*.env
+.env.*
+.pgpass
+
+# === Логи и временные директории ===
+*.log
+scratch/
+tmp/
+temp/
+
+# === IDE & OS ===
+.idea/
+*.iml
+.vscode/
+.DS_Store
+*.swp
+*~
+
+# === Отладочные файлы рендера и тестов ===
+rendered_debug.html
+*.debug.html
+coverage.out
+coverage.html
+
+# === Временная графика (не затрагивая ассеты шаблонов и веб-интерфейса) ===
+/*.png
+template/*_preview.png
+template/standings.png
+template/round_fixtures.png
+!template/headers/*.png
+!web/viewer/*.png
+!web/viewer/*.jpg
+
