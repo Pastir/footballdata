@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{.EntityName}} — {{.HeroLabel}}</title>
+  <style>
+    :root {
+      --bg-dark: #070a11;
+      --bg-card: rgba(16, 24, 40, 0.75);
+      --bg-card-hover: rgba(24, 34, 56, 0.85);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(56, 189, 248, 0.3);
+      --border-gold: rgba(251, 191, 36, 0.4);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent-cyan: #38bdf8;
+      --accent-gold: #fbbf24;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+      --glow-gold: 0 0 35px rgba(251, 191, 36, 0.25);
+      --glow-cyan: 0 0 35px rgba(56, 189, 248, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background: #020408;
+      color: var(--text-main);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 1200px;
+    }
+
+    /* ── CANVAS: 1200×1200 SQUARE HD ── */
+    .canvas {
+      width: 1200px;
+      height: 1200px;
+      background: radial-gradient(circle at 80% 20%, #15243e 0%, #0a1120 50%, #05080f 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 56px 64px;
+    }
+
+    /* Декоративная фоновая сетка футбольного поля */
+    .canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.03) 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 100% 100%, 80px 80px, 80px 80px;
+      pointer-events: none;
+    }
+
+    /* Фоновое легкое свечение в углу */
+    .glow-sphere {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow-1 {
+      top: -150px;
+      right: -100px;
+      background: rgba(56, 189, 248, 0.12);
+    }
+    .glow-2 {
+      bottom: -150px;
+      left: -100px;
+      background: rgba(251, 191, 36, 0.08);
+    }
+
+    /* Содержимое поверх фонов */
+    .content-layer {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* ── 1. ВЕРХНИЙ ХЕДЕР ── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .badge-category {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-card);
+      border-radius: 9999px;
+      padding: 10px 22px;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: var(--accent-cyan);
+      backdrop-filter: blur(8px);
+    }
+
+    .badge-record {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(217, 119, 6, 0.25) 100%);
+      border: 1px solid var(--border-gold);
+      box-shadow: var(--glow-gold);
+      border-radius: 9999px;
+      padding: 10px 24px;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #fef08a;
+      backdrop-filter: blur(8px);
+    }
+
+    /* ── 2. ГЕРОЙ КАРТОЧКИ: КЛУБ & СЧЕТЧИК ── */
+    .hero-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 28px;
+      padding: 40px 48px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .hero-entity {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      max-width: 620px;
+    }
+
+    .entity-logo-wrap {
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .entity-logo {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
+    }
+
+    .entity-info {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .entity-name {
+      font-size: 42px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.15;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+    }
+
+    .coach-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 9999px;
+      padding: 6px 16px 6px 8px;
+      width: fit-content;
+      margin-top: 4px;
+    }
+
+    .coach-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #1e293b;
+    }
+
+    .coach-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .hero-counter {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    }
+
+    .counter-top {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+    }
+
+    .counter-icon {
+      font-size: 46px;
+      line-height: 1;
+    }
+
+    .counter-number {
+      font-size: 112px;
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -3px;
+      background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));
+    }
+
+    .counter-label {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      margin-top: 10px;
+    }
+
+    .counter-sub {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* ── 3. ЦЕПОЧКА МАТЧЕЙ СЕРИИ ── */
+    .history-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 4px;
+    }
+
+    .section-title span {
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .matches-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+    }
+
+    .match-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    }
+
+    .match-date-badge {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+    }
+
+    .match-opponent-logo-wrap {
+      width: 52px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 12px;
+      padding: 6px;
+    }
+
+    .match-opponent-logo {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .match-score {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 1px;
+    }
+
+    .match-res-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .res-win {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+    }
+    .res-draw {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+    }
+    .res-loss {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    }
+
+    .match-venue {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    /* ── 4. СТАТИСТИЧЕСКИЕ МЕТРИКИ (НИЖНИЙ БЛОК) ── */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    .metric-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 24px 22px;
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .metric-value {
+      font-size: 38px;
+      font-weight: 900;
+      color: #ffffff;
+      line-height: 1.1;
+      letter-spacing: -0.5px;
+    }
+
+    .metric-sub {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    /* ── 5. ФУТЕР БРЕНДИНГА ── */
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 24px;
+      margin-top: 8px;
+    }
+
+    .footer-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-logo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-cyan);
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .footer-brand {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+
+    .footer-right {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="glow-sphere glow-1"></div>
+    <div class="glow-sphere glow-2"></div>
+
+    <div class="content-layer">
+      <!-- 1. Хедер: Категория и Рекордные бейджи -->
+      <div class="header">
+        <div class="badge-category">
+          <span>{{.StreakTypeIcon}}</span>
+          <span>{{.CategoryBadge}}</span>
+        </div>
+        {{if .RecordBadge}}
+        <div class="badge-record">
+          <span>{{.RecordBadge}}</span>
+        </div>
+        {{end}}
+      </div>
+
+      <!-- 2. Герой-секция: Команда, Тренер и Главный счетчик -->
+      <div class="hero-section">
+        <div class="hero-entity">
+          <div class="entity-logo-wrap">
+            <img class="entity-logo" src="{{.EntityLogo}}" alt="{{.EntityName}}" />
+          </div>
+          <div class="entity-info">
+            <div class="entity-name">{{.EntityName}}</div>
+            {{if .HasCoach}}
+            <div class="coach-pill">
+              {{if .CoachImage}}
+              <img class="coach-avatar" src="{{.CoachImage}}" alt="{{.CoachName}}" />
+              {{end}}
+              <span class="coach-name">Гл. тренер: {{.CoachName}}</span>
+            </div>
+            {{end}}
+          </div>
+        </div>
+
+        <div class="hero-counter">
+          <div class="counter-top">
+            <span class="counter-icon">{{.StreakTypeIcon}}</span>
+            <span class="counter-number">{{.HeroNumber}}</span>
+          </div>
+          <div class="counter-label">{{.HeroLabel}}</div>
+          <div class="counter-sub">{{.HeroSubLabel}}</div>
+        </div>
+      </div>
+
+      <!-- 3. Цепочка последних матчей серии -->
+      <div class="history-section">
+        <div class="section-title">
+          <span>Матчи в серии</span>
+          <span>Результат</span>
+        </div>
+        <div class="matches-grid">
+          {{range .Matches}}
+          <div class="match-pill">
+            <div class="match-date-badge">{{.DateStr}}</div>
+            <div class="match-opponent-logo-wrap">
+              <img class="match-opponent-logo" src="{{.OpponentLogo}}" alt="{{.OpponentName}}" />
+            </div>
+            <div class="match-score">{{.Score}}</div>
+            <div class="match-res-badge {{.ResultClass}}">{{.Result}}</div>
+            <div class="match-venue">{{.VenueText}}</div>
+          </div>
+          {{end}}
+        </div>
+      </div>
+
+      <!-- 4. Статистика серии -->
+      <div class="metrics-grid">
+        {{range .Metrics}}
+        <div class="metric-card">
+          <div class="metric-label">{{.Label}}</div>
+          <div class="metric-value">{{.Value}}</div>
+          <div class="metric-sub">{{.SubText}}</div>
+        </div>
+        {{end}}
+      </div>
+
+      <!-- 5. Футер с брендингом -->
+      <div class="footer">
+        <div class="footer-left">
+          <div class="footer-logo-dot"></div>
+          <div class="footer-brand">{{.Watermark}}</div>
+        </div>
+        <div class="footer-right">
+          Факты и серии · Статистический движок
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{.LeagueName}} — Лидеры сезона</title>
+  <style>
+    :root {
+      --bg: #070e17;
+      --card-bg: rgba(14, 26, 43, 0.75);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(26, 44, 70, 0.85);
+      --text: #f3f6fa;
+      --muted: #8b9fb5;
+      --gold: #ffbe2e;
+      --silver: #cbd5e1;
+      --bronze: #e28743;
+      --accent: #38bdf8;
+      --green: #22c55e;
+      --purple: #a855f7;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #02060b;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+    }
+
+    .canvas {
+      width: 1920px;
+      min-height: 1080px;
+      background: radial-gradient(circle at 50% 0%, #10243d 0%, var(--bg) 60%);
+      padding: 56px 64px 64px 64px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      overflow: hidden;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .header-main {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .title {
+      font-size: 48px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(180deg, #ffffff 30%, #c4d4e6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 20px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .header-meta {
+      text-align: right;
+    }
+
+    .meta-brand {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+
+    .meta-brand span {
+      color: var(--accent);
+    }
+
+    .meta-date {
+      font-size: 15px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* MAIN GRID: 3 COLUMNS */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      flex: 1;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .col-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 4px;
+    }
+
+    .col-icon {
+      font-size: 28px;
+    }
+
+    .col-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.2px;
+    }
+
+    .col-metric {
+      margin-left: auto;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
+
+    /* CARDS */
+    .cards-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 16px;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
+    }
+
+    /* HERO CARD (#1 PLAYER) */
+    .hero-card {
+      position: relative;
+      background: linear-gradient(135deg, rgba(30, 58, 95, 0.6) 0%, rgba(14, 26, 43, 0.8) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 190, 46, 0.25) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-rank {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%);
+      color: #0b1320;
+      font-size: 18px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+      flex-shrink: 0;
+    }
+
+    .hero-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #152238;
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      flex-shrink: 0;
+    }
+
+    .hero-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .hero-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hero-team {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .team-crest-sm {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+
+    .hero-score {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    .hero-val {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      text-shadow: 0 0 16px rgba(255, 190, 46, 0.4);
+    }
+
+    .hero-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    /* REGULAR ROW (RANK 2-5) */
+    .row-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(10, 18, 30, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .row-rank {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .row-rank.rank-2 {
+      background: rgba(203, 213, 225, 0.15);
+      color: var(--silver);
+      border: 1px solid rgba(203, 213, 225, 0.3);
+    }
+
+    .row-rank.rank-3 {
+      background: rgba(226, 135, 67, 0.15);
+      color: var(--bronze);
+      border: 1px solid rgba(226, 135, 67, 0.3);
+    }
+
+    .row-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #111b2b;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      flex-shrink: 0;
+    }
+
+    .row-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .row-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .row-team {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .row-score {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+
+    .row-val {
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+    }
+
+    .row-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* FOOTER BANNER */
+    .footer-bar {
+      margin-top: auto;
+      padding: 18px 28px;
+      border-radius: 18px;
+      background: rgba(14, 26, 43, 0.5);
+      border: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    .footer-highlight {
+      color: #ffffff;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-main">
+        <div class="badge-pill">Рейтинг игроков • Сезон {{.SeasonName}}</div>
+        <h1 class="title">{{.LeagueName}} — Лидеры статистики</h1>
+        <p class="subtitle">Индивидуальные показатели футболистов на основе официальных данных Sportmonks</p>
+      </div>
+      <div class="header-meta">
+        <div class="meta-brand">FOOTBALL <span>DATA LAB</span></div>
+        <div class="meta-date">Обновлено: {{.UpdatedAtStr}}</div>
+      </div>
+    </header>
+
+    <!-- 3-COLUMN LEADERBOARDS -->
+    <main class="grid">
+      {{range .Categories}}
+      <section class="column">
+        <div class="col-header">
+          <span class="col-icon">{{.Icon}}</span>
+          <h2 class="col-title">{{.Title}}</h2>
+          <span class="col-metric">{{.Metric}}</span>
+        </div>
+
+        <div class="cards-container">
+          <!-- TOP 1 HERO -->
+          {{with .TopItem}}
+          <article class="hero-card">
+            <div class="hero-rank">1</div>
+            {{if .PlayerImage}}
+            <img class="hero-avatar" src="{{.PlayerImage}}" alt="{{.PlayerName}}" />
+            {{else}}
+            <div class="hero-avatar" style="display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--muted)">#</div>
+            {{end}}
+            <div class="hero-info">
+              <div class="hero-name">{{.PlayerName}}</div>
+              <div class="hero-team">
+                {{if .TeamLogo}}
+                <img class="team-crest-sm" src="{{.TeamLogo}}" alt="{{.TeamName}}" />
+                {{end}}
+                <span>{{.TeamName}}</span>
+              </div>
+            </div>
+            <div class="hero-score">
+              <div class="hero-val">{{.ValStr}}</div>
+              <div class="hero-sub">{{.SubValStr}}</div>
+            </div>
+          </article>
+          {{end}}
+
+          <!-- RUNNERS UP (2-5) -->
+          {{range $idx, $item := .Items}}
+          {{if gt $idx 0}}
+          {{if le $idx 4}}
+          <article class="row-card">
+            <div class="row-rank rank-{{.Rank}}">{{.Rank}}</div>
+            {{if .PlayerImage}}
+            <img class="row-avatar" src="{{.PlayerImage}}" alt="{{.PlayerName}}" />
+            {{else}}
+            <div class="row-avatar" style="display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--muted);font-size:12px">#</div>
+            {{end}}
+            <div class="row-info">
+              <div class="row-name">{{.PlayerName}}</div>
+              <div class="row-team">
+                {{if .TeamLogo}}
+                <img class="team-crest-sm" src="{{.TeamLogo}}" alt="{{.TeamName}}" />
+                {{end}}
+                <span>{{.TeamName}}</span>
+              </div>
+            </div>
+            <div class="row-score">
+              <div class="row-val">{{.ValStr}}</div>
+              <div class="row-sub">{{.SubValStr}}</div>
+            </div>
+          </article>
+          {{end}}
+          {{end}}
+          {{end}}
+        </div>
+      </section>
+      {{end}}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer-bar">
+      <div>📊 <span class="footer-highlight">Football Data Lab</span> — Интерактивная платформа футбольной аналитики</div>
+      <div>📱 Откройте <span class="footer-highlight">Telegram Mini App</span> для просмотра всех 10 позиций каждого рейтинга</div>
+    </footer>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{.LeagueName}} — Топ-5 лидеров и Зона вылета</title>
+  <style>
+    :root {
+      --bg: #03070d;
+      --card-bg: rgba(13, 25, 43, 0.82);
+      --card-border: rgba(255, 255, 255, 0.12);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --dim: #64748b;
+      --cyan: #38bdf8;
+      --gold-1: #ffd700;
+      --gold-2: #b8860b;
+      --silver-1: #f1f5f9;
+      --silver-2: #94a3b8;
+      --bronze-1: #f59e0b;
+      --bronze-2: #b45309;
+      --ucl: #0284c7;
+      --uel: #d97706;
+      --green: #16a34a;
+      --red: #dc2626;
+      --rel-bg: rgba(136, 19, 55, 0.35);
+      --rel-border: rgba(244, 63, 94, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #010408;
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ── CANVAS: 1920×1080 WIDESCREEN 16:9 ── */
+    .canvas {
+      width: 1920px;
+      height: 1080px;
+      background: radial-gradient(circle at 50% -15%, #152945 0%, #060c16 65%, #020509 100%);
+      padding: 34px 64px 24px 64px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Subtle mesh ambient background glow */
+    .canvas::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(56, 189, 248, 0.04) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 40%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(90deg, rgba(20, 36, 60, 0.9) 0%, rgba(10, 20, 35, 0.95) 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.12);
+      border-radius: 18px;
+      padding: 14px 32px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 2;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-logo {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+    }
+
+    .header-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .header-title {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-subtitle {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-pill {
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 6px 18px;
+      font-size: 18px;
+      font-weight: 800;
+      color: #e2e8f0;
+      letter-spacing: 1px;
+    }
+
+    /* ── LEADERBOARD: 5 HORIZONTAL BARS ── */
+    .leaderboard {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin: 8px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .team-card {
+      height: 86px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px 0 18px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle rim glow by position */
+    .team-card.pos-1 { border-color: rgba(255, 215, 0, 0.5); box-shadow: 0 6px 24px rgba(255, 215, 0, 0.15); }
+    .team-card.pos-2 { border-color: rgba(241, 245, 249, 0.35); }
+    .team-card.pos-3 { border-color: rgba(245, 158, 11, 0.35); }
+    .team-card.pos-4 { border-color: rgba(56, 189, 248, 0.35); }
+    .team-card.pos-5 { border-color: rgba(251, 146, 60, 0.35); }
+
+    .team-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex: 1;
+    }
+
+    /* Position badge */
+    .pos-badge {
+      width: 52px;
+      height: 52px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 900;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      flex-shrink: 0;
+    }
+
+    .pos-gold   { background: linear-gradient(135deg, #ffe066 0%, #d4a017 100%); color: #1a1202; }
+    .pos-silver { background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%); color: #0f172a; }
+    .pos-bronze { background: linear-gradient(135deg, #fbbf24 0%, #b45309 100%); color: #fff; }
+    .pos-ucl    { background: linear-gradient(135deg, #38bdf8 0%, #0369a1 100%); color: #fff; }
+    .pos-uel    { background: linear-gradient(135deg, #fb923c 0%, #c2410c 100%); color: #fff; }
+
+    .team-crest {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.6));
+      flex-shrink: 0;
+    }
+
+    .team-name {
+      font-size: 30px;
+      font-weight: 800;
+      color: #ffffff;
+      white-space: nowrap;
+      letter-spacing: -0.5px;
+    }
+
+    .team-center-stats {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      margin: 0 36px;
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--dim);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #e2e8f0;
+    }
+
+    .stat-value.gd {
+      color: var(--cyan);
+    }
+
+    .team-right {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    /* Big Points Highlight */
+    .pts-badge {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 5px 18px;
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.2);
+    }
+
+    .pts-num {
+      font-size: 34px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .pts-label {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--cyan);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Form Pills */
+    .form-list {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .form-pill {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .form-w {
+      background: var(--green);
+      box-shadow: 0 0 8px rgba(22, 163, 74, 0.55);
+    }
+
+    .form-d {
+      background: #475569;
+    }
+
+    .form-l {
+      background: var(--red);
+      box-shadow: 0 0 8px rgba(220, 38, 38, 0.55);
+    }
+
+    /* ── RELEGATION ZONE TABLE BOX ── */
+    .relegation-box {
+      background: linear-gradient(180deg, rgba(136, 19, 55, 0.35) 0%, rgba(28, 8, 14, 0.85) 100%);
+      border: 1.5px solid rgba(244, 63, 94, 0.4);
+      border-radius: 18px;
+      padding: 10px 24px 12px 24px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(225, 29, 72, 0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .relegation-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fda4af;
+      padding-bottom: 2px;
+    }
+
+    .relegation-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .rel-row {
+      height: 52px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px 0 16px;
+    }
+
+    .rel-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex: 1;
+    }
+
+    .rel-pos-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, #e11d48 0%, #881337 100%);
+      color: #ffffff;
+      font-size: 19px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(225, 29, 72, 0.4);
+      flex-shrink: 0;
+    }
+
+    .rel-logo {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+      filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+      flex-shrink: 0;
+    }
+
+    .rel-name {
+      font-size: 24px;
+      font-weight: 800;
+      color: #f8fafc;
+      letter-spacing: -0.3px;
+    }
+
+    .rel-center-stats {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+      margin: 0 36px;
+    }
+
+    .rel-stat-item {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .rel-stat-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .rel-stat-val {
+      font-size: 20px;
+      font-weight: 800;
+      color: #e2e8f0;
+    }
+
+    .rel-stat-val.gd-neg {
+      color: #f87171;
+    }
+
+    .rel-right {
+      display: flex;
+      align-items: center;
+    }
+
+    .rel-pts-badge {
+      background: rgba(225, 29, 72, 0.25);
+      border: 1.5px solid rgba(244, 63, 94, 0.4);
+      border-radius: 10px;
+      padding: 3px 14px;
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+    }
+
+    .rel-pts-num {
+      font-size: 24px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .rel-pts-lbl {
+      font-size: 13px;
+      font-weight: 800;
+      color: #fca5a5;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── FOOTER WATERMARK ── */
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      color: var(--dim);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      padding: 0 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .footer-brand {
+      color: #94a3b8;
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="header-left">
+        {{if .LeagueLogo}}
+          <img src="{{.LeagueLogo}}" alt="League" class="header-logo" />
+        {{end}}
+        <div class="header-title-wrap">
+          <h1 class="header-title">{{.LeagueName}}</h1>
+          <div class="header-subtitle">
+            {{if .RoundName}}{{.RoundName}} • {{end}}ИТОГИ ТУРА • ТОП-5 ЛИДЕРОВ
+          </div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="header-pill">{{.Season}}</div>
+      </div>
+    </header>
+
+    <!-- LEADERBOARD BARS (TOP 5) -->
+    <main class="leaderboard">
+      {{range .TopTeams}}
+        <div class="team-card pos-{{.Position}}">
+          <div class="team-left">
+            <div class="pos-badge {{posBadgeClass .Position}}">{{.Position}}</div>
+            {{if .Logo}}
+              <img src="{{.Logo}}" alt="{{.Name}}" class="team-crest" />
+            {{end}}
+            <span class="team-name">{{.Name}}</span>
+          </div>
+
+          <div class="team-center-stats">
+            <div class="stat-box">
+              <span class="stat-label">Игры</span>
+              <span class="stat-value">{{.Played}}</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">В · Н · П</span>
+              <span class="stat-value">{{.Won}} - {{.Drawn}} - {{.Lost}}</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-label">Разница</span>
+              <span class="stat-value gd">{{if gt .GD 0}}+{{end}}{{.GD}}</span>
+            </div>
+          </div>
+
+          <div class="team-right">
+            <div class="pts-badge">
+              <span class="pts-num">{{.Points}}</span>
+              <span class="pts-label">ОЧК</span>
+            </div>
+
+            <div class="form-list">
+              {{range .Form}}
+                <div class="form-pill {{formClass .}}">{{.}}</div>
+              {{end}}
+            </div>
+          </div>
+        </div>
+      {{end}}
+    </main>
+
+    <!-- RELEGATION ZONE TABLE BOX -->
+    {{if .RelegationTeams}}
+      <section class="relegation-box">
+        <div class="relegation-header">
+          <span>⚠️ ЗОНА ВЫЛЕТА • RELEGATION ZONE</span>
+        </div>
+        <div class="relegation-rows">
+          {{range .RelegationTeams}}
+            <div class="rel-row">
+              <div class="rel-left">
+                <div class="rel-pos-badge">{{.Position}}</div>
+                {{if .Logo}}
+                  <img src="{{.Logo}}" alt="{{.Name}}" class="rel-logo" />
+                {{end}}
+                <span class="rel-name">{{.Name}}</span>
+              </div>
+
+              <div class="rel-center-stats">
+                <div class="rel-stat-item">
+                  <span class="rel-stat-val">{{.Played}}</span>
+                  <span class="rel-stat-label">ИГР</span>
+                </div>
+                <div class="rel-stat-item">
+                  <span class="rel-stat-val">{{.Won}}В · {{.Drawn}}Н · {{.Lost}}П</span>
+                </div>
+                <div class="rel-stat-item">
+                  <span class="rel-stat-val gd-neg">{{if gt .GD 0}}+{{end}}{{.GD}}</span>
+                  <span class="rel-stat-label">РМ</span>
+                </div>
+              </div>
+
+              <div class="rel-right">
+                <div class="rel-pts-badge">
+                  <span class="rel-pts-num">{{.Points}}</span>
+                  <span class="rel-pts-lbl">ОЧК</span>
+                </div>
+              </div>
+            </div>
+          {{end}}
+        </div>
+      </section>
+    {{end}}
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div>
+        <span class="footer-brand">Football Data Lab</span> • Автоматический аналитический срез
+      </div>
+      <div>
+        {{if .UpdatedAt}}Обновлено: {{.UpdatedAt}} • {{end}}Подробная статистика в <b>Telegram Mini App</b>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

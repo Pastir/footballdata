@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>Football Data Lab — Просмотр инфографики</title>
+
+  <!-- Cache control -->
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css?v=20261018_leagues1">
+</head>
+<body>
+  <div class="app-container" id="app">
+    <!-- Верхняя панель управления и переключения табов -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="badge-wrapper">
+          <span class="live-dot"></span>
+          <span class="header-subtitle" id="headerContext">ИНФОГРАФИКА ТУРА</span>
+        </div>
+
+        <div class="header-selectors-group">
+          <!-- Кнопка выбора лиги в шапке -->
+          <button class="league-selector-trigger" id="leagueSelectorTrigger" aria-label="Выбрать лигу">
+            <span class="league-pill-flag" id="headerLeagueFlag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span>
+            <span class="league-pill-name" id="headerLeagueName">АПЛ</span>
+            <span class="league-pill-arrow">▼</span>
+          </button>
+
+          <!-- Кнопка архивного селектора сезонов и туров -->
+          <button class="archive-selector-trigger" id="archiveSelectorTrigger" aria-label="Архив сезонов и туров" title="Архив сезонов и туров">
+            <span class="archive-pill-icon">🗓</span>
+            <span class="archive-pill-name" id="headerRoundBadge">ТУР</span>
+            <span class="archive-pill-arrow">▼</span>
+          </button>
+        </div>
+
+        <div class="zoom-actions" id="zoomActions">
+          <button class="icon-btn" id="btnZoomOut" title="Уменьшить" aria-label="Уменьшить">−</button>
+          <span class="zoom-level" id="zoomLevelIndicator">100%</span>
+          <button class="icon-btn" id="btnZoomIn" title="Увеличить" aria-label="Увеличить">+</button>
+          <button class="icon-btn" id="btnZoomReset" title="Сбросить масштаб" aria-label="Сбросить масштаб">↺</button>
+        </div>
+      </div>
+
+      <!-- Быстрый выбор топовых лиг (Quick-Pills карусель) -->
+      <div class="quick-leagues-bar" id="quickLeaguesBar">
+        <div class="quick-leagues-scroll" id="quickLeaguesScroll">
+          <!-- Заполняется динамически из active_leagues.json -->
+        </div>
+      </div>
+
+      <!-- Сегментированные вкладки -->
+      <nav class="tabs-nav" role="tablist">
+        <button class="tab-btn active" id="tabTable" data-tab="table" role="tab" aria-selected="true">
+          <span class="tab-icon">📊</span>
+          <span class="tab-text">Таблица</span>
+        </button>
+        <button class="tab-btn" id="tabFixtures" data-tab="fixtures" role="tab" aria-selected="false">
+          <span class="tab-icon">📅</span>
+          <span class="tab-text">Расписание</span>
+        </button>
+        <button class="tab-btn" id="tabResults" data-tab="results" role="tab" aria-selected="false">
+          <span class="tab-icon">⚽</span>
+          <span class="tab-text">Результаты</span>
+        </button>
+        <button class="tab-btn" id="tabLeaders" data-tab="leaders" role="tab" aria-selected="false">
+          <span class="tab-icon">👑</span>
+          <span class="tab-text">Лидеры</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Основная сцена просмотра с жестами масштабирования -->
+    <main class="viewer-viewport" id="viewport">
+      <!-- Спиннер загрузки -->
+      <div class="loader-overlay" id="loader">
+        <div class="spinner"></div>
+        <p class="loader-text">Загрузка инфографики...</p>
+      </div>
+
+      <!-- Сообщение об ошибке загрузки -->
+      <div class="error-overlay hidden" id="errorOverlay">
+        <div class="error-card">
+          <div class="error-icon">⚠️</div>
+          <h3 class="error-title">Изображение пока не сформировано</h3>
+          <p class="error-desc" id="errorMessage">Файл тура еще не сгенерирован или недоступен по указанному пути.</p>
+          <button class="retry-btn" id="btnRetry">Повторить попытку</button>
+        </div>
+      </div>
+
+      <!-- Контейнер для панорамирования и зума (Таблица / Расписание) -->
+      <div class="image-stage" id="stage">
+        <img id="infographicImg" class="infographic-img" src="" alt="Инфографика тура" draggable="false">
+      </div>
+
+      <!-- Интерактивный режим (Результаты тура и Match Center) -->
+      <div class="interactive-stage hidden" id="interactiveStage">
+        <!-- 1. Экран списка всех результатов тура -->
+        <div class="results-view" id="roundResultsView">
+          <div class="round-summary-card" id="roundSummaryCard"></div>
+          <div class="round-matches-container" id="roundMatchesList"></div>
+        </div>
+
+        <!-- 2. Экран детального матч-центра -->
+        <div class="match-center-view hidden" id="matchCenterView">
+          <!-- Кнопка возврата к результатам тура -->
+          <div class="mc-nav-bar">
+            <button class="mc-back-btn" id="btnBackToResults">
+              <span class="mc-back-arrow">←</span>
+              <span id="btnBackText">Результаты тура</span>
+            </button>
+            <span class="mc-league-badge" id="mcLeagueBadge">PREMIER LEAGUE</span>
+          </div>
+
+          <!-- Карточка матча (Scoreboard) -->
+          <div class="mc-scoreboard">
+            <div class="mc-team home">
+              <img class="mc-team-logo" id="mcHomeLogo" src="" alt="">
+              <span class="mc-team-name" id="mcHomeName">Home Team</span>
+            </div>
+
+            <div class="mc-score-box">
+              <div class="mc-score" id="mcScore">0 : 0</div>
+              <div class="mc-ht-score" id="mcHTScore">(0:0)</div>
+              <div class="mc-status" id="mcStatus">Матч завершён</div>
+            </div>
+
+            <div class="mc-team away">
+              <img class="mc-team-logo" id="mcAwayLogo" src="" alt="">
+              <span class="mc-team-name" id="mcAwayName">Away Team</span>
+            </div>
+          </div>
+
+          <div class="mc-meta-row" id="mcMetaRow">
+            <span class="mc-live-badge hidden" id="mcLiveBadge"><span class="live-dot"></span> LIVE</span>
+            <span id="mcVenue"></span>
+            <span class="mc-meta-dot">•</span>
+            <span id="mcReferee"></span>
+          </div>
+
+          <!-- Вкладки внутри матча (Суб-навигация) -->
+          <nav class="mc-subtabs" role="tablist">
+            <button class="mc-subtab-btn active" data-subtab="overview">Обзор</button>
+            <button class="mc-subtab-btn" data-subtab="stats">Статистика</button>
+            <button class="mc-subtab-btn" data-subtab="lineups">Составы</button>
+            <button class="mc-subtab-btn" data-subtab="h2h">H2H</button>
+          </nav>
+
+          <!-- Контент вкладок -->
+          <div class="mc-content">
+            <!-- Вкладка: Обзор (Таймлайн событий) -->
+            <div class="mc-tab-pane active" id="paneOverview">
+              <div class="events-timeline" id="eventsTimeline"></div>
+            </div>
+
+            <!-- Вкладка: Статистика (Сравнительные бары) -->
+            <div class="mc-tab-pane" id="paneStats">
+              <div class="stats-bars-container" id="statsBarsContainer"></div>
+            </div>
+
+            <!-- Вкладка: Составы (Поле и скамейка) -->
+            <div class="mc-tab-pane" id="paneLineups">
+              <!-- Тактическое поле -->
+              <div class="pitch-container" id="pitchContainer">
+                <div class="football-pitch" id="footballPitch">
+                  <div class="pitch-lines">
+                    <div class="pitch-center-circle"></div>
+                    <div class="pitch-center-line"></div>
+                    <div class="pitch-box top"></div>
+                    <div class="pitch-box bottom"></div>
+                  </div>
+                  <div class="pitch-players-home" id="pitchHomePlayers"></div>
+                  <div class="pitch-players-away" id="pitchAwayPlayers"></div>
+                </div>
+              </div>
+
+              <!-- Главные тренеры -->
+              <div class="mc-coaches-card" id="mcCoachesCard"></div>
+
+              <!-- Запасные игроки -->
+              <div class="mc-bench-card" id="mcBenchCard"></div>
+            </div>
+
+            <!-- Вкладка: H2H -->
+            <div class="mc-tab-pane" id="paneH2H">
+              <div class="h2h-container" id="h2hContainer"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Экран интерактивной турнирной таблицы -->
+        <div class="standings-view hidden" id="standingsView">
+          <div class="standings-container" id="standingsContainer"></div>
+        </div>
+
+        <!-- 4. Экран лидеров турнира (Бомбардиры, Ассистенты, Гол+Пас, Сухие матчи, Дисциплина) -->
+        <div class="leaders-view hidden" id="leadersView">
+          <div class="leaders-nav-bar" id="leadersCategoryNav">
+            <button class="leader-chip active" data-category="scorers">⚽ Бомбардиры</button>
+            <button class="leader-chip" data-category="assists">🎯 Ассистенты</button>
+            <button class="leader-chip" data-category="points">⚡ Гол + Пас</button>
+            <button class="leader-chip" data-category="cleansheets">🧤 Сухие матчи</button>
+            <button class="leader-chip" data-category="discipline">🟨 Карточки</button>
+          </div>
+          <div class="leaders-container" id="leadersContainer"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Подсказка в футере -->
+    <footer class="app-footer">
+      <div class="hint-text">
+        <span class="hint-icon">👆</span>
+        <span>Двойной тап или щипок двумя пальцами для зума инфографики</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Bottom Sheet модальное окно выбора турнира -->
+  <div class="sheet-backdrop hidden" id="sheetBackdrop"></div>
+  <div class="bottom-sheet hidden" id="leagueBottomSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+    <div class="sheet-handle-bar">
+      <div class="sheet-handle"></div>
+    </div>
+    <div class="sheet-header">
+      <div class="sheet-title-group">
+        <h3 class="sheet-title" id="sheetTitle">Выбор турнира</h3>
+        <span class="sheet-subtitle" id="sheetSubtitle">27 активных лиг</span>
+      </div>
+      <button class="sheet-close-btn" id="sheetCloseBtn" aria-label="Закрыть">✕</button>
+    </div>
+
+    <!-- Поисковая строка -->
+    <div class="sheet-search-box">
+      <span class="sheet-search-icon">🔍</span>
+      <input type="text" id="leagueSearchInput" class="sheet-search-input" placeholder="Поиск турнира или страны..." autocomplete="off">
+      <button class="sheet-search-clear hidden" id="sheetSearchClear" aria-label="Очистить">✕</button>
+    </div>
+
+    <!-- Категории турниров (рендерится СТРОГО динамически; если нет Европейских чемпионатов или Еврокубков — не отображаются!) -->
+    <div class="sheet-categories" id="sheetCategoryTabs"></div>
+
+    <!-- Список турниров -->
+    <div class="sheet-leagues-list" id="sheetLeaguesList">
+      <div class="sheet-loading-spinner">Загрузка турниров...</div>
+    </div>
+  </div>
+
+  <!-- Bottom Sheet модальное окно архива сезонов и туров -->
+  <div class="sheet-backdrop hidden" id="archiveSheetBackdrop"></div>
+  <div class="bottom-sheet hidden" id="archiveBottomSheet" role="dialog" aria-modal="true" aria-labelledby="archiveSheetTitle">
+    <div class="sheet-handle-bar">
+      <div class="sheet-handle"></div>
+    </div>
+    <div class="sheet-header">
+      <div class="sheet-title-group">
+        <h3 class="sheet-title" id="archiveSheetTitle">Архив сезонов и туров</h3>
+        <span class="sheet-subtitle" id="archiveSheetSubtitle">Загрузка архива...</span>
+      </div>
+      <button class="sheet-close-btn" id="archiveSheetCloseBtn" aria-label="Закрыть">✕</button>
+    </div>
+
+    <!-- Селектор сезонов (горизонтальные чипы: 2026/2027, 2025/2026...) -->
+    <div class="archive-seasons-bar" id="archiveSeasonsBar"></div>
+
+    <!-- Сетка туров сезона -->
+    <div class="archive-rounds-grid" id="archiveRoundsGrid">
+      <div class="sheet-loading-spinner">Загрузка туров...</div>
+    </div>
+  </div>
+
+  <script src="app.js?v=20261024_phase9_live"></script>
+</body>
+</html>
