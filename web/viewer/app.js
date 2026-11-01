@@ -334,8 +334,10 @@
 
   async function loadLeaguesCatalog() {
     const urls = [
-      `${mediaBase}/active_leagues.json`,
-      'active_leagues.json'
+      '/api/leagues',
+      'active_leagues.json',
+      'viewer/active_leagues.json',
+      `${mediaBase}/active_leagues.json`
     ];
 
     let data = null;
@@ -864,8 +866,21 @@
       targetRoundId = getRoundIdForTab(currentTab);
     }
     if (!targetRoundId) targetRoundId = roundId;
+    if (!targetRoundId) {
+      const active = getActiveLeague();
+      if (active) {
+        targetRoundId = String(active.next_round_id || active.curr_round_id || '');
+        if (!roundId) roundId = targetRoundId;
+      }
+    }
 
-    const cacheKey = `${leagueId}_${targetRoundId}`;
+    if (!targetRoundId || targetRoundId === 'undefined' || targetRoundId === 'null') {
+      targetRoundId = '';
+    }
+
+    const roundApiUrl = targetRoundId ? `/api/rounds/${targetRoundId}?locale=ru` : `/api/rounds?league_id=${leagueId}&locale=ru`;
+
+    const cacheKey = `${leagueId}_${targetRoundId || 'default'}`;
     if (roundDataCache.has(cacheKey)) {
       const cached = roundDataCache.get(cacheKey);
       if (callback) callback(cached);
@@ -877,11 +892,11 @@
     errorOverlay.classList.add('hidden');
 
     const urls = [
-      `/api/rounds/${targetRoundId}?locale=ru`,
-      `data/${leagueId}_${seasonId}_${targetRoundId}.json`,
-      `viewer/data/${leagueId}_${seasonId}_${targetRoundId}.json`,
-      `${mediaBase}/${leagueId}/${seasonId}/${targetRoundId}/round_data.json`
-    ];
+      roundApiUrl,
+      targetRoundId ? `data/${leagueId}_${seasonId}_${targetRoundId}.json` : null,
+      targetRoundId ? `viewer/data/${leagueId}_${seasonId}_${targetRoundId}.json` : null,
+      targetRoundId ? `${mediaBase}/${leagueId}/${seasonId}/${targetRoundId}/round_data.json` : null
+    ].filter(Boolean);
 
     let loadedData = null;
     const buster = `?_cb=${Date.now()}`;

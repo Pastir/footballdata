@@ -159,16 +159,31 @@ func (h *ServerHandlers) HandleLeagueArchive(w http.ResponseWriter, r *http.Requ
 
 // HandleRoundOnDemand генерирует или отдает полные данные тура On-Demand.
 func (h *ServerHandlers) HandleRoundOnDemand(w http.ResponseWriter, r *http.Request) {
-	// Ожидается путь: /api/rounds/{id}
+	// Ожидается путь: /api/rounds/{id} или fallback на активный тур лиги
 	parts := strings.Split(strings.Trim(r.URL.Path, "/"), "/")
-	if len(parts) < 3 {
-		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid url format, expected /api/rounds/{round_id}"})
-		return
+	var roundID int
+	if len(parts) >= 3 && parts[2] != "" {
+		roundID, _ = strconv.Atoi(parts[2])
 	}
 
-	roundID, err := strconv.Atoi(parts[2])
-	if err != nil || roundID <= 0 {
-		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid round id"})
+	// Если round_id не передан в URL или равен 0, определяем активный тур лиги
+	if roundID <= 0 {
+		leagueID, _ := strconv.Atoi(r.URL.Query().Get("league_id"))
+		if leagueID <= 0 {
+			leagueID = 8 // По умолчанию: Premier League
+		}
+		info, err := analytics.GetLeagueSeasonInfo(r.Context(), h.pool, leagueID)
+		if err == nil {
+			if info.NextRoundID > 0 {
+				roundID = info.NextRoundID
+			} else if info.CurrRoundID > 0 {
+				roundID = info.CurrRoundID
+			}
+		}
+	}
+
+	if roundID <= 0 {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "invalid url format, expected /api/rounds/{round_id}"})
 		return
 	}
 
