@@ -54,6 +54,7 @@ func NewServer(pool *pgxpool.Pool, port string, staticDir string, pollInterval t
 	mux.HandleFunc("/api/health", withCORS(handlers.HandleHealth))
 	mux.HandleFunc("/api/leagues", withCORS(handlers.HandleLeagues))
 	mux.HandleFunc("/api/live", withCORS(handlers.HandleLiveMatches))
+	mux.HandleFunc("/api/leaders", withCORS(handlers.HandleLeaders))
 
 	// Параметризованные маршруты
 	mux.HandleFunc("/api/leagues/", withCORS(func(w http.ResponseWriter, r *http.Request) {

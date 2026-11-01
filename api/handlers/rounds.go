@@ -57,6 +57,7 @@ func UpsertRounds(d *fastjson.Value, taskData config.TaskData) {
 	}
 
 	if strings.Compare(qi, "") != 0 {
+
 		query = query + strings.TrimRight(qi, ",") + conflictQuery
 		_, err := db.DBx.PGxPool.Exec(context.Background(), query)
 		if err != nil {

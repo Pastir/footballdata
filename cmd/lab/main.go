@@ -211,27 +211,39 @@ func handleSchedulerTick(ctx context.Context, taskData config.TaskData, log *zap
 
 	if len(tasks) == 0 {
 		fmt.Println("ℹ️ На текущий момент нет задач, ожидающих публикации (все туры либо в игре, либо уже опубликованы).")
-		return
-	}
+	} else {
+		for i, task := range tasks {
+			fmt.Printf("[%d/%d] Задача: %s (Лига %d, Раунд %d, Тип: %s)\n",
+				i+1, len(tasks), task.Title, task.LeagueID, task.RoundID, task.PublicationType)
 
-	for i, task := range tasks {
-		fmt.Printf("[%d/%d] Задача: %s (Лига %d, Раунд %d, Тип: %s)\n",
-			i+1, len(tasks), task.Title, task.LeagueID, task.RoundID, task.PublicationType)
+			if !taskData.GetPublish() {
+				fmt.Printf("      → Режим симуляции (флаг -publish=false). Пропуск отправки.\n")
+				continue
+			}
 
-		if !taskData.GetPublish() {
-			fmt.Printf("      → Режим симуляции (флаг -publish=false). Пропуск отправки.\n")
-			continue
-		}
-
-		if task.ExecuteFunc != nil {
-			fmt.Printf("      → Выполнение публикации...\n")
-			if err := task.ExecuteFunc(ctx); err != nil {
-				log.Error("failed to execute task", zap.String("title", task.Title), zap.Error(err))
-				fmt.Printf("      ❌ Ошибка: %v\n", err)
-			} else {
-				fmt.Printf("      ✅ Успешно опубликовано!\n")
+			if task.ExecuteFunc != nil {
+				fmt.Printf("      → Выполнение публикации...\n")
+				if err := task.ExecuteFunc(ctx); err != nil {
+					log.Error("failed to execute task", zap.String("title", task.Title), zap.Error(err))
+					fmt.Printf("      ❌ Ошибка: %v\n", err)
+				} else {
+					fmt.Printf("      ✅ Успешно опубликовано!\n")
+				}
 			}
 		}
+	}
+
+	// Фоновая актуализация статических данных Mini App (JSON)
+	fmt.Printf("\n🔄 Актуализация статических данных Mini App (active_leagues.json, туры, лидеры)...\n")
+	var syncTd config.TaskData
+	syncTd.Init()
+	syncTd.Args = config.LineArgs{
+		TaskName: "PublishToTelegram",
+		Type:     "syncAll",
+		Publish:  false,
+	}
+	if syncErr := publisher.Dispatch(ctx, syncTd); syncErr != nil {
+		log.Warn("scheduler tick viewer sync failed", zap.Error(syncErr))
 	}
 }
 

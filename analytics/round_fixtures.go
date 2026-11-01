@@ -96,19 +96,20 @@ func GetNextRoundFixtures(ctx context.Context, pool *pgxpool.Pool, info *LeagueS
           , ps.id AS season_id
           , ps.name AS season_name
           , pf.round_id
-          , round.name AS round_name
+          , nr.next_round_name AS round_name
           , pf.starting_at AS fixture_start
-          , round.starting_at AS round_start
-          , round.ending_at AS round_end
+          , nr.next_round_starting_at AS round_start
+          , nr.next_round_ending_at AS round_end
           , pf.venue_id
           , pv.name AS venue_name
-          , pl.country_id
+          , COALESCE(pl.country_id, 0) AS country_id
           , pc.name AS country_name
-          , fh.participant_id AS team_home_id
+          , COALESCE(fh.participant_id, 0) AS team_home_id
           , COALESCE(
                 NULLIF(pth.locale->$2->>'short', ''),
                 NULLIF(pth.locale->$2->>'long', ''),
-                pth.name
+                pth.name,
+                'TBD'
             ) AS team_home_name
           , COALESCE(pth.image_path, '') AS team_home_logo
           , formh.form AS form_home
@@ -116,11 +117,12 @@ func GetNextRoundFixtures(ctx context.Context, pool *pgxpool.Pool, info *LeagueS
           , posh.name AS rule_position_home
           , posh.points AS points_home
           , posh.overall_matches AS overall_matches_home
-          , fa.participant_id AS team_away_id
+          , COALESCE(fa.participant_id, 0) AS team_away_id
           , COALESCE(
                 NULLIF(pta.locale->$2->>'short', ''),
                 NULLIF(pta.locale->$2->>'long', ''),
-                pta.name
+                pta.name,
+                'TBD'
             ) AS team_away_name
           , COALESCE(pta.image_path, '') AS team_away_logo
           , forma.form AS form_away
@@ -128,11 +130,12 @@ func GetNextRoundFixtures(ctx context.Context, pool *pgxpool.Pool, info *LeagueS
           , posa.name AS rule_position_away
           , posa.points AS points_away
           , posa.overall_matches AS overall_matches_away
-          , pst.short_name AS state_short
+          , COALESCE(pst.short_name, 'NS') AS state_short
           , odds.odds_data
           , odds.bookmaker_name
           , CASE WHEN rivals.fixture_id NOTNULL THEN TRUE ELSE FALSE END AS rivals
     FROM provider_fixtures AS pf
+    CROSS JOIN next_round AS nr
     LEFT JOIN provider_leagues AS pl ON (pf.league_id = pl.id)
     LEFT JOIN provider_states AS pst ON (pst.id = pf.state_id)
     LEFT JOIN provider_fixtures_participants AS fh ON (fh.fixture_id = pf.id AND fh.location = 'home')
@@ -146,18 +149,6 @@ func GetNextRoundFixtures(ctx context.Context, pool *pgxpool.Pool, info *LeagueS
     LEFT JOIN form AS formh ON (fh.participant_id = formh.participant_id)
     LEFT JOIN position AS posa ON (posa.participant_id = pta.id)
     LEFT JOIN position AS posh ON (posh.participant_id = pth.id)
-    LEFT JOIN LATERAL (
-        SELECT id
-               , name
-               , starting_at
-               , ending_at
-        FROM provider_rounds
-        WHERE season_id = ps.id
-          AND DATE(NOW()) < starting_at
-          AND finished = FALSE
-        ORDER BY name::INT
-        LIMIT 1
-    ) AS round ON TRUE
     LEFT JOIN LATERAL (
         SELECT po.market_id
                , po.bookmaker_id
@@ -193,7 +184,7 @@ func GetNextRoundFixtures(ctx context.Context, pool *pgxpool.Pool, info *LeagueS
         GROUP BY pfl.id, prl.rival_id
         HAVING COUNT(DISTINCT pfpl.participant_id) > 1
     ) AS rivals ON (rivals.fixture_id = pf.id)
-WHERE pf.league_id = forma.league_id AND ps.is_current AND pf.round_id = round.id
+WHERE pf.league_id = nr.league_id AND ps.is_current AND pf.round_id = nr.next_round_id
 ORDER BY pf.starting_at ASC`
 
 	locale := "ru"

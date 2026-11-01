@@ -203,34 +203,36 @@ SELECT pl.id AS league_id
      , ps.id AS season_id
      , ps.name AS season_name
      , pf.round_id
-     , next_round.last_round_name AS round_name
+     , COALESCE(p_rnd.name, next_round.last_round_name) AS round_name
      , pf.starting_at AS fixture_start
      , pf.venue_id
      , pv.name AS venue_name
-     , pl.country_id
+     , COALESCE(pl.country_id, 0) AS country_id
      , pc.name AS country_name
      
-     , fh.participant_id AS team_home_id
+     , COALESCE(fh.participant_id, 0) AS team_home_id
      , COALESCE(
            NULLIF(pth.locale->$3->>'short', ''),
            NULLIF(pth.locale->$3->>'long', ''),
-           pth.name
+           pth.name,
+           'TBD'
        ) AS team_home_name
      , COALESCE(pth.image_path, '') AS team_home_logo
      , fh.winner AS team_home_winner
      , fh.result AS team_home_result
      
-     , fa.participant_id AS team_away_id
+     , COALESCE(fa.participant_id, 0) AS team_away_id
      , COALESCE(
            NULLIF(pta.locale->$3->>'short', ''),
            NULLIF(pta.locale->$3->>'long', ''),
-           pta.name
+           pta.name,
+           'TBD'
        ) AS team_away_name
      , COALESCE(pta.image_path, '') AS team_away_logo
      , fa.winner AS team_away_winner
      , fa.result AS team_away_result
      
-     , pst.short_name AS state_short
+     , COALESCE(pst.short_name, 'NS') AS state_short
      , ref.referee_name
      
      , scores.scores
@@ -253,6 +255,7 @@ SELECT pl.id AS league_id
 FROM provider_fixtures AS pf 
 JOIN next_round ON (pf.season_id = next_round.season_id AND pf.round_id = (CASE WHEN $2::int > 0 THEN $2::int ELSE next_round.last_round_id END))
 JOIN provider_seasons AS ps ON (pf.season_id = ps.id AND ps.is_current)
+LEFT JOIN provider_rounds AS p_rnd ON (p_rnd.id = pf.round_id)
 LEFT JOIN provider_leagues AS pl ON (pf.league_id = pl.id)
 LEFT JOIN provider_states AS pst ON (pst.id = pf.state_id)
 LEFT JOIN provider_fixtures_participants AS fh ON (fh.fixture_id = pf.id AND fh.location = 'home')

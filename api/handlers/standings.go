@@ -4,15 +4,15 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/Pastir/footballdata/config"
 	"github.com/Pastir/footballdata/db"
-	"github.com/Pastir/logger"
+	"github.com/Pastir/footballdata/logs"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/jackc/pgconn"
 	"github.com/valyala/fastjson"
-	"go.uber.org/zap"
 )
 
 // UpsertStandings - standings processing
@@ -22,13 +22,11 @@ func UpsertStandings(d *fastjson.Value, taskData config.TaskData) {
 
 	query := `INSERT INTO provider_standings(id, participant_id, sport_id, league_id, season_id, stage_id, group_id, 
                                round_id, position, result, points, standing_rule_id) VALUES `
-	conflictQuery := ` ON CONFLICT (id) DO UPDATE SET participant_id    = EXCLUDED.participant_id
+	conflictQuery := ` ON CONFLICT (participant_id, season_id, round_id) DO UPDATE SET id = EXCLUDED.id
                                                       ,sport_id         = EXCLUDED.sport_id
                                                       ,league_id        = EXCLUDED.league_id
-                                                      ,season_id        = EXCLUDED.season_id
                                                       ,stage_id         = EXCLUDED.stage_id
                                                       ,group_id         = EXCLUDED.group_id
-                                                      ,round_id         = EXCLUDED.round_id
                                                       ,position         = EXCLUDED.position
                                                       ,result           = EXCLUDED.result
                                                       ,points           = EXCLUDED.points
@@ -57,7 +55,7 @@ func UpsertStandings(d *fastjson.Value, taskData config.TaskData) {
 		_, err := db.DBx.PGxPool.Exec(context.Background(), q)
 		if err != nil {
 			spew.Dump(err)
-			logger.ErrorLog.Error("UpsertStandings", zap.Error(err))
+			logs.ErrorLog("upsertStandings", "UpsertStandings", err)
 		}
 	}
 
@@ -95,7 +93,7 @@ func UpsertStandingsPositionRules(d *fastjson.Value) {
 		q := query + strings.TrimRight(qi, ",") + conflictQuery
 		_, err := db.DBx.PGxPool.Exec(context.Background(), q)
 		if err != nil {
-			logger.ErrorLog.Error("UpsertStandingsPositionRules", zap.Error(err))
+			logs.ErrorLog("upsertStandings", "UpsertStandingsPositionRules", err)
 		}
 	}
 
@@ -131,7 +129,7 @@ func UpsertStandingsForms(d *fastjson.Value) {
 		q := query + strings.TrimRight(qi, ",") + conflictQuery
 		_, err := db.DBx.PGxPool.Exec(context.Background(), q)
 		if err != nil {
-			logger.ErrorLog.Error("UpsertStandingsDetails", zap.Error(err))
+			logs.ErrorLog("upsertStandings", "UpsertStandingsForms", err)
 		}
 	}
 }
@@ -141,6 +139,17 @@ func UpsertStandingsDetails(d *fastjson.Value) {
 
 	data := d.GetArray("data")
 
+	var standingIds []string
+	for _, tm := range data {
+		if sId := tm.GetInt("id"); sId > 0 {
+			standingIds = append(standingIds, strconv.Itoa(sId))
+		}
+	}
+	if len(standingIds) > 0 {
+		delQuery := fmt.Sprintf("DELETE FROM provider_standings_details WHERE standing_id IN (%s)", strings.Join(standingIds, ","))
+		_, _ = db.DBx.PGxPool.Exec(context.Background(), delQuery)
+	}
+
 	query := `INSERT INTO provider_standings_details(id, standing_id, type_id, standing_type, value) VALUES `
 	conflictQuery := ` ON CONFLICT (id) DO UPDATE SET standing_id = EXCLUDED.standing_id
                                                       ,type_id    = EXCLUDED.type_id
@@ -149,10 +158,16 @@ func UpsertStandingsDetails(d *fastjson.Value) {
                                                       ,updated_at = NOW()`
 	var qi string
 	for _, tm := range data {
-		for _, v := range tm.GetArray("details") {
+		standingId := tm.GetInt("id")
+		detailsArr := tm.GetArray("details")
+		for _, v := range detailsArr {
+			sId := v.GetInt("standing_id")
+			if sId == 0 {
+				sId = standingId
+			}
 			qi += fmt.Sprintf("(%s, %s, %s, %s, %s),",
 				db.CastInterfaceString(v.GetInt("id")),
-				db.CastInterfaceString(v.GetInt("standing_id")),
+				db.CastInterfaceString(sId),
 				db.CastInterfaceString(v.GetInt("type_id")),
 				db.CastInterfaceString(string(v.GetStringBytes("standing_type"))),
 				db.CastInterfaceString(v.GetInt("value")),
@@ -164,7 +179,7 @@ func UpsertStandingsDetails(d *fastjson.Value) {
 		q := query + strings.TrimRight(qi, ",") + conflictQuery
 		_, err := db.DBx.PGxPool.Exec(context.Background(), q)
 		if err != nil {
-			logger.ErrorLog.Error("UpsertStandingsDetails", zap.Error(err))
+			logs.ErrorLog("upsertStandings", "UpsertStandingsForms", err)
 		}
 	}
 }
@@ -212,7 +227,7 @@ func UpsertGroup(d *fastjson.Value) {
 		q := query + strings.TrimRight(qi, ",") + conflictQuery
 		_, err := db.DBx.PGxPool.Exec(context.Background(), q)
 		if err != nil {
-			logger.ErrorLog.Error("UpsertGroup", zap.Error(err))
+			logs.ErrorLog("upsertStandings", "UpsertGroup", err)
 		}
 	}
 }

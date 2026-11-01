@@ -21,6 +21,7 @@ type Storage interface {
 	MarkPublished(ctx context.Context, id int64, messageID int64) error
 	MarkFailed(ctx context.Context, id int64, errMsg string) error
 	UpdateStatus(ctx context.Context, id int64, status PublicationStatus) error
+	RecordSkipped(ctx context.Context, channelID int64, pubType PublicationType, leagueID, roundID int, reason string) error
 	ListPendingScheduled(ctx context.Context, dueBefore time.Time, limit int) ([]Publication, error)
 }
 
@@ -138,7 +139,7 @@ WHERE id = $1`
 	return pub, nil
 }
 
-// IsAlreadyPublished проверяет, был ли уже успешно опубликован пост для заданного канала, типа, лиги и тура.
+// IsAlreadyPublished проверяет, был ли уже успешно опубликован пост (или пропущен) для заданного канала, типа, лиги и тура.
 func (s *PGStorage) IsAlreadyPublished(
 	ctx context.Context,
 	channelID int64,
@@ -152,7 +153,7 @@ SELECT EXISTS(
       AND publication_type = $2
       AND league_id = $3
       AND round_id = $4
-      AND status = 'published'
+      AND status IN ('published', 'skipped')
 )`
 	var exists bool
 	err := s.pool.QueryRow(ctx, query, channelID, string(pubType), leagueID, roundID).Scan(&exists)
@@ -160,6 +161,30 @@ SELECT EXISTS(
 		return false, fmt.Errorf("check is already published: %w", err)
 	}
 	return exists, nil
+}
+
+// RecordSkipped фиксирует пропуск устаревшей публикации, предотвращая повторный спам.
+func (s *PGStorage) RecordSkipped(
+	ctx context.Context,
+	channelID int64,
+	pubType PublicationType,
+	leagueID, roundID int,
+	reason string,
+) error {
+	const query = `
+INSERT INTO telegram_publications (
+    channel_id, publication_type, league_id, round_id,
+    title, status, error_message, created_at, updated_at
+) VALUES (
+    $1, $2, $3, $4,
+    $5, 'skipped', $6, NOW(), NOW()
+)`
+	title := fmt.Sprintf("Skipped %s (L:%d R:%d): %s", pubType, leagueID, roundID, reason)
+	_, err := s.pool.Exec(ctx, query, channelID, string(pubType), leagueID, roundID, title, reason)
+	if err != nil {
+		return fmt.Errorf("record skipped: %w", err)
+	}
+	return nil
 }
 
 // GetLastPublished возвращает последнюю успешную публикацию для заданного тура.

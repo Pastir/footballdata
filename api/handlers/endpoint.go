@@ -21,8 +21,6 @@ import (
 
 func EndPoint(taskData config.TaskData) {
 
-	fmt.Println("EndPoint called: ", db.Prov.Endpoints[taskData.Name()].TaskName, "EndPoint: ", db.Prov.Endpoints[taskData.Name()].Endpoint)
-
 	switch db.Prov.Endpoints[taskData.Name()].Cycle {
 	case "seasons":
 		seasonsId := queries.GetSeasons(taskData)
@@ -164,6 +162,7 @@ func RequestEndpoint(taskData config.TaskData) {
 		//getParams.Del("filters")
 		url = replaceToken(url, taskData.Replace)
 		// request to provider endpoint
+		fmt.Println(url)
 		resp, err := client.RequestToEndpoint(url)
 		if err != nil {
 			logs.ErrorLog(taskData.Name(), "RequestToEndpoint", err)

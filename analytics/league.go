@@ -55,22 +55,6 @@ WITH season AS (
       AND ps.is_current = true
     LIMIT 1
 ),
-finished AS (
-    SELECT pr.id,
-           pr.name,
-           ROW_NUMBER() OVER (ORDER BY pr.name::INT DESC) AS rn
-    FROM provider_rounds pr
-    JOIN season s ON pr.season_id = s.season_id
-    WHERE pr.finished = true
-),
-nxt AS (
-    SELECT pr.id, pr.name
-    FROM provider_rounds pr
-    JOIN season s ON pr.season_id = s.season_id
-    WHERE pr.finished = false
-    ORDER BY pr.name::INT
-    LIMIT 1
-),
 round_count AS (
     SELECT MAX(pr.name::INT) AS total_matches
     FROM provider_rounds pr
@@ -79,21 +63,23 @@ round_count AS (
 team_count AS (
     SELECT COUNT(DISTINCT ps2.participant_id) AS cnt
     FROM provider_standings ps2
-    WHERE EXISTS (SELECT 1 FROM finished f WHERE f.rn = 1 AND f.id = ps2.round_id)
+    JOIN season s ON true
+    JOIN LATERAL get_neighbor_rounds(s.season_id) nr ON ps2.round_id = nr.last_round_id
 )
 SELECT s.league_id,
        s.league_name,
        s.league_logo,
        s.season_id,
        s.season_name,
-       COALESCE((SELECT id   FROM finished WHERE rn = 1), 0)  AS curr_round_id,
-       COALESCE((SELECT name FROM finished WHERE rn = 1), '') AS curr_round_name,
-       COALESCE((SELECT id   FROM finished WHERE rn = 2), 0)  AS prev_round_id,
-       COALESCE((SELECT id   FROM nxt), 0)                    AS next_round_id,
-       COALESCE((SELECT name FROM nxt), '')                   AS next_round_name,
+       COALESCE(nr.last_round_id, 0)   AS curr_round_id,
+       COALESCE(nr.last_round_name, '') AS curr_round_name,
+       COALESCE(nr.prev_round_id, 0)   AS prev_round_id,
+       COALESCE(nr.next_round_id, 0)   AS next_round_id,
+       COALESCE(nr.next_round_name, '') AS next_round_name,
        COALESCE((SELECT total_matches FROM round_count), 0)   AS total_team_matches,
        COALESCE((SELECT cnt FROM team_count), 0)              AS team_count
-FROM season s`
+FROM season s
+LEFT JOIN LATERAL get_neighbor_rounds(s.season_id) nr ON true`
 
 	var info LeagueSeasonInfo
 	row := pool.QueryRow(ctx, query, leagueID)
@@ -129,9 +115,21 @@ type ActiveLeagueItem struct {
 	NextRound    string `json:"next_round"`
 	Category     string `json:"category"`      // "eurocups", "domestic"
 	CategoryName string `json:"category_name"` // "Еврокубки", "Европейские чемпионаты"
-	IsTop        bool   `json:"is_top"`
-	Active       bool   `json:"active"`
-	Order        int    `json:"order"`
+	IsTop        bool              `json:"is_top"`
+	Active       bool              `json:"active"`
+	Order        int               `json:"order"`
+	Rounds       []LeagueRoundItem `json:"rounds,omitempty"`
+}
+
+// LeagueRoundItem представляет метаданные тура сезона для навигатора туров.
+type LeagueRoundItem struct {
+	ID            int    `json:"id"`
+	Name          string `json:"name"`
+	StartingAt    string `json:"starting_at,omitempty"`
+	EndingAt      string `json:"ending_at,omitempty"`
+	Finished      bool   `json:"finished"`
+	FinishedCount int    `json:"finished_count"`
+	TotalMatches  int    `json:"total_matches"`
 }
 
 // LeagueCategory описывает раздел турниров в селекторе.
@@ -165,30 +163,15 @@ SELECT
     COALESCE(pc.image_path, ''),
     ps.id AS season_id,
     ps.name AS season_name,
-    COALESCE(
-        (SELECT pr.id FROM provider_rounds pr 
-         WHERE pr.season_id = ps.id AND pr.finished = true 
-         ORDER BY pr.name::INT DESC LIMIT 1), 0
-    ) AS curr_round_id,
-    COALESCE(
-        (SELECT pr.name FROM provider_rounds pr 
-         WHERE pr.season_id = ps.id AND pr.finished = true 
-         ORDER BY pr.name::INT DESC LIMIT 1), ''
-    ) AS curr_round_name,
-    COALESCE(
-        (SELECT pr.id FROM provider_rounds pr 
-         WHERE pr.season_id = ps.id AND pr.finished = false 
-         ORDER BY pr.name::INT ASC LIMIT 1), 0
-    ) AS next_round_id,
-    COALESCE(
-        (SELECT pr.name FROM provider_rounds pr 
-         WHERE pr.season_id = ps.id AND pr.finished = false 
-         ORDER BY pr.name::INT ASC LIMIT 1), ''
-    ) AS next_round_name,
+    COALESCE(nr.last_round_id, 0) AS curr_round_id,
+    COALESCE(nr.last_round_name, '') AS curr_round_name,
+    COALESCE(nr.next_round_id, 0) AS next_round_id,
+    COALESCE(nr.next_round_name, '') AS next_round_name,
     pl.active
 FROM provider_leagues pl
 JOIN provider_seasons ps ON ps.league_id = pl.id AND ps.is_current = true
 LEFT JOIN provider_countries pc ON pc.id = pl.country_id
+LEFT JOIN LATERAL get_neighbor_rounds(ps.id) nr ON true
 WHERE pl.active = true
 ORDER BY pl.id;`
 
@@ -218,6 +201,55 @@ ORDER BY pl.id;`
 		item := resolveLeagueMetadata(lid, lname, shortCode, llogo, cid, cname, cflag, sid, sname, currRid, currRname, nextRid, nextRname, subType, ltype, active)
 		leagues = append(leagues, item)
 		catCounts[item.Category]++
+	}
+
+	// Подгружаем полный список туров текущих сезонов для навигатора ‹ Тур ›
+	seasonIDs := make([]int, len(leagues))
+	for i, l := range leagues {
+		seasonIDs[i] = l.SeasonID
+	}
+	if len(seasonIDs) > 0 {
+		roundsQuery := `
+SELECT 
+    pr.season_id, 
+    pr.id, 
+    pr.name, 
+    COALESCE(pr.starting_at::text, ''), 
+    COALESCE(pr.ending_at::text, ''),
+    COALESCE(pr.finished, false),
+    COALESCE(COUNT(pf.id) FILTER (WHERE pf.state_id = 5), 0),
+    COALESCE(COUNT(pf.id), 0)
+FROM provider_rounds pr
+LEFT JOIN provider_fixtures pf ON pf.round_id = pr.id
+WHERE pr.season_id = ANY($1)
+GROUP BY pr.season_id, pr.id, pr.name, pr.starting_at, pr.ending_at, pr.finished
+ORDER BY pr.season_id, pr.starting_at ASC, pr.id ASC;`
+		rRows, rErr := pool.Query(ctx, roundsQuery, seasonIDs)
+		if rErr == nil {
+			defer rRows.Close()
+			roundsMap := make(map[int][]LeagueRoundItem)
+			for rRows.Next() {
+				var sid, rid, finishedCount, totalMatches int
+				var rname, startAt, endAt string
+				var finished bool
+				if scanErr := rRows.Scan(&sid, &rid, &rname, &startAt, &endAt, &finished, &finishedCount, &totalMatches); scanErr == nil {
+					roundsMap[sid] = append(roundsMap[sid], LeagueRoundItem{
+						ID:            rid,
+						Name:          rname,
+						StartingAt:    startAt,
+						EndingAt:      endAt,
+						Finished:      finished,
+						FinishedCount: finishedCount,
+						TotalMatches:  totalMatches,
+					})
+				}
+			}
+			for i := range leagues {
+				if rList, ok := roundsMap[leagues[i].SeasonID]; ok {
+					leagues[i].Rounds = rList
+				}
+			}
+		}
 	}
 
 	// Формируем список категорий только если в них есть хотя бы одна лига

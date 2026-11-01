@@ -15,6 +15,18 @@ func GetCurrentStandings(ctx context.Context, pool *pgxpool.Pool, info *LeagueSe
     SELECT *
     FROM get_neighbor_rounds($1)
 ),
+target_cutoff AS (
+    SELECT 
+        CASE 
+            WHEN $2::int > 0 THEN 
+                COALESCE(
+                    (SELECT (pr.ending_at + INTERVAL '1 day')::date FROM provider_rounds pr WHERE pr.id = $2::int),
+                    (CURRENT_DATE + INTERVAL '1 day')::date
+                )
+            ELSE 
+                (CURRENT_DATE + INTERVAL '1 day')::date
+        END AS cutoff_date
+),
 form AS (
     SELECT
         f.participant_id,
@@ -25,7 +37,8 @@ form AS (
         nr.league_id,
         nr.season_id
     FROM next_round AS nr
-    CROSS JOIN LATERAL get_form_5last_rounds(nr.season_id, nr.next_round_starting_at) AS f
+    CROSS JOIN target_cutoff AS tc
+    CROSS JOIN LATERAL get_form_5last_rounds(nr.season_id, tc.cutoff_date) AS f
 )
 SELECT ps.id,
        ps.position,

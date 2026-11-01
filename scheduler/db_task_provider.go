@@ -85,6 +85,17 @@ func (p *DBTaskProvider) GetDueTasks(ctx context.Context, now time.Time) ([]Publ
 			}
 		}
 
+		// Проверка актуальности окна публикации (stale check):
+		// Если тур завершился более 36 часов назад, публикация в Telegram устарела (спам).
+		// Фиксируем пропуск со статусом SKIPPED.
+		if !status.EndingAt.IsZero() && now.Sub(status.EndingAt) > 36*time.Hour {
+			if p.storage != nil {
+				_ = p.storage.RecordSkipped(ctx, p.channelID, publisher.PubTypeRoundResults, status.LeagueID, status.RoundID,
+					fmt.Sprintf("stale round results: ended at %s (>36h ago)", status.EndingAt.Format("2006-01-02 15:04")))
+			}
+			continue
+		}
+
 		st := *status
 		tasks = append(tasks, PublicationTask{
 			ChannelID:       p.channelID,
@@ -170,6 +181,16 @@ func (p *DBTaskProvider) checkWeekendHubDue(ctx context.Context, now time.Time) 
 	_ = p.pool.QueryRow(ctx, queryFirst, info.NextRoundID).Scan(&firstMatchKickoff)
 
 	if firstMatchKickoff == nil {
+		return false, info.NextRoundID, nil
+	}
+
+	// Если первый матч уже начался, публикация расписания тура устарела (спам).
+	// Помечаем задачу как SKIPPED.
+	if now.After(*firstMatchKickoff) {
+		if p.storage != nil {
+			_ = p.storage.RecordSkipped(ctx, p.channelID, publisher.PubTypeRoundFixtures, 8, info.NextRoundID,
+				fmt.Sprintf("first match kickoff has passed (%s)", firstMatchKickoff.Format("2006-01-02 15:04")))
+		}
 		return false, info.NextRoundID, nil
 	}
 

@@ -569,10 +569,31 @@ CREATE INDEX idx_pred_items_status ON prediction_items(settlement_status);
 ---
 
 ### Фаза 9 — Live Match Center и гибридная архитектура API (Archive & Live Polling) — СТАТУС: ВЫПОЛНЕНО
-- [x] **Разработка легковесного Go REST API сервера**: пакет `server/` на чистом `net/http` с CORS, эндпоинтами `/health`, `/api/leagues`, `/api/leagues/{id}/archive`, `/api/rounds/{round_id}`, `/api/live`, `/api/fixtures/{id}/live`; интеграция в CLI `./lab -task ApiServer` (`-port`, `-static`, `-pollInterval`);
+- [x] **Разработка легковесного Go REST API сервера**: пакет `server/` на чистом `net/http` с CORS, эндпоинтами `/health`, `/api/leagues`, `/api/leagues/{id}/archive`, `/api/rounds/{round_id}`, `/api/live`, `/api/fixtures/{id}/live`, `/api/leaders`; интеграция в CLI `./lab -task ApiServer` (`-port`, `-static`, `-pollInterval`);
 - [x] **In-play опрос с настраиваемым интервалом**: воркер `server/poller.go` и in-memory кэш `server/store.go` (`LiveStore`), интервал настраивается через флаг `-pollInterval` (по умолчанию 20s, e.g. 15s, 30s);
-- [x] **Интерактивный архивный селектор сезонов и туров в Mini App**: кнопка в шапке `archiveSelectorTrigger` и Bottom Sheet `archiveBottomSheet` с чипами сезонов и сеткой туров, динамическая подгрузка 20-летнего архива из БД;
-- [x] **Гибридная схема Cache-First**: эталонный конфиг `web/nginx.conf` (`try_files $uri @go_api_round`), клиентский fallback в `web/viewer/app.js` (`urls` со статикой и `/api/rounds/...`), Live Polling таймер в открытом Match Center.
+- [x] **Интерактивный архивный селектор сезонов и туров в Mini App**: центральный свитчер `‹ ТУР ›` и Bottom Sheet `archiveBottomSheet` с чипами сезонов и сеткой туров, динамическая подгрузка 20-летнего архива из БД;
+- [x] **Гибридная схема API-First & Cache Fallback**: клиентский опрос `/api/rounds/...` и `/api/leaders` с fallback на статические JSON-файлы, мгновенное отображение сыгранных матчей и онлайн-счетов.
+
+---
+
+### Фаза 10 — Стабилизация Mini App, API туров и аналитики формы — СТАТУС: ВЫПОЛНЕНО
+- [x] **Мгновенная отдача результатов сыгранных матчей (Ла Лига и топ-лиги)**: приоритетное обращение к live REST API `/api/rounds/{round_id}` с возвратом актуальных счетов и событий из PostgreSQL;
+- [x] **Устранение артефактов половинного счёта `(null:null)`**: строгая проверка на null в JS (`homeHT != null && awayHT != null`);
+- [x] **Исправление навигации по турам дальше `текущий + 1`**: безопасное сканирование nullable-котировок (`bookmakerName *string`) в `analytics/round_archive.go`;
+- [x] **Реальная статистика матчей в турах (устранение `0/10`)**: расчёт `finished_count` и `total_matches` в `analytics/league.go` с передачей в `active_leagues.json`;
+- [x] **Удаление дублирующего элемента шапки**: удалена кнопка `#archiveSelectorTrigger`, унифицирована навигация через блок `‹ ТУР ›`;
+- [x] **Нативный эндпоинт лидеров сезона**: реализация `/api/leaders?league_id=...&season_id=...` для live-отдачи топ-10 бомбардиров, ассистентов и сухих матчей;
+- [x] **Детерминированный расчёт формы (Манчестер Сити)**: расчет границы даты формы (`cutoff_date`) с учетом текущего тура в `analytics/standings.go`.
+
+---
+
+### Фаза 11 — Актуализация данных топ-5 лиг, лидеров, навигации по турам и Live-статусов — СТАТУС: ВЫПОЛНЕНО
+- [x] **Восстановление статистики турнирных таблиц (Ла Лига, Серия А, Бундеслига, Лига 1)**: устранена проблема с 0 значениями (W/D/L/GF/GA/GD) через перезаполнение `provider_standings_details` с параметром `rule;details;group;form`;
+- [x] **Интеграция официальных топрейтингов Sportmonks (`provider_seasons_topscores`)**: в `analytics/player_leaders.go` бомбардиры (Холанд 9 голов), ассистенты (Эванилсон 4, Гросс 4, Райс 4), очки Гол+Пас и карточки переведены на официальные данные с привязкой сыгранных матчей к `provider_lineups_{league_id}`;
+- [x] **Безопасное сканирование туров без участников (Тур 20 и до 38-го)**: добавлена защита `COALESCE` для `team_home_id` и `team_away_id` в `round_archive.go`, `round_fixtures.go` и `round_results.go`, устранены падения `dest[12]`;
+- [x] **Live-матчи во всех лигах**: внедрены функции `isMatchLive`, `isMatchFinished` и `formatLiveStateLabel` с поддержкой всех live-кодов Sportmonks (`1st`, `2nd`, `HT`, `et`, `2et`, `PEN`, `BRK`, `LIVE`), отображение пульсирующего красного бейджа LIVE и актуального счёта;
+- [x] **Защита от счёта первого тайма `(null:null)`**: строгая проверка на `null` и `"null"` в отображении `mcHTScore`;
+- [x] **Ассеты и деплой**: версия `v=20261101_v8`, сервер `ApiServer` перезапущен в режиме демона на порту 8080, данные обновлены через `syncAll`.
 
 ---
 

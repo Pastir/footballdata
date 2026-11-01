@@ -385,26 +385,27 @@ ORDER BY pf.starting_at ASC`
 	return matches, nil
 }
 
-// GetUpcomingRound возвращает ID и название ближайшего предстоящего тура текущего сезона на основе даты.
+// GetUpcomingRound возвращает ID и название ближайшего предстоящего тура текущего сезона на основе get_neighbor_rounds.
 func GetUpcomingRound(ctx context.Context, pool *pgxpool.Pool, leagueID int, now time.Time) (int, string, error) {
 	if pool == nil {
 		return 0, "", fmt.Errorf("database pool is nil")
 	}
 
 	query := `
-SELECT pr.id, pr.name
-FROM provider_rounds pr
-JOIN provider_seasons ps ON ps.id = pr.season_id AND ps.is_current = true
-WHERE ps.league_id = $1
-  AND pr.ending_at >= $2::date
-ORDER BY pr.name::int ASC
+SELECT COALESCE(nr.next_round_id, 0), COALESCE(nr.next_round_name, '')
+FROM provider_seasons ps
+CROSS JOIN LATERAL get_neighbor_rounds(ps.id) nr
+WHERE ps.league_id = $1 AND ps.is_current = true
 LIMIT 1`
 
 	var roundID int
 	var roundName string
-	err := pool.QueryRow(ctx, query, leagueID, now.Format("2006-01-02")).Scan(&roundID, &roundName)
+	err := pool.QueryRow(ctx, query, leagueID).Scan(&roundID, &roundName)
 	if err != nil {
 		return 0, "", fmt.Errorf("query upcoming round: %w", err)
+	}
+	if roundID == 0 {
+		return 0, "", fmt.Errorf("no upcoming round found for league %d", leagueID)
 	}
 
 	return roundID, roundName, nil

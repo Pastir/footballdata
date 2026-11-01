@@ -84,6 +84,12 @@ func (m *mockPublisherStorage) MarkFailed(_ context.Context, id int64, errMsg st
 	return nil
 }
 
+func (m *mockPublisherStorage) RecordSkipped(_ context.Context, channelID int64, pubType publisher.PublicationType, leagueID, roundID int, _ string) error {
+	key := fmt.Sprintf("%d_%s_%d_%d", channelID, pubType, leagueID, roundID)
+	m.publishedMap[key] = true
+	return nil
+}
+
 func (m *mockPublisherStorage) UpdateStatus(_ context.Context, id int64, status publisher.PublicationStatus) error {
 	pub, ok := m.items[id]
 	if !ok {

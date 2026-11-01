@@ -114,22 +114,62 @@ func GetRoundClosingStatus(ctx context.Context, pool *pgxpool.Pool, leagueID int
 		return nil, fmt.Errorf("database pool is not initialized")
 	}
 
-	// Выбираем текущий или последний сыгранный тур текущего сезона лиги
+	// Выбираем тур текущего сезона через get_neighbor_rounds:
+	// если следующий тур уже завершился (по дате или по окончанию всех матчей), оцениваем его,
+	// иначе оцениваем последний сыгранный тур (last_round).
 	queryRound := `
 SELECT pl.id AS league_id,
        pl.name AS league_name,
        ps.id AS season_id,
        ps.name AS season_name,
-       pr.id AS round_id,
-       pr.name AS round_name,
-       pr.starting_at,
-       pr.ending_at
+       CASE 
+           WHEN nr.next_round_id IS NOT NULL AND (
+               $2::date >= nr.next_round_ending_at 
+               OR ($2::date >= nr.next_round_starting_at AND NOT EXISTS (
+                   SELECT 1 FROM provider_fixtures pf 
+                   WHERE pf.round_id = nr.next_round_id 
+                     AND pf.state_id NOT IN (5, 7, 8, 10, 11, 12, 14, 15, 17)
+               ))
+           ) THEN nr.next_round_id
+           ELSE nr.last_round_id
+       END AS round_id,
+       CASE 
+           WHEN nr.next_round_id IS NOT NULL AND (
+               $2::date >= nr.next_round_ending_at 
+               OR ($2::date >= nr.next_round_starting_at AND NOT EXISTS (
+                   SELECT 1 FROM provider_fixtures pf 
+                   WHERE pf.round_id = nr.next_round_id 
+                     AND pf.state_id NOT IN (5, 7, 8, 10, 11, 12, 14, 15, 17)
+               ))
+           ) THEN nr.next_round_name
+           ELSE nr.last_round_name
+       END AS round_name,
+       CASE 
+           WHEN nr.next_round_id IS NOT NULL AND (
+               $2::date >= nr.next_round_ending_at 
+               OR ($2::date >= nr.next_round_starting_at AND NOT EXISTS (
+                   SELECT 1 FROM provider_fixtures pf 
+                   WHERE pf.round_id = nr.next_round_id 
+                     AND pf.state_id NOT IN (5, 7, 8, 10, 11, 12, 14, 15, 17)
+               ))
+           ) THEN nr.next_round_starting_at
+           ELSE nr.last_round_starting_at
+       END AS starting_at,
+       CASE 
+           WHEN nr.next_round_id IS NOT NULL AND (
+               $2::date >= nr.next_round_ending_at 
+               OR ($2::date >= nr.next_round_starting_at AND NOT EXISTS (
+                   SELECT 1 FROM provider_fixtures pf 
+                   WHERE pf.round_id = nr.next_round_id 
+                     AND pf.state_id NOT IN (5, 7, 8, 10, 11, 12, 14, 15, 17)
+               ))
+           ) THEN nr.next_round_ending_at
+           ELSE nr.last_round_ending_at
+       END AS ending_at
 FROM provider_leagues pl
 JOIN provider_seasons ps ON ps.league_id = pl.id AND ps.is_current = true
-JOIN provider_rounds pr ON pr.season_id = ps.id
+CROSS JOIN LATERAL get_neighbor_rounds(ps.id) nr
 WHERE pl.id = $1
-  AND (pr.is_current = true OR pr.ending_at <= $2::date)
-ORDER BY pr.name::int DESC
 LIMIT 1`
 
 	var status RoundClosingStatus

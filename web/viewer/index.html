@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=20261018_leagues1">
+  <link rel="stylesheet" href="style.css?v=20261101_v9">
 </head>
 <body>
   <div class="app-container" id="app">
@@ -37,13 +37,6 @@
             <span class="league-pill-name" id="headerLeagueName">АПЛ</span>
             <span class="league-pill-arrow">▼</span>
           </button>
-
-          <!-- Кнопка архивного селектора сезонов и туров -->
-          <button class="archive-selector-trigger" id="archiveSelectorTrigger" aria-label="Архив сезонов и туров" title="Архив сезонов и туров">
-            <span class="archive-pill-icon">🗓</span>
-            <span class="archive-pill-name" id="headerRoundBadge">ТУР</span>
-            <span class="archive-pill-arrow">▼</span>
-          </button>
         </div>
 
         <div class="zoom-actions" id="zoomActions">
@@ -61,19 +54,15 @@
         </div>
       </div>
 
-      <!-- Сегментированные вкладки -->
+      <!-- Сегментированные вкладки (Таблица / Матчи / Лидеры) -->
       <nav class="tabs-nav" role="tablist">
         <button class="tab-btn active" id="tabTable" data-tab="table" role="tab" aria-selected="true">
           <span class="tab-icon">📊</span>
           <span class="tab-text">Таблица</span>
         </button>
-        <button class="tab-btn" id="tabFixtures" data-tab="fixtures" role="tab" aria-selected="false">
-          <span class="tab-icon">📅</span>
-          <span class="tab-text">Расписание</span>
-        </button>
-        <button class="tab-btn" id="tabResults" data-tab="results" role="tab" aria-selected="false">
+        <button class="tab-btn" id="tabMatches" data-tab="matches" role="tab" aria-selected="false">
           <span class="tab-icon">⚽</span>
-          <span class="tab-text">Результаты</span>
+          <span class="tab-text">Матчи</span>
         </button>
         <button class="tab-btn" id="tabLeaders" data-tab="leaders" role="tab" aria-selected="false">
           <span class="tab-icon">👑</span>
@@ -107,19 +96,31 @@
 
       <!-- Интерактивный режим (Результаты тура и Match Center) -->
       <div class="interactive-stage hidden" id="interactiveStage">
-        <!-- 1. Экран списка всех результатов тура -->
+        <!-- 1. Экран списка матчей тура с навигатором ‹ Тур › -->
         <div class="results-view" id="roundResultsView">
+          <!-- Навигатор туров ‹ 9 ТУР › -->
+          <div class="round-pager" id="roundPager">
+            <button class="pager-btn" id="pagerPrev" aria-label="Предыдущий тур" title="Предыдущий тур">‹</button>
+            <button class="pager-title-btn" id="pagerRoundTitle" title="Выбрать тур из списка">
+              <span class="pager-round-num" id="pagerRoundNum">9 ТУР</span>
+              <span class="pager-round-tag" id="pagerRoundTag">Текущий</span>
+              <span class="pager-arrow-down">▾</span>
+            </button>
+            <button class="pager-btn" id="pagerNext" aria-label="Следующий тур" title="Следующий тур">›</button>
+            <button class="pager-current-btn hidden" id="pagerGoCurrent" title="Вернуться к текущему туру">К текущему</button>
+          </div>
+
           <div class="round-summary-card" id="roundSummaryCard"></div>
           <div class="round-matches-container" id="roundMatchesList"></div>
         </div>
 
         <!-- 2. Экран детального матч-центра -->
         <div class="match-center-view hidden" id="matchCenterView">
-          <!-- Кнопка возврата к результатам тура -->
+          <!-- Кнопка возврата к матчам тура -->
           <div class="mc-nav-bar">
             <button class="mc-back-btn" id="btnBackToResults">
               <span class="mc-back-arrow">←</span>
-              <span id="btnBackText">Результаты тура</span>
+              <span id="btnBackText">К матчам тура</span>
             </button>
             <span class="mc-league-badge" id="mcLeagueBadge">PREMIER LEAGUE</span>
           </div>
@@ -281,6 +282,6 @@
     </div>
   </div>
 
-  <script src="app.js?v=20261030_v2"></script>
+  <script src="app.js?v=20261101_v9"></script>
 </body>
 </html>

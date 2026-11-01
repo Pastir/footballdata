@@ -247,8 +247,8 @@ func dispatchRoundResults(ctx context.Context, taskData config.TaskData, log *za
 		}
 	}
 
-	resultsStartParam := fmt.Sprintf("%d_%d_%d_results", info.LeagueID, info.SeasonID, roundID)
-	tableStartParam := fmt.Sprintf("%d_%d_%d_table", info.LeagueID, info.SeasonID, roundID)
+	resultsStartParam := fmt.Sprintf("%d_%d_%d_matches", info.LeagueID, info.SeasonID, roundID)
+	tableStartParam := fmt.Sprintf("%d_%d_table", info.LeagueID, info.SeasonID)
 
 	resultsURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, resultsStartParam)
 	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, tableStartParam)

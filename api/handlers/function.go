@@ -40,6 +40,7 @@ func init() {
 		"upsertFixturesDate":            UpsertFixturesBetweenDate,
 		"upsertFixturesSeasons":         UpsertFixturesSeasons,
 		"upsertStandings":               UpsertStandings,
+		"upsertStandingsSeasons":        UpsertStandings,
 		"upsertBookmakers":              UpsertBookmakers,
 		"upsertMarkets":                 UpsertMarkets,
 		"upsertOdds":                    UpsertOdds,

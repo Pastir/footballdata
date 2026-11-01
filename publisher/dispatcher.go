@@ -364,8 +364,8 @@ func dispatchRoundDigest(ctx context.Context, taskData config.TaskData, log *zap
 		}
 	}
 
-	tableStartParam := fmt.Sprintf("%d_%d_%d_table", info.LeagueID, info.SeasonID, roundID)
-	fixturesStartParam := fmt.Sprintf("%d_%d_%d_fixtures", info.LeagueID, info.SeasonID, roundID)
+	tableStartParam := fmt.Sprintf("%d_%d_table", info.LeagueID, info.SeasonID)
+	fixturesStartParam := fmt.Sprintf("%d_%d_%d_matches", info.LeagueID, info.SeasonID, roundID)
 
 	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, tableStartParam)
 	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, fixturesStartParam)
@@ -660,6 +660,22 @@ func syncViewerFiles(publicDir string) {
 	_ = os.Chmod(filepath.Join(publicDir, "app.js"), 0644)
 	_ = copyFile(filepath.Join("web", "viewer", "style.css"), filepath.Join(publicDir, "style.css"))
 	_ = os.Chmod(filepath.Join(publicDir, "style.css"), 0644)
+
+	// Синхронизируем все сгенерированные json-данные туров и лидеров
+	dataEntries, err := os.ReadDir(filepath.Join("web", "viewer", "data"))
+	if err == nil {
+		publicDataDir := filepath.Join(publicDir, "data")
+		viewerDataDir := filepath.Join(viewerDir, "data")
+		_ = os.MkdirAll(publicDataDir, 0755)
+		_ = os.MkdirAll(viewerDataDir, 0755)
+		for _, entry := range dataEntries {
+			if !entry.IsDir() {
+				srcData := filepath.Join("web", "viewer", "data", entry.Name())
+				_ = copyFile(srcData, filepath.Join(publicDataDir, entry.Name()))
+				_ = copyFile(srcData, filepath.Join(viewerDataDir, entry.Name()))
+			}
+		}
+	}
 }
 
 // dispatchCatalog генерирует и выгружает active_leagues.json для Telegram Mini App.
@@ -844,50 +860,33 @@ func syncSingleLeagueData(ctx context.Context, pool *pgxpool.Pool, leagueID int,
 		}
 	}
 
-	// 4. Расписание следующего тура (NextRoundID)
+	// 4. Актуальные данные текущего / предстоящего тура (NextRoundID)
 	if info.NextRoundID > 0 && info.NextRoundID != info.CurrRoundID {
-		fixtures, fErr := analytics.GetNextRoundFixtures(ctx, pool, &info)
-		if fErr == nil && len(fixtures) > 0 {
-			var exportMatches []analytics.RoundResultMatch
-			for _, m := range fixtures {
+		nextInfo := info
+		nextInfo.CurrRoundID = info.NextRoundID
+		nextStandings, sErr := analytics.GetCurrentStandings(ctx, pool, &nextInfo)
+		if sErr != nil || len(nextStandings) == 0 {
+			nextStandings = standings
+		}
+
+		nextMatches, nmErr := analytics.GetRoundResults(ctx, pool, &nextInfo)
+		if nmErr == nil && len(nextMatches) > 0 {
+			for i := range nextMatches {
+				m := &nextMatches[i]
 				h2h, _ := analytics.GetH2HMatches(ctx, pool, m.TeamHomeID, m.TeamAwayID, info.Locale, 10)
 				homeProfile, _ := analytics.GetTeamPreMatchProfile(ctx, pool, m.TeamHomeID, info.SeasonID)
 				awayProfile, _ := analytics.GetTeamPreMatchProfile(ctx, pool, m.TeamAwayID, info.SeasonID)
-
-				matchEntry := analytics.RoundResultMatch{
-					LeagueID:     info.LeagueID,
-					FixtureID:    m.FixtureID,
-					LeagueName:   info.LeagueName,
-					SeasonID:     info.SeasonID,
-					SeasonName:   info.SeasonName,
-					RoundID:      m.RoundID,
-					RoundName:    m.RoundName,
-					FixtureStart: m.FixtureStart,
-					VenueID:      m.VenueID,
-					VenueName:    m.VenueName,
-					CountryID:    m.CountryID,
-					TeamHomeID:   m.TeamHomeID,
-					TeamHomeName: m.TeamHomeName,
-					TeamHomeLogo: m.TeamHomeLogo,
-					TeamAwayID:   m.TeamAwayID,
-					TeamAwayName: m.TeamAwayName,
-					TeamAwayLogo: m.TeamAwayLogo,
-					StateShort:   m.StateShort,
-					Scores:       analytics.MatchScores{},
-					Odds: analytics.MatchOdds{
-						HomeOdds:      m.OddsHome,
-						DrawOdds:      m.OddsDraw,
-						AwayOdds:      m.OddsAway,
-						BookmakerName: m.BookmakerName,
-					},
-					H2H: &h2h,
-					PreMatchStats: &analytics.PreMatchStatsComparison{
-						Home: homeProfile,
-						Away: awayProfile,
-					},
-					IsRival: m.IsRival,
+				m.H2H = &h2h
+				m.PreMatchStats = &analytics.PreMatchStatsComparison{
+					Home: homeProfile,
+					Away: awayProfile,
 				}
-				exportMatches = append(exportMatches, matchEntry)
+			}
+
+			summary := analytics.ComputeRoundSummary(nextMatches)
+			roundName := info.NextRoundName
+			if nextMatches[0].RoundName != "" {
+				roundName = nextMatches[0].RoundName
 			}
 
 			payload := roundExportPayload{
@@ -896,13 +895,13 @@ func syncSingleLeagueData(ctx context.Context, pool *pgxpool.Pool, leagueID int,
 				SeasonID:      info.SeasonID,
 				SeasonName:    info.SeasonName,
 				RoundID:       info.NextRoundID,
-				RoundName:     info.NextRoundName,
-				PrevRoundID:   info.PrevRoundID,
+				RoundName:     roundName,
+				PrevRoundID:   info.CurrRoundID,
 				NextRoundID:   info.NextRoundID,
 				NextRoundName: info.NextRoundName,
-				Summary:       analytics.RoundSummary{TotalMatches: len(fixtures)},
-				Matches:       exportMatches,
-				Standings:     standings,
+				Summary:       summary,
+				Matches:       nextMatches,
+				Standings:     nextStandings,
 			}
 			if pJSON, pErr := json.MarshalIndent(payload, "", "  "); pErr == nil {
 				_ = os.WriteFile(fmt.Sprintf("web/viewer/data/%d_%d_%d.json", info.LeagueID, info.SeasonID, info.NextRoundID), pJSON, 0644)

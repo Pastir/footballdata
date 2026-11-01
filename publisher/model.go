@@ -31,6 +31,7 @@ const (
 	StatusPublished PublicationStatus = "published"
 	StatusFailed    PublicationStatus = "failed"
 	StatusCancelled PublicationStatus = "cancelled"
+	StatusSkipped   PublicationStatus = "skipped"
 )
 
 // MediaType определяет тип медиа-вложения в Telegram.

@@ -8,12 +8,23 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/Pastir/footballdata/analytics"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"go.uber.org/zap"
 )
+
+type cachedLeadersItem struct {
+	data      *analytics.SeasonLeadersData
+	expiresAt time.Time
+}
+
+type cachedRoundItem struct {
+	data      *analytics.RoundExportPayload
+	expiresAt time.Time
+}
 
 // ServerHandlers объединяет зависимости для HTTP обработчиков.
 type ServerHandlers struct {
@@ -22,6 +33,12 @@ type ServerHandlers struct {
 	poller    *LivePoller
 	staticDir string
 	log       *zap.Logger
+
+	leadersMu    sync.RWMutex
+	leadersCache map[string]*cachedLeadersItem
+
+	roundsMu    sync.RWMutex
+	roundsCache map[string]*cachedRoundItem
 }
 
 // NewServerHandlers создает экземпляр ServerHandlers.
@@ -31,11 +48,13 @@ func NewServerHandlers(pool *pgxpool.Pool, store *LiveStore, poller *LivePoller,
 		log = l
 	}
 	return &ServerHandlers{
-		pool:      pool,
-		store:     store,
-		poller:    poller,
-		staticDir: staticDir,
-		log:       log,
+		pool:         pool,
+		store:        store,
+		poller:       poller,
+		staticDir:    staticDir,
+		log:          log,
+		leadersCache: make(map[string]*cachedLeadersItem),
+		roundsCache:  make(map[string]*cachedRoundItem),
 	}
 }
 
@@ -158,6 +177,18 @@ func (h *ServerHandlers) HandleRoundOnDemand(w http.ResponseWriter, r *http.Requ
 		locale = "ru"
 	}
 
+	cacheKey := fmt.Sprintf("%d_%s", roundID, locale)
+	h.roundsMu.RLock()
+	cachedRound, roundFound := h.roundsCache[cacheKey]
+	h.roundsMu.RUnlock()
+
+	if roundFound && time.Now().Before(cachedRound.expiresAt) {
+		w.Header().Set("X-Cache", "HIT")
+		w.Header().Set("Cache-Control", "public, max-age=60")
+		writeJSON(w, http.StatusOK, cachedRound.data)
+		return
+	}
+
 	matches, info, err := analytics.GetRoundResultsByRoundID(r.Context(), h.pool, roundID, locale)
 	if err != nil {
 		h.log.Error("GetRoundResultsByRoundID failed", zap.Int("round_id", roundID), zap.Error(err))
@@ -182,6 +213,40 @@ func (h *ServerHandlers) HandleRoundOnDemand(w http.ResponseWriter, r *http.Requ
 		Standings:     standings,
 	}
 
+	// Умный расчет TTL кэша: live-матчи — 15 сек, завершённый тур — 1 час, будущий — 10 минут
+	var ttl time.Duration = 10 * time.Minute
+	hasLive := false
+	allFinished := len(matches) > 0
+	for _, m := range matches {
+		if m.StateShort != nil {
+			st := *m.StateShort
+			if st == "1st" || st == "2nd" || st == "HT" || st == "et" || st == "2et" || st == "PEN" || st == "LIVE" {
+				hasLive = true
+				allFinished = false
+				break
+			}
+			if st != "FT" && st != "AET" && st != "FTP" {
+				allFinished = false
+			}
+		} else {
+			allFinished = false
+		}
+	}
+	if hasLive {
+		ttl = 15 * time.Second
+	} else if allFinished {
+		ttl = 1 * time.Hour
+	}
+
+	h.roundsMu.Lock()
+	h.roundsCache[cacheKey] = &cachedRoundItem{
+		data:      &payload,
+		expiresAt: time.Now().Add(ttl),
+	}
+	h.roundsMu.Unlock()
+
+	w.Header().Set("X-Cache", "MISS")
+	w.Header().Set("Cache-Control", "public, max-age=60")
 	writeJSON(w, http.StatusOK, payload)
 }
 
@@ -250,4 +315,68 @@ func (h *ServerHandlers) HandleFixtureLive(w http.ResponseWriter, r *http.Reques
 	}
 
 	writeJSON(w, http.StatusOK, m)
+}
+
+// HandleLeaders возвращает актуальный топ лидеров сезона (бомбардиры, ассистенты, сухие матчи и т.д.).
+func (h *ServerHandlers) HandleLeaders(w http.ResponseWriter, r *http.Request) {
+	leagueIDStr := r.URL.Query().Get("league_id")
+	if leagueIDStr == "" {
+		leagueIDStr = r.URL.Query().Get("league")
+	}
+	leagueID, err := strconv.Atoi(leagueIDStr)
+	if err != nil || leagueID <= 0 {
+		writeJSON(w, http.StatusBadRequest, map[string]string{"error": "valid league_id query parameter is required"})
+		return
+	}
+
+	locale := r.URL.Query().Get("locale")
+	if locale == "" {
+		locale = "ru"
+	}
+
+	limit := 10
+	if lStr := r.URL.Query().Get("limit"); lStr != "" {
+		if l, err := strconv.Atoi(lStr); err == nil && l > 0 {
+			limit = l
+		}
+	}
+
+	cacheKey := fmt.Sprintf("%d_%s_%d", leagueID, locale, limit)
+
+	h.leadersMu.RLock()
+	cached, found := h.leadersCache[cacheKey]
+	h.leadersMu.RUnlock()
+
+	if found && time.Now().Before(cached.expiresAt) {
+		w.Header().Set("X-Cache", "HIT")
+		w.Header().Set("Cache-Control", "public, max-age=300")
+		writeJSON(w, http.StatusOK, cached.data)
+		return
+	}
+
+	info, err := analytics.GetLeagueSeasonInfo(r.Context(), h.pool, leagueID)
+	if err != nil {
+		h.log.Error("GetLeagueSeasonInfo failed in HandleLeaders", zap.Int("league_id", leagueID), zap.Error(err))
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return
+	}
+	info.Locale = locale
+
+	leaders, err := analytics.GetSeasonPlayerLeaders(r.Context(), h.pool, &info, limit)
+	if err != nil {
+		h.log.Error("GetSeasonPlayerLeaders failed in HandleLeaders", zap.Int("league_id", leagueID), zap.Error(err))
+		writeJSON(w, http.StatusInternalServerError, map[string]string{"error": err.Error()})
+		return
+	}
+
+	h.leadersMu.Lock()
+	h.leadersCache[cacheKey] = &cachedLeadersItem{
+		data:      leaders,
+		expiresAt: time.Now().Add(10 * time.Minute),
+	}
+	h.leadersMu.Unlock()
+
+	w.Header().Set("X-Cache", "MISS")
+	w.Header().Set("Cache-Control", "public, max-age=300")
+	writeJSON(w, http.StatusOK, leaders)
 }

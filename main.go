@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/Pastir/ManageServer"
-	"github.com/Pastir/footballdata/api/handlers"
+	handler "github.com/Pastir/footballdata/api/handlers"
 	"github.com/Pastir/footballdata/api/statistics"
 	"github.com/Pastir/footballdata/config"
 	"github.com/Pastir/footballdata/db"
@@ -63,7 +63,7 @@ func main() {
   -task upsertCoachesTeamsSeasons -seasonIsCurrent true
   -task upsertCoachesIds
   -task upsertRefereesSeasons -seasonIsCurrent true
-  -task upsertPlayerIds -playerId 37673230,37675253,37675754
+  -task upsertPlayerIds -playerId 37673230,37675253,37675754e
   -task upsertFixtures
   -task upsertFixturesSeasons -seasonIsCurrent true
        -task upsertFixturesSeasonsTimeline -seasonIsCurrent true

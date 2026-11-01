@@ -178,30 +178,32 @@ SELECT pl.id AS league_id
      , pf.starting_at AS fixture_start
      , pf.venue_id
      , pv.name AS venue_name
-     , pl.country_id
+     , COALESCE(pl.country_id, 0) AS country_id
      , pc.name AS country_name
      
-     , fh.participant_id AS team_home_id
+     , COALESCE(fh.participant_id, 0) AS team_home_id
      , COALESCE(
            NULLIF(pth.locale->$2->>'short', ''),
            NULLIF(pth.locale->$2->>'long', ''),
-           pth.name
+           pth.name,
+           'TBD'
        ) AS team_home_name
      , COALESCE(pth.image_path, '') AS team_home_logo
      , fh.winner AS team_home_winner
      , fh.result AS team_home_result
      
-     , fa.participant_id AS team_away_id
+     , COALESCE(fa.participant_id, 0) AS team_away_id
      , COALESCE(
            NULLIF(pta.locale->$2->>'short', ''),
            NULLIF(pta.locale->$2->>'long', ''),
-           pta.name
+           pta.name,
+           'TBD'
        ) AS team_away_name
      , COALESCE(pta.image_path, '') AS team_away_logo
      , fa.winner AS team_away_winner
      , fa.result AS team_away_result
      
-     , pst.short_name AS state_short
+     , COALESCE(pst.short_name, 'NS') AS state_short
      , ref.referee_name
      
      , scores.scores
@@ -430,6 +432,7 @@ ORDER BY pf.starting_at ASC;`
 		var m RoundResultMatch
 		var (
 			rawScores, rawEvents, rawStats, rawLineups, rawCoaches, rawOdds []byte
+			bookmakerName                                                   *string
 			homeXG, awayXG                                                   *float64
 		)
 
@@ -468,13 +471,17 @@ ORDER BY pf.starting_at ASC;`
 			&rawLineups,
 			&rawCoaches,
 			&rawOdds,
-			&m.Odds.BookmakerName,
+			&bookmakerName,
 
 			&homeXG,
 			&awayXG,
 			&m.IsRival,
 		); err != nil {
 			return nil, nil, fmt.Errorf("scan match error: %w", err)
+		}
+
+		if bookmakerName != nil {
+			m.Odds.BookmakerName = *bookmakerName
 		}
 
 		if homeXG != nil {
@@ -510,30 +517,32 @@ SELECT pl.id AS league_id
      , pf.starting_at AS fixture_start
      , pf.venue_id
      , pv.name AS venue_name
-     , pl.country_id
+     , COALESCE(pl.country_id, 0) AS country_id
      , pc.name AS country_name
      
-     , fh.participant_id AS team_home_id
+     , COALESCE(fh.participant_id, 0) AS team_home_id
      , COALESCE(
            NULLIF(pth.locale->$2->>'short', ''),
            NULLIF(pth.locale->$2->>'long', ''),
-           pth.name
+           pth.name,
+           'TBD'
        ) AS team_home_name
      , COALESCE(pth.image_path, '') AS team_home_logo
      , fh.winner AS team_home_winner
      , fh.result AS team_home_result
      
-     , fa.participant_id AS team_away_id
+     , COALESCE(fa.participant_id, 0) AS team_away_id
      , COALESCE(
            NULLIF(pta.locale->$2->>'short', ''),
            NULLIF(pta.locale->$2->>'long', ''),
-           pta.name
+           pta.name,
+           'TBD'
        ) AS team_away_name
      , COALESCE(pta.image_path, '') AS team_away_logo
      , fa.winner AS team_away_winner
      , fa.result AS team_away_result
      
-     , pst.short_name AS state_short
+     , COALESCE(pst.short_name, 'NS') AS state_short
      , ref.referee_name
      
      , scores.scores
@@ -750,6 +759,7 @@ LIMIT 1;`
 	var m RoundResultMatch
 	var (
 		rawScores, rawEvents, rawStats, rawLineups, rawCoaches, rawOdds []byte
+		bookmakerName                                                   *string
 		homeXG, awayXG                                                   *float64
 	)
 
@@ -788,7 +798,7 @@ LIMIT 1;`
 		&rawLineups,
 		&rawCoaches,
 		&rawOdds,
-		&m.Odds.BookmakerName,
+		&bookmakerName,
 
 		&homeXG,
 		&awayXG,
@@ -796,6 +806,10 @@ LIMIT 1;`
 	)
 	if err != nil {
 		return nil, fmt.Errorf("GetFixtureLiveDetails: %w", err)
+	}
+
+	if bookmakerName != nil {
+		m.Odds.BookmakerName = *bookmakerName
 	}
 
 	if homeXG != nil {

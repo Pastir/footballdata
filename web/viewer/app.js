@@ -69,8 +69,31 @@
         seasonId = parts[1];
         roundId = parts[2];
         initialTab = parts[3];
-      } else if (parts.length === 1 && (parts[0] === 'table' || parts[0] === 'fixtures' || parts[0] === 'results' || parts[0] === 'leaders')) {
-        initialTab = parts[0];
+      } else if (parts.length === 3) {
+        // Формат: <league_id>_<season_id>_<tab> (например, 8_28083_table, 8_28083_matches)
+        leagueId = parts[0];
+        seasonId = parts[1];
+        if (parts[2] === 'table' || parts[2] === 'matches' || parts[2] === 'fixtures' || parts[2] === 'results' || parts[2] === 'leaders') {
+          initialTab = (parts[2] === 'fixtures' || parts[2] === 'results') ? 'matches' : parts[2];
+        } else {
+          roundId = parts[2];
+          initialTab = 'matches';
+        }
+      } else if (parts.length === 2) {
+        // Формат: <league_id>_<tab>
+        leagueId = parts[0];
+        if (parts[1] === 'table' || parts[1] === 'matches' || parts[1] === 'fixtures' || parts[1] === 'results' || parts[1] === 'leaders') {
+          initialTab = (parts[1] === 'fixtures' || parts[1] === 'results') ? 'matches' : parts[1];
+        } else {
+          roundId = parts[1];
+          initialTab = 'matches';
+        }
+      } else if (parts.length === 1) {
+        if (parts[0] === 'table' || parts[0] === 'matches' || parts[0] === 'leaders') {
+          initialTab = parts[0];
+        } else if (parts[0] === 'fixtures' || parts[0] === 'results') {
+          initialTab = 'matches';
+        }
       }
     }
   }
@@ -82,8 +105,7 @@
   }
   if (!leagueId) leagueId = '8';
   if (!seasonId) seasonId = '28083';
-  if (!roundId) roundId = '407869';
-  if (!initialTab) initialTab = targetMatchId ? 'fixtures' : 'results';
+  if (!initialTab) initialTab = targetMatchId ? 'matches' : 'matches';
 
   const mediaBase = urlParams.get('media_base') || '/media';
 
@@ -195,29 +217,44 @@
   const leadersContainer = document.getElementById('leadersContainer');
   const leadersCategoryNav = document.getElementById('leadersCategoryNav');
 
+  // Элементы навигатора туров ‹ 9 ТУР ›
+  const roundPager = document.getElementById('roundPager');
+  const pagerPrev = document.getElementById('pagerPrev');
+  const pagerNext = document.getElementById('pagerNext');
+  const pagerRoundTitle = document.getElementById('pagerRoundTitle');
+  const pagerRoundNum = document.getElementById('pagerRoundNum');
+  const pagerRoundTag = document.getElementById('pagerRoundTag');
+  const pagerGoCurrent = document.getElementById('pagerGoCurrent');
+
   const TAB_FILES = {
     table: 'standings.png',
-    fixtures: 'round_fixtures.png',
+    matches: 'round_results.png',
+    fixtures: 'round_results.png',
     results: 'round_results.png',
     leaders: 'leaders.png'
   };
 
   const TAB_TITLES = {
     table: 'ТУРНИРНАЯ ТАБЛИЦА',
-    fixtures: 'РАСПИСАНИЕ ТУРА',
-    results: 'РЕЗУЛЬТАТЫ ТУРА',
+    matches: 'МАТЧИ ТУРА',
+    fixtures: 'МАТЧИ ТУРА',
+    results: 'МАТЧИ ТУРА',
     leaders: 'ЛИДЕРЫ СЕЗОНА'
   };
 
   let currentTab = initialTab;
+  if (currentTab === 'fixtures' || currentTab === 'results') {
+    currentTab = 'matches';
+  }
   if (!TAB_FILES[currentTab]) {
-    currentTab = 'table';
+    currentTab = 'matches';
   }
 
   // Кэш загруженных данных туров (key: `${leagueId}_${roundId}`) и лидеров
   const roundDataCache = new Map();
   let activeRoundData = null;
   let leadersDataCache = null;
+  const leadersDataCacheMap = new Map();
   let currentLeaderCategory = 'scorers';
 
   function getActiveLeague() {
@@ -232,25 +269,16 @@
     return `Тур ${s}`;
   }
 
-  function getRoundIdForTab(tabKey) {
+  function getDefaultRoundId() {
     const active = getActiveLeague();
-    if (tabKey === 'fixtures') {
-      if (active?.next_round_id) return String(active.next_round_id);
-      for (const data of roundDataCache.values()) {
-        if (String(data.league_id) === String(leagueId) && data.next_round_id) {
-          return String(data.next_round_id);
-        }
-      }
-      return roundId;
-    } else if (tabKey === 'results') {
-      if (active?.curr_round_id) return String(active.curr_round_id);
-      return roundId;
-    } else if (tabKey === 'table') {
-      if (active?.curr_round_id) return String(active.curr_round_id);
-      if (active?.next_round_id) return String(active.next_round_id);
-      return roundId;
-    }
-    return roundId;
+    if (!active) return roundId || '';
+    // По умолчанию отображается текущий тур (или следующий, если он еще не начался)
+    return String(active.next_round_id || active.curr_round_id || roundId || '');
+  }
+
+  function getRoundIdForTab(tabKey) {
+    if (roundId) return String(roundId);
+    return getDefaultRoundId();
   }
 
   // 4. Состояние масштабирования и панорамирования (Pan & Zoom для PNG)
@@ -336,9 +364,6 @@
     renderQuickLeaguesCarousel();
     renderCategoryMenu();
     renderLeaguesList();
-
-    // Обновляем текущую вкладку с учетом уточненных ID туров из каталога
-    selectTab(currentTab);
   }
 
   function updateHeaderLeagueInfo() {
@@ -568,13 +593,7 @@
 
     leagueId = String(target.league_id);
     seasonId = String(target.season_id);
-    if (currentTab === 'fixtures' && target.next_round_id) {
-      roundId = String(target.next_round_id);
-    } else if (target.curr_round_id) {
-      roundId = String(target.curr_round_id);
-    } else if (target.next_round_id) {
-      roundId = String(target.next_round_id);
-    }
+    roundId = String(target.next_round_id || target.curr_round_id || '');
 
     try {
       localStorage.setItem('fdl_active_league_id', leagueId);
@@ -668,6 +687,26 @@
     archiveBottomSheet.classList.remove('hidden');
     if (archiveSelectorTrigger) archiveSelectorTrigger.classList.add('open');
 
+    const active = getActiveLeague();
+    if (active && active.rounds && active.rounds.length > 0) {
+      if (archiveSheetSubtitle) {
+        archiveSheetSubtitle.textContent = `${active.display_name || active.league_name} · ${active.season_name}`;
+      }
+      renderArchiveRounds({
+        id: active.season_id,
+        name: active.season_name,
+        is_current: true,
+        rounds: active.rounds.map(r => ({
+          id: r.id,
+          name: r.name,
+          is_current: String(r.id) === String(active.next_round_id || active.curr_round_id),
+          total_matches: r.total_matches || 10,
+          finished_count: r.finished_count !== undefined ? r.finished_count : (r.finished ? (r.total_matches || 10) : 0)
+        }))
+      });
+      return;
+    }
+
     if (archiveSheetSubtitle) {
       archiveSheetSubtitle.textContent = 'Загрузка сезонов и туров...';
     }
@@ -742,7 +781,7 @@
 
     season.rounds.forEach(r => {
       const card = document.createElement('div');
-      const isSelected = String(r.id) === String(targetRoundId || roundId);
+      const isSelected = String(r.id) === String(roundId);
       card.className = `archive-round-card ${isSelected ? 'active' : ''} ${r.is_current ? 'is-current' : ''}`;
       card.innerHTML = `
         <div class="archive-round-num">${escapeHtml(r.name)} ТУР</div>
@@ -756,20 +795,8 @@
   }
 
   function selectArchiveRound(rId, rName, sId, sName) {
-    targetRoundId = rId;
-    roundId = rId;
-    seasonId = sId;
-    displayRound = `${rName} тур`;
-
-    if (headerRoundBadge) {
-      headerRoundBadge.textContent = `${rName} ТУР`;
-    }
-    headerContext.textContent = `${displayLeague.toUpperCase()} • ${displayRound.toUpperCase()} • ${TAB_TITLES[currentTab] || ''}`;
-
     closeArchiveBottomSheet();
-    loadRoundData(true, (data) => {
-      handleRoundDataLoaded(data);
-    });
+    navigateToRound(rId);
   }
 
   if (archiveSelectorTrigger) {
@@ -804,9 +831,9 @@
     } else {
       const active = getActiveLeague();
       let roundLabel = displayRound;
-      if (currentTab === 'fixtures' && active?.next_round) {
+      if (active?.next_round) {
         roundLabel = formatRoundName(active.next_round);
-      } else if (currentTab === 'results' && active?.curr_round) {
+      } else if (active?.curr_round) {
         roundLabel = formatRoundName(active.curr_round);
       }
       headerContext.textContent = `${displayLeague.toUpperCase()} • ${roundLabel.toUpperCase()} • ${TAB_TITLES[currentTab] || ''}`;
@@ -850,10 +877,10 @@
     errorOverlay.classList.add('hidden');
 
     const urls = [
-      `${mediaBase}/${leagueId}/${seasonId}/${targetRoundId}/round_data.json`,
+      `/api/rounds/${targetRoundId}?locale=ru`,
       `data/${leagueId}_${seasonId}_${targetRoundId}.json`,
-      `round_data.json`,
-      `/api/rounds/${targetRoundId}?locale=ru`
+      `viewer/data/${leagueId}_${seasonId}_${targetRoundId}.json`,
+      `${mediaBase}/${leagueId}/${seasonId}/${targetRoundId}/round_data.json`
     ];
 
     let loadedData = null;
@@ -907,29 +934,26 @@
       return;
     }
 
-    if (targetMatchId) {
-      const match = data.matches?.find(m => String(m.FixtureID) === String(targetMatchId));
-      if (match) {
-        currentTab = (match.StateShort !== 'FT') ? 'fixtures' : 'results';
-      }
-    }
-
-    const isFixtures = currentTab === 'fixtures';
+    currentTab = 'matches';
     tabButtons.forEach(btn => {
-      const isActive = btn.dataset.tab === currentTab;
+      const isActive = btn.dataset.tab === 'matches';
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
 
-    headerContext.textContent = `${displayLeague.toUpperCase()} • ${displayRound.toUpperCase()} • ${isFixtures ? TAB_TITLES.fixtures : TAB_TITLES.results}`;
+    if (data.round_name) {
+      displayRound = formatRoundName(data.round_name);
+    }
+    headerContext.textContent = `${displayLeague.toUpperCase()} • ${displayRound.toUpperCase()} • ${TAB_TITLES.matches}`;
     document.title = `${displayLeague} — ${displayRound} | Football Data Lab`;
 
     const btnBackText = document.getElementById('btnBackText');
     if (btnBackText) {
-      btnBackText.textContent = isFixtures ? 'Расписание тура' : 'Результаты тура';
+      btnBackText.textContent = 'К матчам тура';
     }
 
-    renderRoundResultsView(data, isFixtures);
+    renderRoundResultsView(data);
+    updateRoundPager(data);
 
     if (targetMatchId) {
       openMatchCenter(targetMatchId);
@@ -938,14 +962,14 @@
     }
   }
 
-  // 7. Отрисовка списка матчей (Расписание или Результаты)
-  function renderRoundResultsView(data, isFixtures = (currentTab === 'fixtures')) {
+  // 7. Отрисовка списка матчей тура
+  function renderRoundResultsView(data) {
     activeRoundData = data;
     const summary = data.summary || {};
     const matches = data.matches || [];
 
-    // Экспресс-статистика тура (отображается только для завершённых результатов)
-    if (!isFixtures && summary.TotalMatches > 0 && (summary.TotalGoals > 0 || summary.HomeWins > 0 || summary.AwayWins > 0)) {
+    // Экспресс-статистика тура (отображается при наличии сыгранных матчей)
+    if (summary.TotalMatches > 0 && (summary.TotalGoals > 0 || summary.HomeWins > 0 || summary.AwayWins > 0)) {
       roundSummaryCard.innerHTML = `
         <div class="rs-title">Экспресс-статистика тура</div>
         <div class="rs-grid">
@@ -994,17 +1018,32 @@
       html += `<div class="day-header">📅 ${dateHeader}</div>`;
 
       g.matches.forEach(m => {
-        const isFinished = m.StateShort === 'FT';
+        const isFinished = isMatchFinished(m.StateShort);
+        const isLive = isMatchLive(m.StateShort);
         let scoreBoxHtml = '';
         if (isFinished) {
           const homeScore = m.Scores?.HomeCurrent ?? '-';
           const awayScore = m.Scores?.AwayCurrent ?? '-';
           const homeHT = m.Scores?.HomeHT;
           const awayHT = m.Scores?.AwayHT;
-          const htText = (homeHT !== undefined && awayHT !== undefined) ? `(${homeHT}:${awayHT})` : '';
+          const htText = (homeHT != null && awayHT != null && homeHT !== 'null' && awayHT !== 'null') ? `(${homeHT}:${awayHT})` : '';
           scoreBoxHtml = `
             <div class="rm-score">${homeScore} : ${awayScore}</div>
             ${htText ? `<div class="rm-ht-score">${htText}</div>` : ''}
+          `;
+        } else if (isLive) {
+          const homeScore = m.Scores?.HomeCurrent ?? 0;
+          const awayScore = m.Scores?.AwayCurrent ?? 0;
+          const homeHT = m.Scores?.HomeHT;
+          const awayHT = m.Scores?.AwayHT;
+          const htText = (homeHT != null && awayHT != null && homeHT !== 'null' && awayHT !== 'null') ? `(${homeHT}:${awayHT})` : '';
+          const liveLabel = formatLiveStateLabel(m.StateShort);
+          scoreBoxHtml = `
+            <div class="rm-score" style="color:#ef4444;font-weight:800;">${homeScore} : ${awayScore}</div>
+            <div class="rm-ht-score" style="color:#ef4444;font-weight:700;">
+              <span class="live-dot" style="display:inline-block;width:6px;height:6px;background:#ef4444;border-radius:50%;margin-right:4px;vertical-align:middle;animation:pulse-glow 1.5s infinite;"></span>
+              ${liveLabel} ${htText}
+            </div>
           `;
         } else {
           const kTime = formatMatchTime(m.FixtureStart);
@@ -1015,17 +1054,20 @@
           `;
         }
 
+        const homeName = m.TeamHomeName || 'TBD';
+        const awayName = m.TeamAwayName || 'TBD';
+
         html += `
           <div class="round-match-card" data-fixture-id="${m.FixtureID}">
             <div class="rm-team home">
               ${m.TeamHomeLogo ? `<img class="rm-logo" src="${m.TeamHomeLogo}" alt="">` : ''}
-              <span class="rm-name">${escapeHtml(m.TeamHomeName)}</span>
+              <span class="rm-name">${escapeHtml(homeName)}</span>
             </div>
             <div class="rm-score-box">
               ${scoreBoxHtml}
             </div>
             <div class="rm-team away">
-              <span class="rm-name">${escapeHtml(m.TeamAwayName)}</span>
+              <span class="rm-name">${escapeHtml(awayName)}</span>
               ${m.TeamAwayLogo ? `<img class="rm-logo" src="${m.TeamAwayLogo}" alt="">` : ''}
             </div>
             <div class="rm-arrow">›</div>
@@ -1042,6 +1084,181 @@
         const fid = card.dataset.fixtureId;
         openMatchCenter(fid);
       });
+    });
+  }
+
+  // Вспомогательные функции определения состояния матчей
+  function isMatchLive(state) {
+    if (!state) return false;
+    return ['1st', '2nd', 'HT', 'ET', 'et', '2et', 'PEN', 'LIVE', '1H', '2H', 'INPLAY_1ST_HALF', 'INPLAY_2ND_HALF', 'BREAK', 'BRK', 'ETB', 'PENB', 'INT'].includes(state);
+  }
+
+  function isMatchFinished(state) {
+    if (!state) return false;
+    return ['FT', 'AET', 'FTP', 'AWAR', 'WO'].includes(state);
+  }
+
+  function formatLiveStateLabel(state) {
+    if (state === 'HT') return 'Перерыв';
+    if (state === '1st' || state === '1H' || state === 'INPLAY_1ST_HALF') return '1-й тайм';
+    if (state === '2nd' || state === '2H' || state === 'INPLAY_2ND_HALF') return '2-й тайм';
+    if (state === 'et' || state === 'ET' || state === 'INPLAY_ET') return 'Экстра-тайм';
+    if (state === '2et' || state === 'INPLAY_ET_2ND_HALF') return '2-й экстра-тайм';
+    if (state === 'PEN' || state === 'INPLAY_PENALTIES') return 'Пенальти';
+    if (state === 'BRK' || state === 'BREAK') return 'Перерыв';
+    return 'LIVE';
+  }
+
+  // Обновление состояния навигатора туров ‹ 9 ТУР ›
+  function updateRoundPager(data) {
+    if (!roundPager || !data) return;
+
+    const active = getActiveLeague();
+    const currentRId = String(data.round_id || roundId);
+    const rName = formatRoundName(data.round_name || '');
+
+    if (pagerRoundNum) {
+      pagerRoundNum.textContent = rName ? rName.toUpperCase() : 'ТУР';
+    }
+
+    // Определение статуса тура (Текущий, LIVE, Прошлый тур, Архив, Предстоящий)
+    let tag = 'Архив';
+    let tagClass = 'pager-round-tag past';
+    let isCurrentRound = false;
+
+    if (active) {
+      if (String(active.next_round_id) === currentRId) {
+        tag = 'Текущий';
+        tagClass = 'pager-round-tag';
+        isCurrentRound = true;
+      } else if (String(active.curr_round_id) === currentRId) {
+        tag = 'Прошлый тур';
+        tagClass = 'pager-round-tag past';
+      }
+    }
+
+    const hasLive = data.matches?.some(m => isMatchLive(m.StateShort));
+    if (hasLive) {
+      tag = 'LIVE';
+      tagClass = 'pager-round-tag live';
+    }
+
+    if (pagerRoundTag) {
+      pagerRoundTag.textContent = tag;
+      pagerRoundTag.className = tagClass;
+    }
+
+    if (pagerGoCurrent) {
+      if (isCurrentRound) {
+        pagerGoCurrent.classList.add('hidden');
+      } else {
+        pagerGoCurrent.classList.remove('hidden');
+      }
+    }
+
+    // Навигация влево/вправо по упорядоченному списку туров сезона
+    const rounds = active?.rounds || [];
+    if (rounds.length > 0) {
+      const idx = rounds.findIndex(r => String(r.id) === currentRId);
+      if (idx !== -1) {
+        // Предыдущий тур (листаем влево до 1-го тура)
+        if (idx > 0) {
+          if (pagerPrev) {
+            pagerPrev.disabled = false;
+            pagerPrev.dataset.targetId = rounds[idx - 1].id;
+            pagerPrev.title = `К ${rounds[idx - 1].name} туру`;
+          }
+        } else {
+          if (pagerPrev) {
+            pagerPrev.disabled = true;
+            pagerPrev.dataset.targetId = '';
+          }
+        }
+
+        // Следующий тур (листаем вправо)
+        if (idx < rounds.length - 1) {
+          if (pagerNext) {
+            pagerNext.disabled = false;
+            pagerNext.dataset.targetId = rounds[idx + 1].id;
+            pagerNext.title = `К ${rounds[idx + 1].name} туру`;
+          }
+        } else {
+          if (pagerNext) {
+            pagerNext.disabled = true;
+            pagerNext.dataset.targetId = '';
+          }
+        }
+        return;
+      }
+    }
+
+    // Резервный переход по prev_round_id / next_round_id из данных тура
+    if (pagerPrev) {
+      if (data.prev_round_id) {
+        pagerPrev.disabled = false;
+        pagerPrev.dataset.targetId = data.prev_round_id;
+      } else {
+        pagerPrev.disabled = true;
+        pagerPrev.dataset.targetId = '';
+      }
+    }
+
+    if (pagerNext) {
+      if (data.next_round_id) {
+        pagerNext.disabled = false;
+        pagerNext.dataset.targetId = data.next_round_id;
+      } else {
+        pagerNext.disabled = true;
+        pagerNext.dataset.targetId = '';
+      }
+    }
+  }
+
+  function navigateToRound(targetId) {
+    if (!targetId) return;
+    const nextRId = String(targetId);
+    roundId = nextRId;
+
+    try {
+      const u = new URL(window.location.href);
+      u.searchParams.set('tab', currentTab || 'matches');
+      u.searchParams.set('round', roundId);
+      window.history.replaceState({}, '', u.toString());
+    } catch (_) {}
+
+    loadRoundData(roundId, (data) => {
+      handleRoundDataLoaded(data);
+    });
+  }
+
+  if (pagerPrev) {
+    pagerPrev.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tid = pagerPrev.dataset.targetId;
+      if (tid) navigateToRound(tid);
+    });
+  }
+
+  if (pagerNext) {
+    pagerNext.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tid = pagerNext.dataset.targetId;
+      if (tid) navigateToRound(tid);
+    });
+  }
+
+  if (pagerGoCurrent) {
+    pagerGoCurrent.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const active = getActiveLeague();
+      const tid = active?.next_round_id || active?.curr_round_id;
+      if (tid) navigateToRound(tid);
+    });
+  }
+
+  if (pagerRoundTitle) {
+    pagerRoundTitle.addEventListener('click', () => {
+      openArchiveBottomSheet();
     });
   }
 
@@ -1095,21 +1312,21 @@
     mcVenue.textContent = match.VenueName || 'Стадион';
     mcReferee.textContent = match.RefereeName ? `Судья: ${match.RefereeName}` : (match.StateShort === 'FT' ? 'Матч завершён' : 'Матч ожидает начала');
 
-    const isLive = ['1st', '2nd', 'HT', 'ET', 'PEN', 'LIVE'].includes(match.StateShort);
-    const isFinished = ['FT', 'AET', 'FTP'].includes(match.StateShort);
+    const isLive = isMatchLive(match.StateShort);
+    const isFinished = isMatchFinished(match.StateShort);
     const isPreMatch = !isLive && !isFinished;
-    currentTab = isPreMatch ? 'fixtures' : 'results';
+    currentTab = 'matches';
 
     // Синхронизируем состояние верхних табов навигации
     tabButtons.forEach(btn => {
-      const isActive = btn.dataset.tab === currentTab;
+      const isActive = btn.dataset.tab === 'matches';
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
-    headerContext.textContent = `${displayLeague.toUpperCase()} • ${displayRound.toUpperCase()} • ${isPreMatch ? TAB_TITLES.fixtures : TAB_TITLES.results}`;
+    headerContext.textContent = `${displayLeague.toUpperCase()} • ${displayRound.toUpperCase()} • ${TAB_TITLES.matches}`;
     const btnBackText = document.getElementById('btnBackText');
     if (btnBackText) {
-      btnBackText.textContent = isPreMatch ? 'Расписание тура' : 'Результаты тура';
+      btnBackText.textContent = 'К матчам тура';
     }
 
     const overviewBtn = document.querySelector('[data-subtab="overview"]');
@@ -1138,10 +1355,10 @@
       mcScore.style.letterSpacing = '';
       const hHT = match.Scores?.HomeHT;
       const aHT = match.Scores?.AwayHT;
-      mcHTScore.textContent = (hHT !== undefined && aHT !== undefined) ? `(${hHT}:${aHT})` : '';
+      mcHTScore.textContent = (hHT != null && aHT != null && hHT !== 'null' && aHT !== 'null') ? `(${hHT}:${aHT})` : '';
 
       if (isLive) {
-        mcStatus.textContent = match.StateShort === 'HT' ? 'Перерыв (HT)' : 'Идёт матч';
+        mcStatus.textContent = formatLiveStateLabel(match.StateShort);
         if (mcLiveBadge) mcLiveBadge.classList.remove('hidden');
         startLiveMatchPolling(fixtureId);
       } else {
@@ -1196,15 +1413,15 @@
           }
           const hHT = liveMatch.Scores.HomeHT;
           const aHT = liveMatch.Scores.AwayHT;
-          mcHTScore.textContent = (hHT !== undefined && aHT !== undefined) ? `(${hHT}:${aHT})` : '';
+          mcHTScore.textContent = (hHT != null && aHT != null && hHT !== 'null' && aHT !== 'null') ? `(${hHT}:${aHT})` : '';
         }
 
-        if (['FT', 'AET', 'FTP'].includes(liveMatch.StateShort)) {
+        if (isMatchFinished(liveMatch.StateShort)) {
           mcStatus.textContent = 'Матч завершён';
           if (mcLiveBadge) mcLiveBadge.classList.add('hidden');
           stopLiveMatchPolling();
         } else {
-          mcStatus.textContent = liveMatch.StateShort === 'HT' ? 'Перерыв (HT)' : 'Идёт матч';
+          mcStatus.textContent = formatLiveStateLabel(liveMatch.StateShort);
         }
 
         if (liveMatch.Events) renderOverviewTimeline(liveMatch.Events, liveMatch);
@@ -1228,12 +1445,13 @@
     matchCenterView.classList.add('hidden');
     roundResultsView.classList.remove('hidden');
 
+    currentTab = 'matches';
     tabButtons.forEach(btn => {
-      const isActive = btn.dataset.tab === currentTab;
+      const isActive = btn.dataset.tab === 'matches';
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
-    headerContext.textContent = `${displayLeague.toUpperCase()} • ${displayRound.toUpperCase()} • ${TAB_TITLES[currentTab] || ''}`;
+    headerContext.textContent = `${displayLeague.toUpperCase()} • ${displayRound.toUpperCase()} • ${TAB_TITLES.matches}`;
 
     if (tg?.BackButton) {
       tg.BackButton.hide();
@@ -1357,26 +1575,30 @@
 
   // 8.2. Интерактивные лидеры турнира (Phase 7)
   async function loadLeadersData(callback) {
-    if (leadersDataCache && String(leadersDataCache.league_id) === String(leagueId)) {
-      if (callback) callback(leadersDataCache);
-      return;
+    const cacheKey = `${leagueId}_${seasonId}`;
+    if (leadersDataCacheMap.has(cacheKey)) {
+      const cached = leadersDataCacheMap.get(cacheKey);
+      if (Date.now() - cached.timestamp < 600000) { // 10 мин in-memory кэш на клиенте
+        leadersDataCache = cached.data;
+        if (callback) callback(cached.data);
+        return;
+      }
     }
 
     loader.classList.remove('hidden');
     errorOverlay.classList.add('hidden');
 
     const urls = [
-      `${mediaBase}/${leagueId}/${seasonId}/leaders.json`,
+      `/api/leaders?league_id=${leagueId}&season_id=${seasonId}&locale=ru`,
       `data/${leagueId}_${seasonId}_leaders.json`,
-      `leaders.json`
+      `viewer/data/${leagueId}_${seasonId}_leaders.json`,
+      `${mediaBase}/${leagueId}/${seasonId}/leaders.json`
     ];
 
     let loadedData = null;
-    const buster = `?_cb=${Date.now()}`;
     for (const u of urls) {
       try {
-        const fetchUrl = u.includes('?') ? `${u}&${buster.slice(1)}` : `${u}${buster}`;
-        const resp = await fetch(fetchUrl, { cache: 'no-cache' });
+        const resp = await fetch(u);
         if (resp.ok) {
           const json = await resp.json();
           if (!json.league_id || String(json.league_id) === String(leagueId)) {
@@ -1391,6 +1613,7 @@
 
     if (loadedData) {
       leadersDataCache = loadedData;
+      leadersDataCacheMap.set(cacheKey, { data: loadedData, timestamp: Date.now() });
       if (callback) callback(loadedData);
     } else {
       if (callback) {
@@ -2226,9 +2449,10 @@
     });
   });
 
-  // 11. Переключение главных табов (Таблица / Расписание / Результаты)
+  // 11. Переключение главных табов (Таблица / Матчи / Лидеры)
   function selectTab(tabKey) {
     if (!TAB_FILES[tabKey]) return;
+    if (tabKey === 'fixtures' || tabKey === 'results') tabKey = 'matches';
     currentTab = tabKey;
 
     tabButtons.forEach(btn => {
@@ -2237,36 +2461,37 @@
       btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
     });
 
-    if (tabKey === 'results' || tabKey === 'fixtures') {
+    if (tabKey === 'matches') {
       stage.classList.add('hidden');
       interactiveStage.classList.remove('hidden');
       if (standingsView) standingsView.classList.add('hidden');
       if (leadersView) leadersView.classList.add('hidden');
+      if (roundResultsView) roundResultsView.classList.remove('hidden');
+      if (matchCenterView) matchCenterView.classList.add('hidden');
       if (zoomActions) zoomActions.style.display = 'none';
 
-      const isFixtures = tabKey === 'fixtures';
-      const targetRoundId = getRoundIdForTab(tabKey);
+      const targetRoundId = getRoundIdForTab('matches');
       const active = getActiveLeague();
       let initialRoundLabel = displayRound;
-      if (isFixtures && active?.next_round) {
+      if (active?.next_round) {
         initialRoundLabel = formatRoundName(active.next_round);
-      } else if (!isFixtures && active?.curr_round) {
+      } else if (active?.curr_round) {
         initialRoundLabel = formatRoundName(active.curr_round);
       }
 
-      headerContext.textContent = `${displayLeague.toUpperCase()} • ${initialRoundLabel.toUpperCase()} • ${TAB_TITLES[tabKey]}`;
-      document.title = `${displayLeague} — ${initialRoundLabel} | ${TAB_TITLES[tabKey]}`;
+      headerContext.textContent = `${displayLeague.toUpperCase()} • ${initialRoundLabel.toUpperCase()} • ${TAB_TITLES.matches}`;
+      document.title = `${displayLeague} — ${initialRoundLabel} | ${TAB_TITLES.matches}`;
 
       const btnBackText = document.getElementById('btnBackText');
       if (btnBackText) {
-        btnBackText.textContent = isFixtures ? 'Расписание тура' : 'Результаты тура';
+        btnBackText.textContent = 'К матчам тура';
       }
 
       // Обновляем адресную строку с актуальным туром для выбранной вкладки
       try {
         const u = new URL(window.location.href);
-        u.searchParams.set('tab', tabKey);
-        u.searchParams.set('round', targetRoundId);
+        u.searchParams.set('tab', 'matches');
+        if (targetRoundId) u.searchParams.set('round', targetRoundId);
         window.history.replaceState({}, '', u.toString());
       } catch (_) {}
 
@@ -2281,11 +2506,12 @@
 
         if (data.round_name) {
           const rn = formatRoundName(data.round_name);
-          headerContext.textContent = `${displayLeague.toUpperCase()} • ${rn.toUpperCase()} • ${TAB_TITLES[tabKey]}`;
-          document.title = `${displayLeague} — ${rn} | ${TAB_TITLES[tabKey]}`;
+          headerContext.textContent = `${displayLeague.toUpperCase()} • ${rn.toUpperCase()} • ${TAB_TITLES.matches}`;
+          document.title = `${displayLeague} — ${rn} | ${TAB_TITLES.matches}`;
         }
 
-        renderRoundResultsView(data, isFixtures);
+        renderRoundResultsView(data);
+        updateRoundPager(data);
         if (targetMatchId) {
           openMatchCenter(targetMatchId);
         } else {
@@ -2330,15 +2556,14 @@
   }
 
   tabButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (btn.dataset.tab !== currentTab) {
-        selectTab(btn.dataset.tab);
-      }
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      selectTab(btn.dataset.tab);
     });
   });
 
   btnRetry.addEventListener('click', () => {
-    if (currentTab === 'results' || currentTab === 'fixtures' || currentTab === 'table') {
+    if (currentTab === 'matches' || currentTab === 'table') {
       const targetRoundId = getRoundIdForTab(currentTab);
       roundDataCache.delete(`${leagueId}_${targetRoundId}`);
       selectTab(currentTab);
@@ -2357,7 +2582,7 @@
 
   // 13. Жесты Touch: Pinch-to-zoom и Pan для PNG режима
   viewport.addEventListener('touchstart', (e) => {
-    if (currentTab === 'results' || currentTab === 'table' || currentTab === 'leaders') return; // В интерактивном режиме скроллится нативно
+    if (currentTab === 'matches' || currentTab === 'table' || currentTab === 'leaders') return; // В интерактивном режиме скроллится нативно
     if (e.touches.length === 1) {
       const now = Date.now();
       if (now - state.lastTapTime < 300) {
@@ -2383,7 +2608,7 @@
   }, { passive: true });
 
   viewport.addEventListener('touchmove', (e) => {
-    if (currentTab === 'results' || currentTab === 'table' || currentTab === 'leaders') return;
+    if (currentTab === 'matches' || currentTab === 'table' || currentTab === 'leaders') return;
     if (e.touches.length === 1 && state.isDragging) {
       state.posX = e.touches[0].clientX - state.startX;
       state.posY = e.touches[0].clientY - state.startY;
@@ -2402,12 +2627,20 @@
   }, { passive: true });
 
   viewport.addEventListener('touchend', (e) => {
-    if (currentTab === 'results' || currentTab === 'table' || currentTab === 'leaders') return;
+    if (currentTab === 'matches' || currentTab === 'table' || currentTab === 'leaders') return;
     if (e.touches.length < 2) state.lastTouchDist = 0;
     if (e.touches.length === 0) state.isDragging = false;
   });
 
   // 14. Стартовый запуск
-  loadLeaguesCatalog();
-  selectTab(currentTab);
+  (async () => {
+    await loadLeaguesCatalog();
+    if (!roundId) {
+      const active = getActiveLeague();
+      if (active) {
+        roundId = String(active.next_round_id || active.curr_round_id || '');
+      }
+    }
+    selectTab(currentTab);
+  })();
 })();

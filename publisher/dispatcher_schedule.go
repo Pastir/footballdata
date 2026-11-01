@@ -258,8 +258,8 @@ func processRoundFixturesForLeague(
 		return 0, fmt.Errorf("telegram configuration is missing (BotToken or ChannelID is empty)")
 	}
 
-	fixturesStartParam := fmt.Sprintf("%d_%d_%d_fixtures", info.LeagueID, info.SeasonID, roundID)
-	tableStartParam := fmt.Sprintf("%d_%d_%d_table", info.LeagueID, info.SeasonID, roundID)
+	fixturesStartParam := fmt.Sprintf("%d_%d_%d_matches", info.LeagueID, info.SeasonID, roundID)
+	tableStartParam := fmt.Sprintf("%d_%d_table", info.LeagueID, info.SeasonID)
 
 	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, fixturesStartParam)
 	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, tableStartParam)

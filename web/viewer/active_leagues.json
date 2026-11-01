@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-19T15:03:14Z",
+  "updated_at": "2026-11-01T19:12:36Z",
   "total": 5,
   "categories": [
     {
@@ -21,15 +21,359 @@
       "league_logo": "https://cdn.sportmonks.com/images/soccer/leagues/8/8.png",
       "season_id": 28083,
       "season_name": "2026/2027",
-      "curr_round_id": 407869,
-      "curr_round": "6",
-      "next_round_id": 407868,
-      "next_round": "7",
+      "curr_round_id": 407867,
+      "curr_round": "8",
+      "next_round_id": 407866,
+      "next_round": "9",
       "category": "domestic",
       "category_name": "Европейские чемпионаты",
       "is_top": true,
       "active": true,
-      "order": 1
+      "order": 1,
+      "rounds": [
+        {
+          "id": 407874,
+          "name": "1",
+          "starting_at": "2026-08-21",
+          "ending_at": "2026-08-24",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 407873,
+          "name": "2",
+          "starting_at": "2026-08-28",
+          "ending_at": "2026-08-31",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 407872,
+          "name": "3",
+          "starting_at": "2026-09-04",
+          "ending_at": "2026-09-06",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 407871,
+          "name": "4",
+          "starting_at": "2026-09-12",
+          "ending_at": "2026-09-14",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 407870,
+          "name": "5",
+          "starting_at": "2026-09-18",
+          "ending_at": "2026-09-20",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 407869,
+          "name": "6",
+          "starting_at": "2026-10-10",
+          "ending_at": "2026-10-12",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 407868,
+          "name": "7",
+          "starting_at": "2026-10-17",
+          "ending_at": "2026-10-19",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 407867,
+          "name": "8",
+          "starting_at": "2026-10-23",
+          "ending_at": "2026-10-25",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 407866,
+          "name": "9",
+          "starting_at": "2026-10-31",
+          "ending_at": "2026-11-02",
+          "finished": false,
+          "finished_count": 8,
+          "total_matches": 10
+        },
+        {
+          "id": 407865,
+          "name": "10",
+          "starting_at": "2026-11-06",
+          "ending_at": "2026-11-08",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407864,
+          "name": "11",
+          "starting_at": "2026-11-21",
+          "ending_at": "2026-11-23",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407863,
+          "name": "12",
+          "starting_at": "2026-11-27",
+          "ending_at": "2026-11-29",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407862,
+          "name": "13",
+          "starting_at": "2026-12-01",
+          "ending_at": "2026-12-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407861,
+          "name": "14",
+          "starting_at": "2026-12-05",
+          "ending_at": "2026-12-06",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407860,
+          "name": "15",
+          "starting_at": "2026-12-12",
+          "ending_at": "2026-12-14",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407859,
+          "name": "16",
+          "starting_at": "2026-12-19",
+          "ending_at": "2026-12-21",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407858,
+          "name": "17",
+          "starting_at": "2026-12-26",
+          "ending_at": "2026-12-27",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407857,
+          "name": "18",
+          "starting_at": "2026-12-29",
+          "ending_at": "2026-12-30",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407856,
+          "name": "19",
+          "starting_at": "2027-01-01",
+          "ending_at": "2027-01-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407855,
+          "name": "20",
+          "starting_at": "2027-01-05",
+          "ending_at": "2027-01-07",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407854,
+          "name": "21",
+          "starting_at": "2027-01-16",
+          "ending_at": "2027-01-16",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407853,
+          "name": "22",
+          "starting_at": "2027-01-23",
+          "ending_at": "2027-01-23",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407852,
+          "name": "23",
+          "starting_at": "2027-01-30",
+          "ending_at": "2027-01-30",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407851,
+          "name": "24",
+          "starting_at": "2027-02-06",
+          "ending_at": "2027-02-06",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407850,
+          "name": "25",
+          "starting_at": "2027-02-10",
+          "ending_at": "2027-02-10",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407849,
+          "name": "26",
+          "starting_at": "2027-02-20",
+          "ending_at": "2027-02-20",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407848,
+          "name": "27",
+          "starting_at": "2027-02-27",
+          "ending_at": "2027-02-27",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407847,
+          "name": "28",
+          "starting_at": "2027-03-03",
+          "ending_at": "2027-03-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407846,
+          "name": "29",
+          "starting_at": "2027-03-13",
+          "ending_at": "2027-03-13",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407845,
+          "name": "30",
+          "starting_at": "2027-03-20",
+          "ending_at": "2027-03-20",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407844,
+          "name": "31",
+          "starting_at": "2027-04-10",
+          "ending_at": "2027-04-10",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407843,
+          "name": "32",
+          "starting_at": "2027-04-17",
+          "ending_at": "2027-04-17",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407842,
+          "name": "33",
+          "starting_at": "2027-04-24",
+          "ending_at": "2027-04-24",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407841,
+          "name": "34",
+          "starting_at": "2027-05-01",
+          "ending_at": "2027-05-01",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407840,
+          "name": "35",
+          "starting_at": "2027-05-08",
+          "ending_at": "2027-05-08",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407839,
+          "name": "36",
+          "starting_at": "2027-05-15",
+          "ending_at": "2027-05-15",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407838,
+          "name": "37",
+          "starting_at": "2027-05-23",
+          "ending_at": "2027-05-23",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 407837,
+          "name": "38",
+          "starting_at": "2027-05-30",
+          "ending_at": "2027-05-30",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        }
+      ]
     },
     {
       "league_id": 82,
@@ -42,15 +386,323 @@
       "league_logo": "https://cdn.sportmonks.com/images/soccer/leagues/18/82.png",
       "season_id": 28321,
       "season_name": "2026/2027",
-      "curr_round_id": 409206,
-      "curr_round": "5",
-      "next_round_id": 409205,
-      "next_round": "6",
+      "curr_round_id": 409204,
+      "curr_round": "7",
+      "next_round_id": 409203,
+      "next_round": "8",
       "category": "domestic",
       "category_name": "Европейские чемпионаты",
       "is_top": true,
       "active": true,
-      "order": 4
+      "order": 4,
+      "rounds": [
+        {
+          "id": 409210,
+          "name": "1",
+          "starting_at": "2026-08-28",
+          "ending_at": "2026-08-30",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 409209,
+          "name": "2",
+          "starting_at": "2026-09-04",
+          "ending_at": "2026-09-06",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 409208,
+          "name": "3",
+          "starting_at": "2026-09-11",
+          "ending_at": "2026-09-13",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 409207,
+          "name": "4",
+          "starting_at": "2026-09-18",
+          "ending_at": "2026-09-20",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 409206,
+          "name": "5",
+          "starting_at": "2026-10-09",
+          "ending_at": "2026-10-11",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 409205,
+          "name": "6",
+          "starting_at": "2026-10-16",
+          "ending_at": "2026-10-18",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 409204,
+          "name": "7",
+          "starting_at": "2026-10-23",
+          "ending_at": "2026-10-25",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 409203,
+          "name": "8",
+          "starting_at": "2026-10-30",
+          "ending_at": "2026-11-01",
+          "finished": false,
+          "finished_count": 7,
+          "total_matches": 9
+        },
+        {
+          "id": 409202,
+          "name": "9",
+          "starting_at": "2026-11-06",
+          "ending_at": "2026-11-08",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409201,
+          "name": "10",
+          "starting_at": "2026-11-20",
+          "ending_at": "2026-11-22",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409200,
+          "name": "11",
+          "starting_at": "2026-11-27",
+          "ending_at": "2026-11-29",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409199,
+          "name": "12",
+          "starting_at": "2026-12-05",
+          "ending_at": "2026-12-05",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409198,
+          "name": "13",
+          "starting_at": "2026-12-12",
+          "ending_at": "2026-12-12",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409197,
+          "name": "14",
+          "starting_at": "2026-12-19",
+          "ending_at": "2026-12-19",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409196,
+          "name": "15",
+          "starting_at": "2027-01-09",
+          "ending_at": "2027-01-09",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409195,
+          "name": "16",
+          "starting_at": "2027-01-13",
+          "ending_at": "2027-01-13",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409194,
+          "name": "17",
+          "starting_at": "2027-01-16",
+          "ending_at": "2027-01-16",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409193,
+          "name": "18",
+          "starting_at": "2027-01-23",
+          "ending_at": "2027-01-23",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409192,
+          "name": "19",
+          "starting_at": "2027-01-30",
+          "ending_at": "2027-01-30",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409191,
+          "name": "20",
+          "starting_at": "2027-02-06",
+          "ending_at": "2027-02-06",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409190,
+          "name": "21",
+          "starting_at": "2027-02-13",
+          "ending_at": "2027-02-13",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409189,
+          "name": "22",
+          "starting_at": "2027-02-20",
+          "ending_at": "2027-02-20",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409188,
+          "name": "23",
+          "starting_at": "2027-02-27",
+          "ending_at": "2027-02-27",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409187,
+          "name": "24",
+          "starting_at": "2027-03-03",
+          "ending_at": "2027-03-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409186,
+          "name": "25",
+          "starting_at": "2027-03-06",
+          "ending_at": "2027-03-06",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409185,
+          "name": "26",
+          "starting_at": "2027-03-13",
+          "ending_at": "2027-03-13",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409184,
+          "name": "27",
+          "starting_at": "2027-03-20",
+          "ending_at": "2027-03-20",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409183,
+          "name": "28",
+          "starting_at": "2027-04-03",
+          "ending_at": "2027-04-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409182,
+          "name": "29",
+          "starting_at": "2027-04-10",
+          "ending_at": "2027-04-10",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409181,
+          "name": "30",
+          "starting_at": "2027-04-17",
+          "ending_at": "2027-04-17",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409180,
+          "name": "31",
+          "starting_at": "2027-04-24",
+          "ending_at": "2027-04-24",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409179,
+          "name": "32",
+          "starting_at": "2027-05-08",
+          "ending_at": "2027-05-08",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409178,
+          "name": "33",
+          "starting_at": "2027-05-15",
+          "ending_at": "2027-05-15",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 409177,
+          "name": "34",
+          "starting_at": "2027-05-22",
+          "ending_at": "2027-05-22",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        }
+      ]
     },
     {
       "league_id": 301,
@@ -63,15 +715,323 @@
       "league_logo": "https://cdn.sportmonks.com/images/soccer/leagues/13/301.png",
       "season_id": 28082,
       "season_name": "2026/2027",
-      "curr_round_id": 407270,
-      "curr_round": "6",
-      "next_round_id": 407269,
-      "next_round": "7",
+      "curr_round_id": 407268,
+      "curr_round": "8",
+      "next_round_id": 407267,
+      "next_round": "9",
       "category": "domestic",
       "category_name": "Европейские чемпионаты",
       "is_top": true,
       "active": true,
-      "order": 5
+      "order": 5,
+      "rounds": [
+        {
+          "id": 407275,
+          "name": "1",
+          "starting_at": "2026-08-21",
+          "ending_at": "2026-08-23",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 407274,
+          "name": "2",
+          "starting_at": "2026-08-28",
+          "ending_at": "2026-08-30",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 407273,
+          "name": "3",
+          "starting_at": "2026-09-03",
+          "ending_at": "2026-09-06",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 407272,
+          "name": "4",
+          "starting_at": "2026-09-11",
+          "ending_at": "2026-09-13",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 407271,
+          "name": "5",
+          "starting_at": "2026-09-18",
+          "ending_at": "2026-09-20",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 407270,
+          "name": "6",
+          "starting_at": "2026-10-09",
+          "ending_at": "2026-10-11",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 407269,
+          "name": "7",
+          "starting_at": "2026-10-16",
+          "ending_at": "2026-10-18",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 407268,
+          "name": "8",
+          "starting_at": "2026-10-23",
+          "ending_at": "2026-10-26",
+          "finished": true,
+          "finished_count": 9,
+          "total_matches": 9
+        },
+        {
+          "id": 407267,
+          "name": "9",
+          "starting_at": "2026-10-30",
+          "ending_at": "2026-11-02",
+          "finished": false,
+          "finished_count": 4,
+          "total_matches": 9
+        },
+        {
+          "id": 407266,
+          "name": "10",
+          "starting_at": "2026-11-06",
+          "ending_at": "2026-11-08",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407265,
+          "name": "11",
+          "starting_at": "2026-11-20",
+          "ending_at": "2026-11-22",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407264,
+          "name": "12",
+          "starting_at": "2026-11-27",
+          "ending_at": "2026-11-29",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407263,
+          "name": "13",
+          "starting_at": "2026-12-04",
+          "ending_at": "2026-12-06",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407262,
+          "name": "14",
+          "starting_at": "2026-12-11",
+          "ending_at": "2026-12-13",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407261,
+          "name": "15",
+          "starting_at": "2027-01-02",
+          "ending_at": "2027-01-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407260,
+          "name": "16",
+          "starting_at": "2027-01-15",
+          "ending_at": "2027-01-17",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407259,
+          "name": "17",
+          "starting_at": "2027-01-22",
+          "ending_at": "2027-01-24",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407258,
+          "name": "18",
+          "starting_at": "2027-01-29",
+          "ending_at": "2027-01-31",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407257,
+          "name": "19",
+          "starting_at": "2027-02-06",
+          "ending_at": "2027-02-07",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407256,
+          "name": "20",
+          "starting_at": "2027-02-13",
+          "ending_at": "2027-02-13",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407255,
+          "name": "21",
+          "starting_at": "2027-02-20",
+          "ending_at": "2027-02-20",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407254,
+          "name": "22",
+          "starting_at": "2027-02-27",
+          "ending_at": "2027-02-28",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407253,
+          "name": "23",
+          "starting_at": "2027-03-06",
+          "ending_at": "2027-03-06",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407252,
+          "name": "24",
+          "starting_at": "2027-03-13",
+          "ending_at": "2027-03-13",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407251,
+          "name": "25",
+          "starting_at": "2027-03-20",
+          "ending_at": "2027-03-21",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407250,
+          "name": "26",
+          "starting_at": "2027-04-03",
+          "ending_at": "2027-04-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407249,
+          "name": "27",
+          "starting_at": "2027-04-10",
+          "ending_at": "2027-04-10",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407248,
+          "name": "28",
+          "starting_at": "2027-04-17",
+          "ending_at": "2027-04-17",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407247,
+          "name": "29",
+          "starting_at": "2027-04-24",
+          "ending_at": "2027-04-24",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407246,
+          "name": "30",
+          "starting_at": "2027-05-01",
+          "ending_at": "2027-05-01",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407245,
+          "name": "31",
+          "starting_at": "2027-05-08",
+          "ending_at": "2027-05-09",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407244,
+          "name": "32",
+          "starting_at": "2027-05-16",
+          "ending_at": "2027-05-16",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407243,
+          "name": "33",
+          "starting_at": "2027-05-22",
+          "ending_at": "2027-05-22",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        },
+        {
+          "id": 407242,
+          "name": "34",
+          "starting_at": "2027-05-29",
+          "ending_at": "2027-05-29",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 9
+        }
+      ]
     },
     {
       "league_id": 384,
@@ -84,15 +1044,359 @@
       "league_logo": "https://cdn.sportmonks.com/images/soccer/leagues/0/384.png",
       "season_id": 27895,
       "season_name": "2026/2027",
-      "curr_round_id": 406995,
-      "curr_round": "6",
-      "next_round_id": 406994,
-      "next_round": "7",
+      "curr_round_id": 406992,
+      "curr_round": "9",
+      "next_round_id": 406991,
+      "next_round": "10",
       "category": "domestic",
       "category_name": "Европейские чемпионаты",
       "is_top": true,
       "active": true,
-      "order": 3
+      "order": 3,
+      "rounds": [
+        {
+          "id": 407000,
+          "name": "1",
+          "starting_at": "2026-08-22",
+          "ending_at": "2026-08-24",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406999,
+          "name": "2",
+          "starting_at": "2026-08-28",
+          "ending_at": "2026-08-31",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406998,
+          "name": "3",
+          "starting_at": "2026-09-04",
+          "ending_at": "2026-09-07",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406997,
+          "name": "4",
+          "starting_at": "2026-09-11",
+          "ending_at": "2026-09-14",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406996,
+          "name": "5",
+          "starting_at": "2026-09-18",
+          "ending_at": "2026-09-20",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406995,
+          "name": "6",
+          "starting_at": "2026-10-10",
+          "ending_at": "2026-10-12",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406994,
+          "name": "7",
+          "starting_at": "2026-10-16",
+          "ending_at": "2026-10-19",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406993,
+          "name": "8",
+          "starting_at": "2026-10-23",
+          "ending_at": "2026-10-25",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406992,
+          "name": "9",
+          "starting_at": "2026-10-27",
+          "ending_at": "2026-10-29",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 406991,
+          "name": "10",
+          "starting_at": "2026-10-31",
+          "ending_at": "2026-11-02",
+          "finished": false,
+          "finished_count": 4,
+          "total_matches": 10
+        },
+        {
+          "id": 406990,
+          "name": "11",
+          "starting_at": "2026-11-06",
+          "ending_at": "2026-11-08",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406989,
+          "name": "12",
+          "starting_at": "2026-11-21",
+          "ending_at": "2026-11-23",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406988,
+          "name": "13",
+          "starting_at": "2026-11-27",
+          "ending_at": "2026-11-30",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406987,
+          "name": "14",
+          "starting_at": "2026-12-04",
+          "ending_at": "2026-12-07",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406986,
+          "name": "15",
+          "starting_at": "2026-12-11",
+          "ending_at": "2026-12-14",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406985,
+          "name": "16",
+          "starting_at": "2026-12-18",
+          "ending_at": "2026-12-20",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406984,
+          "name": "17",
+          "starting_at": "2027-01-02",
+          "ending_at": "2027-01-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406983,
+          "name": "18",
+          "starting_at": "2027-01-05",
+          "ending_at": "2027-01-07",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406982,
+          "name": "19",
+          "starting_at": "2027-01-09",
+          "ending_at": "2027-01-11",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406981,
+          "name": "20",
+          "starting_at": "2027-01-17",
+          "ending_at": "2027-01-17",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406980,
+          "name": "21",
+          "starting_at": "2027-01-24",
+          "ending_at": "2027-01-24",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406979,
+          "name": "22",
+          "starting_at": "2027-01-31",
+          "ending_at": "2027-01-31",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406978,
+          "name": "23",
+          "starting_at": "2027-02-07",
+          "ending_at": "2027-02-07",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406977,
+          "name": "24",
+          "starting_at": "2027-02-14",
+          "ending_at": "2027-02-14",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406976,
+          "name": "25",
+          "starting_at": "2027-02-21",
+          "ending_at": "2027-02-21",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406975,
+          "name": "26",
+          "starting_at": "2027-02-28",
+          "ending_at": "2027-02-28",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406974,
+          "name": "27",
+          "starting_at": "2027-03-07",
+          "ending_at": "2027-03-07",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406973,
+          "name": "28",
+          "starting_at": "2027-03-14",
+          "ending_at": "2027-03-14",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406972,
+          "name": "29",
+          "starting_at": "2027-03-21",
+          "ending_at": "2027-03-21",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406971,
+          "name": "30",
+          "starting_at": "2027-04-04",
+          "ending_at": "2027-04-04",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406970,
+          "name": "31",
+          "starting_at": "2027-04-11",
+          "ending_at": "2027-04-11",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406969,
+          "name": "32",
+          "starting_at": "2027-04-18",
+          "ending_at": "2027-04-18",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406968,
+          "name": "33",
+          "starting_at": "2027-04-25",
+          "ending_at": "2027-04-25",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406967,
+          "name": "34",
+          "starting_at": "2027-05-02",
+          "ending_at": "2027-05-02",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406966,
+          "name": "35",
+          "starting_at": "2027-05-09",
+          "ending_at": "2027-05-09",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406965,
+          "name": "36",
+          "starting_at": "2027-05-16",
+          "ending_at": "2027-05-16",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406964,
+          "name": "37",
+          "starting_at": "2027-05-23",
+          "ending_at": "2027-05-23",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 406963,
+          "name": "38",
+          "starting_at": "2027-05-30",
+          "ending_at": "2027-05-30",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        }
+      ]
     },
     {
       "league_id": 564,
@@ -105,15 +1409,359 @@
       "league_logo": "https://cdn.sportmonks.com/images/soccer/leagues/20/564.png",
       "season_id": 27965,
       "season_name": "2026/2027",
-      "curr_round_id": 408954,
-      "curr_round": "7",
-      "next_round_id": 408955,
-      "next_round": "6",
+      "curr_round_id": 408951,
+      "curr_round": "10",
+      "next_round_id": 408950,
+      "next_round": "11",
       "category": "domestic",
       "category_name": "Европейские чемпионаты",
       "is_top": true,
       "active": true,
-      "order": 2
+      "order": 2,
+      "rounds": [
+        {
+          "id": 408960,
+          "name": "1",
+          "starting_at": "2026-08-15",
+          "ending_at": "2026-08-27",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408959,
+          "name": "2",
+          "starting_at": "2026-08-20",
+          "ending_at": "2026-08-24",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408958,
+          "name": "3",
+          "starting_at": "2026-08-28",
+          "ending_at": "2026-08-31",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408955,
+          "name": "6",
+          "starting_at": "2026-09-03",
+          "ending_at": "2026-10-21",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408957,
+          "name": "4",
+          "starting_at": "2026-09-04",
+          "ending_at": "2026-09-07",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408956,
+          "name": "5",
+          "starting_at": "2026-09-11",
+          "ending_at": "2026-09-14",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408954,
+          "name": "7",
+          "starting_at": "2026-09-18",
+          "ending_at": "2026-09-20",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408953,
+          "name": "8",
+          "starting_at": "2026-10-09",
+          "ending_at": "2026-12-09",
+          "finished": false,
+          "finished_count": 9,
+          "total_matches": 10
+        },
+        {
+          "id": 408952,
+          "name": "9",
+          "starting_at": "2026-10-16",
+          "ending_at": "2026-10-19",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408951,
+          "name": "10",
+          "starting_at": "2026-10-23",
+          "ending_at": "2026-10-26",
+          "finished": true,
+          "finished_count": 10,
+          "total_matches": 10
+        },
+        {
+          "id": 408950,
+          "name": "11",
+          "starting_at": "2026-10-30",
+          "ending_at": "2026-11-02",
+          "finished": false,
+          "finished_count": 6,
+          "total_matches": 10
+        },
+        {
+          "id": 408949,
+          "name": "12",
+          "starting_at": "2026-11-06",
+          "ending_at": "2026-11-08",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408948,
+          "name": "13",
+          "starting_at": "2026-11-20",
+          "ending_at": "2026-11-23",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408947,
+          "name": "14",
+          "starting_at": "2026-11-29",
+          "ending_at": "2026-11-29",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408946,
+          "name": "15",
+          "starting_at": "2026-12-06",
+          "ending_at": "2026-12-06",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408945,
+          "name": "16",
+          "starting_at": "2026-12-13",
+          "ending_at": "2026-12-13",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408944,
+          "name": "17",
+          "starting_at": "2026-12-20",
+          "ending_at": "2026-12-20",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408943,
+          "name": "18",
+          "starting_at": "2027-01-03",
+          "ending_at": "2027-01-03",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408942,
+          "name": "19",
+          "starting_at": "2027-01-10",
+          "ending_at": "2027-01-10",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408941,
+          "name": "20",
+          "starting_at": "2027-01-17",
+          "ending_at": "2027-01-17",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408940,
+          "name": "21",
+          "starting_at": "2027-01-24",
+          "ending_at": "2027-01-24",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408939,
+          "name": "22",
+          "starting_at": "2027-01-31",
+          "ending_at": "2027-01-31",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408938,
+          "name": "23",
+          "starting_at": "2027-02-07",
+          "ending_at": "2027-02-07",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408937,
+          "name": "24",
+          "starting_at": "2027-02-14",
+          "ending_at": "2027-02-14",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408936,
+          "name": "25",
+          "starting_at": "2027-02-21",
+          "ending_at": "2027-02-21",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408935,
+          "name": "26",
+          "starting_at": "2027-02-28",
+          "ending_at": "2027-02-28",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408934,
+          "name": "27",
+          "starting_at": "2027-03-07",
+          "ending_at": "2027-03-07",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408933,
+          "name": "28",
+          "starting_at": "2027-03-14",
+          "ending_at": "2027-03-14",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408932,
+          "name": "29",
+          "starting_at": "2027-03-21",
+          "ending_at": "2027-03-21",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408931,
+          "name": "30",
+          "starting_at": "2027-04-04",
+          "ending_at": "2027-04-04",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408930,
+          "name": "31",
+          "starting_at": "2027-04-11",
+          "ending_at": "2027-04-11",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408929,
+          "name": "32",
+          "starting_at": "2027-04-18",
+          "ending_at": "2027-04-18",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408928,
+          "name": "33",
+          "starting_at": "2027-04-21",
+          "ending_at": "2027-04-21",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408927,
+          "name": "34",
+          "starting_at": "2027-05-02",
+          "ending_at": "2027-05-02",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408926,
+          "name": "35",
+          "starting_at": "2027-05-09",
+          "ending_at": "2027-05-09",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408925,
+          "name": "36",
+          "starting_at": "2027-05-16",
+          "ending_at": "2027-05-16",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408924,
+          "name": "37",
+          "starting_at": "2027-05-23",
+          "ending_at": "2027-05-23",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        },
+        {
+          "id": 408923,
+          "name": "38",
+          "starting_at": "2027-05-30",
+          "ending_at": "2027-05-30",
+          "finished": false,
+          "finished_count": 0,
+          "total_matches": 10
+        }
+      ]
     }
   ]
 }
