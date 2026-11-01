@@ -657,3 +657,19 @@ CLI Flags (-task, -type, -leagueId, etc.)
   - Пересобран `lab`, сервер `ApiServer` перезапущен в режиме демона;
   - Ассеты Mini App обновлены до `v=20261101_v8` и выгружены на `s.pastir.me`;
   - Проведена пакетная генерация актуальных JSON-данных через `syncAll`.
+
+---
+
+### Фаза 14: Продакшен домен data-lab.live, устранение ошибки 400 invalid url format и systemd юнит — СТАТУС: ВЫПОЛНЕНО
+- [x] **1. Устранение ошибки 400 `/api/rounds/{round_id}` при открытии продакшена `data-lab.live`**:
+  - Диагностирована первопричина: на домене `data-lab.live` в корне статики отсутствовал файл `active_leagues.json` (отдавался 404), из-за чего `loadLeaguesCatalog` завершался без данных, `roundId` оставался пустым, и Mini App отправлял некорректный запрос `/api/rounds/?locale=ru`;
+  - В `web/viewer/app.js` метод `loadLeaguesCatalog` переведён на приоритетное получение каталога через живой эндпоинт `/api/leagues` (с fallback на статические файлы `active_leagues.json` и `viewer/active_leagues.json`);
+  - В `loadRoundData` добавлена валидация `targetRoundId` и автоматический fallback на `/api/rounds?league_id=${leagueId}&locale=ru` при отсутствии явного ID тура;
+  - В `server/handlers.go` метод `HandleRoundOnDemand` дополнен безопасным разрешением тура: если `round_id` отсутствует в URL, сервер автоматически определяет активный тур лиги (по умолчанию АПЛ, ID 8) и отдаёт HTTP 200 вместо 400;
+  - В `server/server.go` зарегистрированы маршруты `/api/rounds` и `/api/rounds/`.
+- [x] **2. Настройка статики и сервиса на продакшен-сервере `data-lab.live`**:
+  - Созданы недостающие символические ссылки в `/var/www/domains/data-lab.live/public/` (`active_leagues.json`, `round_data.json`, `leaders.json`);
+  - Пересобран бинарник `lab` с помощью Go 1.27 (`/usr/local/go/bin/go`);
+  - Обновлён и перезапущен systemd-сервис `fdl-api.service`;
+  - Версия ассетов поднята до `v=20261101_v10`;
+  - Успешно верифицирована работа `https://data-lab.live/`: `/api/rounds/?locale=ru` (HTTP 200), `/active_leagues.json` (HTTP 200), `/api/leaders` (`X-Cache: HIT`).
