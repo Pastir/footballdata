@@ -77,47 +77,75 @@ func (p *DBTaskProvider) GetDueTasks(ctx context.Context, now time.Time) ([]Publ
 			continue
 		}
 
-		// Проверяем идемпотентность: не публиковались ли уже результаты этого тура
+		st := *status
+
+		// 1.1 Проверяем результаты тура (roundResults)
 		if p.storage != nil {
 			already, err := p.storage.IsAlreadyPublished(ctx, p.channelID, publisher.PubTypeRoundResults, status.LeagueID, status.RoundID)
-			if err == nil && already {
-				continue
-			}
-		}
-
-		// Проверка актуальности окна публикации (stale check):
-		// Если тур завершился более 36 часов назад, публикация в Telegram устарела (спам).
-		// Фиксируем пропуск со статусом SKIPPED.
-		if !status.EndingAt.IsZero() && now.Sub(status.EndingAt) > 36*time.Hour {
-			if p.storage != nil {
-				_ = p.storage.RecordSkipped(ctx, p.channelID, publisher.PubTypeRoundResults, status.LeagueID, status.RoundID,
-					fmt.Sprintf("stale round results: ended at %s (>36h ago)", status.EndingAt.Format("2006-01-02 15:04")))
-			}
-			continue
-		}
-
-		st := *status
-		tasks = append(tasks, PublicationTask{
-			ChannelID:       p.channelID,
-			BotToken:        p.botToken,
-			PublicationType: publisher.PubTypeRoundResults,
-			LeagueID:        st.LeagueID,
-			SeasonID:        st.SeasonID,
-			RoundID:         st.RoundID,
-			Title:           fmt.Sprintf("%s — %s Результаты тура", st.LeagueName, st.RoundName),
-			ExecuteFunc: func(execCtx context.Context) error {
-				var td config.TaskData
-				td.Init()
-				td.Args = config.LineArgs{
-					TaskName: "PublishToTelegram",
-					Type:     "roundResults",
-					LeagueId: st.LeagueID,
-					RoundId:  st.RoundID,
-					Publish:  true,
+			if err == nil && !already {
+				// Stale check
+				if !status.EndingAt.IsZero() && now.Sub(status.EndingAt) > 36*time.Hour {
+					_ = p.storage.RecordSkipped(ctx, p.channelID, publisher.PubTypeRoundResults, status.LeagueID, status.RoundID,
+						fmt.Sprintf("stale round results: ended at %s (>36h ago)", status.EndingAt.Format("2006-01-02 15:04")))
+				} else {
+					tasks = append(tasks, PublicationTask{
+						ChannelID:       p.channelID,
+						BotToken:        p.botToken,
+						PublicationType: publisher.PubTypeRoundResults,
+						LeagueID:        st.LeagueID,
+						SeasonID:        st.SeasonID,
+						RoundID:         st.RoundID,
+						Title:           fmt.Sprintf("%s — %s Результаты тура", st.LeagueName, st.RoundName),
+						ExecuteFunc: func(execCtx context.Context) error {
+							var td config.TaskData
+							td.Init()
+							td.Args = config.LineArgs{
+								TaskName: "PublishToTelegram",
+								Type:     "roundResults",
+								LeagueId: st.LeagueID,
+								RoundId:  st.RoundID,
+								Publish:  true,
+							}
+							return publisher.Dispatch(execCtx, td)
+						},
+					})
 				}
-				return publisher.Dispatch(execCtx, td)
-			},
-		})
+			}
+		}
+
+		// 1.2 Автопилот: Карточка аномалии и драмы тура (banter)
+		if p.storage != nil {
+			alreadyBanter, err := p.storage.IsAlreadyPublished(ctx, p.channelID, publisher.PubTypeBanter, status.LeagueID, status.RoundID)
+			if err == nil && !alreadyBanter {
+				if status.EndingAt.IsZero() || now.Sub(status.EndingAt) <= 36*time.Hour {
+					anomalies, err := analytics.FindRoundAnomalies(ctx, p.pool, status.LeagueID, status.RoundID)
+					if err == nil && len(anomalies) > 0 && anomalies[0].SeverityScore >= 75.0 {
+						best := anomalies[0]
+						tasks = append(tasks, PublicationTask{
+							ChannelID:       p.channelID,
+							BotToken:        p.botToken,
+							PublicationType: publisher.PubTypeBanter,
+							LeagueID:        st.LeagueID,
+							SeasonID:        st.SeasonID,
+							RoundID:         st.RoundID,
+							Title:           fmt.Sprintf("%s — %s Карточка драмы (%s, Score: %.1f)", st.LeagueName, st.RoundName, best.BadgeText, best.SeverityScore),
+							ExecuteFunc: func(execCtx context.Context) error {
+								var td config.TaskData
+								td.Init()
+								td.Args = config.LineArgs{
+									TaskName: "PublishToTelegram",
+									Type:     "banter",
+									LeagueId: st.LeagueID,
+									RoundId:  st.RoundID,
+									Publish:  true,
+								}
+								return publisher.Dispatch(execCtx, td)
+							},
+						})
+					}
+				}
+			}
+		}
 	}
 
 	// 2. Проверяем пятничный пакет расписания уикенда (weekendHub)

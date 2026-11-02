@@ -70,7 +70,7 @@
       "team_name": "Милан",
       "team_code": "MIL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/113.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 5,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -84,7 +84,7 @@
       "team_name": "Интер",
       "team_code": "INT",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/18/2930.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 5,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -98,7 +98,7 @@
       "team_name": "Комо",
       "team_code": "COM",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/268.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 5,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -112,7 +112,7 @@
       "team_name": "Фрозиноне",
       "team_code": "FRO",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/4070.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 5,
       "secondary_val": 1,
       "metric_label": "голов"
@@ -126,7 +126,7 @@
       "team_name": "Кальяри",
       "team_code": "CAG",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/9/585.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 5,
       "secondary_val": 1,
       "metric_label": "голов"
@@ -140,7 +140,7 @@
       "team_name": "Милан",
       "team_code": "MIL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/113.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 4,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -184,7 +184,7 @@
       "team_name": "Фрозиноне",
       "team_code": "FRO",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/4070.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 4,
       "secondary_val": 3,
       "metric_label": "ассистов"
@@ -198,7 +198,7 @@
       "team_name": "Фрозиноне",
       "team_code": "FRO",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/4070.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 4,
       "secondary_val": 2,
       "metric_label": "ассистов"
@@ -212,7 +212,7 @@
       "team_name": "Фрозиноне",
       "team_code": "FRO",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/4070.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 4,
       "secondary_val": 1,
       "metric_label": "ассистов"
@@ -240,7 +240,7 @@
       "team_name": "Интер",
       "team_code": "INT",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/18/2930.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 4,
       "secondary_val": 0,
       "metric_label": "ассистов"
@@ -254,13 +254,27 @@
       "team_name": "Милан",
       "team_code": "MIL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/113.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 3,
       "secondary_val": 5,
       "metric_label": "ассистов"
     },
     {
       "rank": 9,
+      "player_id": 37592734,
+      "player_name": "Diego Moreira",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
+      "team_id": 113,
+      "team_name": "Милан",
+      "team_code": "MIL",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/113.png",
+      "matches": 10,
+      "primary_val": 3,
+      "secondary_val": 4,
+      "metric_label": "ассистов"
+    },
+    {
+      "rank": 10,
       "player_id": 37286823,
       "player_name": "Tijjani Noslin",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/7/37286823.png",
@@ -269,20 +283,6 @@
       "team_code": "LAZ",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/43.png",
       "matches": 10,
-      "primary_val": 3,
-      "secondary_val": 4,
-      "metric_label": "ассистов"
-    },
-    {
-      "rank": 10,
-      "player_id": 37592734,
-      "player_name": "Diego Moreira",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-      "team_id": 113,
-      "team_name": "Милан",
-      "team_code": "MIL",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/113.png",
-      "matches": 9,
       "primary_val": 3,
       "secondary_val": 4,
       "metric_label": "ассистов"
@@ -354,7 +354,7 @@
       "team_name": "Милан",
       "team_code": "MIL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/113.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 8,
       "secondary_val": 5,
       "metric_label": "очков (Г+П)"
@@ -368,27 +368,13 @@
       "team_name": "Интер",
       "team_code": "INT",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/18/2930.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 7,
       "secondary_val": 5,
       "metric_label": "очков (Г+П)"
     },
     {
       "rank": 7,
-      "player_id": 37592734,
-      "player_name": "Diego Moreira",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-      "team_id": 113,
-      "team_name": "Милан",
-      "team_code": "MIL",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/113.png",
-      "matches": 9,
-      "primary_val": 7,
-      "secondary_val": 4,
-      "metric_label": "очков (Г+П)"
-    },
-    {
-      "rank": 8,
       "player_id": 37286823,
       "player_name": "Tijjani Noslin",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/7/37286823.png",
@@ -396,6 +382,20 @@
       "team_name": "Лацио",
       "team_code": "LAZ",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/43.png",
+      "matches": 10,
+      "primary_val": 7,
+      "secondary_val": 4,
+      "metric_label": "очков (Г+П)"
+    },
+    {
+      "rank": 8,
+      "player_id": 37592734,
+      "player_name": "Diego Moreira",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
+      "team_id": 113,
+      "team_name": "Милан",
+      "team_code": "MIL",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/113.png",
       "matches": 10,
       "primary_val": 7,
       "secondary_val": 4,
@@ -410,7 +410,7 @@
       "team_name": "Фрозиноне",
       "team_code": "FRO",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/4070.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 7,
       "secondary_val": 3,
       "metric_label": "очков (Г+П)"
@@ -433,20 +433,6 @@
   "clean_sheets": [
     {
       "rank": 1,
-      "player_id": 4237168,
-      "player_name": "Christos Mandas",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-      "team_id": 43,
-      "team_name": "Лацио",
-      "team_code": "LAZ",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/43.png",
-      "matches": 9,
-      "primary_val": 4,
-      "secondary_val": 7,
-      "metric_label": "сухих матчей"
-    },
-    {
-      "rank": 2,
       "player_id": 133779,
       "player_name": "Guglielmo Vicario",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/19/133779.png",
@@ -454,9 +440,23 @@
       "team_name": "Ювентус",
       "team_code": "JUV",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/17/625.png",
-      "matches": 9,
-      "primary_val": 4,
+      "matches": 10,
+      "primary_val": 5,
       "secondary_val": 10,
+      "metric_label": "сухих матчей"
+    },
+    {
+      "rank": 2,
+      "player_id": 4237168,
+      "player_name": "Christos Mandas",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
+      "team_id": 43,
+      "team_name": "Лацио",
+      "team_code": "LAZ",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/43.png",
+      "matches": 10,
+      "primary_val": 4,
+      "secondary_val": 8,
       "metric_label": "сухих матчей"
     },
     {
@@ -503,6 +503,20 @@
     },
     {
       "rank": 6,
+      "player_id": 37582342,
+      "player_name": "Lorenzo Palmisani",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
+      "team_id": 4070,
+      "team_name": "Фрозиноне",
+      "team_code": "FRO",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/4070.png",
+      "matches": 10,
+      "primary_val": 3,
+      "secondary_val": 14,
+      "metric_label": "сухих матчей"
+    },
+    {
+      "rank": 7,
       "player_id": 22146095,
       "player_name": "E. Caprile",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/15/22146095.png",
@@ -510,13 +524,13 @@
       "team_name": "Кальяри",
       "team_code": "CAG",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/9/585.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 3,
-      "secondary_val": 13,
+      "secondary_val": 15,
       "metric_label": "сухих матчей"
     },
     {
-      "rank": 7,
+      "rank": 8,
       "player_id": 6588,
       "player_name": "Pierluigi Gollini",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/28/6588.png",
@@ -530,7 +544,7 @@
       "metric_label": "сухих матчей"
     },
     {
-      "rank": 8,
+      "rank": 9,
       "player_id": 129638,
       "player_name": "Alex Meret",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/6/129638.png",
@@ -538,23 +552,9 @@
       "team_name": "Наполи",
       "team_code": "NAP",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/21/597.png",
-      "matches": 6,
+      "matches": 7,
       "primary_val": 2,
-      "secondary_val": 9,
-      "metric_label": "сухих матчей"
-    },
-    {
-      "rank": 9,
-      "player_id": 25945,
-      "player_name": "Justin Bijlow",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/25/25945.png",
-      "team_id": 102,
-      "team_name": "Дженоа",
-      "team_code": "GEN",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/102.png",
-      "matches": 9,
-      "primary_val": 2,
-      "secondary_val": 13,
+      "secondary_val": 11,
       "metric_label": "сухих матчей"
     },
     {
@@ -589,20 +589,6 @@
     },
     {
       "rank": 2,
-      "player_id": 1525399,
-      "player_name": "J. Vásquez",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/23/1525399.png",
-      "team_id": 102,
-      "team_name": "Дженоа",
-      "team_code": "GEN",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/102.png",
-      "matches": 9,
-      "primary_val": 3,
-      "secondary_val": 1,
-      "metric_label": "ЖК"
-    },
-    {
-      "rank": 3,
       "player_id": 37600933,
       "player_name": "Lorenzo Lucchesi",
       "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
@@ -611,6 +597,20 @@
       "team_code": "MON",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/28/1628.png",
       "matches": 9,
+      "primary_val": 3,
+      "secondary_val": 1,
+      "metric_label": "ЖК"
+    },
+    {
+      "rank": 3,
+      "player_id": 1525399,
+      "player_name": "J. Vásquez",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/23/1525399.png",
+      "team_id": 102,
+      "team_name": "Дженоа",
+      "team_code": "GEN",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/6/102.png",
+      "matches": 10,
       "primary_val": 3,
       "secondary_val": 1,
       "metric_label": "ЖК"

@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-01T19:12:36Z",
+  "updated_at": "2026-11-02T21:10:53Z",
   "total": 5,
   "categories": [
     {
@@ -109,7 +109,7 @@
           "starting_at": "2026-10-31",
           "ending_at": "2026-11-02",
           "finished": false,
-          "finished_count": 8,
+          "finished_count": 9,
           "total_matches": 10
         },
         {
@@ -386,10 +386,10 @@
       "league_logo": "https://cdn.sportmonks.com/images/soccer/leagues/18/82.png",
       "season_id": 28321,
       "season_name": "2026/2027",
-      "curr_round_id": 409204,
-      "curr_round": "7",
-      "next_round_id": 409203,
-      "next_round": "8",
+      "curr_round_id": 409203,
+      "curr_round": "8",
+      "next_round_id": 409202,
+      "next_round": "9",
       "category": "domestic",
       "category_name": "Европейские чемпионаты",
       "is_top": true,
@@ -464,8 +464,8 @@
           "name": "8",
           "starting_at": "2026-10-30",
           "ending_at": "2026-11-01",
-          "finished": false,
-          "finished_count": 7,
+          "finished": true,
+          "finished_count": 9,
           "total_matches": 9
         },
         {
@@ -803,7 +803,7 @@
           "starting_at": "2026-10-30",
           "ending_at": "2026-11-02",
           "finished": false,
-          "finished_count": 4,
+          "finished_count": 8,
           "total_matches": 9
         },
         {
@@ -1141,7 +1141,7 @@
           "starting_at": "2026-10-31",
           "ending_at": "2026-11-02",
           "finished": false,
-          "finished_count": 4,
+          "finished_count": 8,
           "total_matches": 10
         },
         {
@@ -1515,7 +1515,7 @@
           "starting_at": "2026-10-30",
           "ending_at": "2026-11-02",
           "finished": false,
-          "finished_count": 6,
+          "finished_count": 9,
           "total_matches": 10
         },
         {

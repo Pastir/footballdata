@@ -17,6 +17,7 @@ import (
 	"github.com/Pastir/footballdata/db"
 	"github.com/Pastir/footballdata/logs"
 	"github.com/Pastir/footballdata/prediction"
+	"github.com/Pastir/footballdata/press"
 	"github.com/Pastir/footballdata/publisher"
 	"github.com/Pastir/footballdata/scheduler"
 	"github.com/Pastir/footballdata/server"
@@ -74,6 +75,17 @@ func main() {
 	case "ApiServer", "LiveServer", "Server":
 		handleApiServer(context.Background(), taskData, log)
 
+	case "PressDigest", "Press":
+		handlePressDigest(context.Background(), taskData, log)
+
+	case "AnomalyCard", "BanterCard":
+		taskData.Args.Type = "banter"
+		if err := publisher.Dispatch(context.Background(), taskData); err != nil {
+			log.Error("banter card task failed", zap.Error(err))
+			fmt.Fprintf(os.Stderr, "❌ Ошибка формирования карточки аномалии: %v\n", err)
+			os.Exit(1)
+		}
+
 	default:
 		fmt.Fprintf(os.Stderr, `Использование: ./lab -conf config.yaml -task <TASK> [ФЛАГИ]
 
@@ -84,6 +96,7 @@ func main() {
   SchedulerDaemon    — Непрерывный фоновый планировщик публикаций
   SettleBets         — Авторасчёт открытых ставок/экспрессов по результатам матчей и отчёт ROI
   ApiServer          — REST API сервер для отдачи live и архивных данных туров (-port, -pollInterval, -static)
+  PressDigest        — Сбор европейских таблоидов, генерация выжимки через Gemini и публикация (-publish)
 
 Доступные типы публикаций (-type для task=PublishToTelegram):
   table           — Турнирная таблица (рендер PNG + пост в Telegram)
@@ -99,6 +112,7 @@ func main() {
   recalculateStreaks — Принудительный перерасчёт серий и рекордов в таблице analytics_streaks
   catalog         — Каталог турниров (генерация active_leagues.json и синхронизация Mini App)
   syncAll         — Пакетная генерация данных для всех активных лиг (Mini App)
+  banter          — Карточки футбольных аномалий и драмы (1200x1200px: ограбление по xG, валидол 90+, джокер)
 
 Основные флаги:
   -conf string        Путь к файлу конфигурации (по умолчанию ./config.yaml)
@@ -350,3 +364,26 @@ func handleApiServer(ctx context.Context, taskData config.TaskData, log *zap.Log
 	}
 	fmt.Println("REST API сервер штатно остановлен (graceful shutdown).")
 }
+
+func handlePressDigest(ctx context.Context, taskData config.TaskData, log *zap.Logger) {
+	pool := db.DBx.PGxPool
+	if pool == nil {
+		fmt.Fprintf(os.Stderr, "❌ Ошибка: база данных не подключена\n")
+		os.Exit(1)
+	}
+
+	publish := taskData.Args.Publish
+	limit := 1 // по умолчанию 1 самая топовая статья
+	if taskData.Cycle > 0 {
+		limit = taskData.Cycle
+	}
+
+	fmt.Printf("🚀 Запуск дайджеста европейской прессы (Publish: %v, Limit: %d)...\n", publish, limit)
+	if err := press.RunPipeline(ctx, pool, &config.Config, publish, limit); err != nil {
+		log.Error("press digest pipeline failed", zap.Error(err))
+		fmt.Fprintf(os.Stderr, "❌ Ошибка дайджеста: %v\n", err)
+		os.Exit(1)
+	}
+	fmt.Println("✨ Дайджест успешно завершен!")
+}
+

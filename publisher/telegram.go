@@ -17,11 +17,13 @@ import (
 )
 
 const (
-	tgAPISendPhoto       = "https://api.telegram.org/bot%s/sendPhoto"
-	tgAPISendDocument    = "https://api.telegram.org/bot%s/sendDocument"
-	tgAPISendMessage     = "https://api.telegram.org/bot%s/sendMessage"
-	tgAPISendRichMessage = "https://api.telegram.org/bot%s/sendRichMessage"
-	httpTimeout          = 30 * time.Second
+	tgAPISendPhoto              = "https://api.telegram.org/bot%s/sendPhoto"
+	tgAPISendDocument           = "https://api.telegram.org/bot%s/sendDocument"
+	tgAPISendMessage            = "https://api.telegram.org/bot%s/sendMessage"
+	tgAPISendRichMessage        = "https://api.telegram.org/bot%s/sendRichMessage"
+	tgAPIEditMessageReplyMarkup = "https://api.telegram.org/bot%s/editMessageReplyMarkup"
+	tgAPIGetChat                = "https://api.telegram.org/bot%s/getChat"
+	httpTimeout                 = 30 * time.Second
 )
 
 // RichBlockTableCell описывает отдельную ячейку нативной таблицы Telegram (Bot API 10.1+).
@@ -132,6 +134,8 @@ func SendTextMessageWithKeyboardAndPreview(
 	keyboard *InlineKeyboardMarkup,
 	preview *LinkPreviewOptions,
 ) (int64, error) {
+	keyboard = EnsureDiscussButton(ctx, botToken, channelID, keyboard)
+
 	reqBody := map[string]interface{}{
 		"chat_id":    channelID,
 		"text":       text,
@@ -180,6 +184,237 @@ func SendTextMessageWithKeyboardAndPreview(
 	return tgResp.Result.MessageID, nil
 }
 
+type tgChatResult struct {
+	ID           int64  `json:"id"`
+	Title        string `json:"title"`
+	Username     string `json:"username"`
+	LinkedChatID int64  `json:"linked_chat_id"`
+	InviteLink   string `json:"invite_link"`
+}
+
+type tgChatResponse struct {
+	OK          bool         `json:"ok"`
+	Description string       `json:"description"`
+	Result      tgChatResult `json:"result"`
+}
+
+// GetChatUsername запрашивает username канала через Bot API getChat.
+func GetChatUsername(ctx context.Context, botToken, channelID string) (string, error) {
+	url := fmt.Sprintf(tgAPIGetChat, botToken) + "?chat_id=" + channelID
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return "", fmt.Errorf("new getChat request: %w", err)
+	}
+
+	client := &http.Client{Timeout: httpTimeout}
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", fmt.Errorf("http getChat: %w", err)
+	}
+	defer resp.Body.Close()
+
+	var chatResp tgChatResponse
+	if err = json.NewDecoder(resp.Body).Decode(&chatResp); err != nil {
+		return "", fmt.Errorf("decode getChat response: %w", err)
+	}
+	if !chatResp.OK {
+		return "", fmt.Errorf("getChat api error: %s", chatResp.Description)
+	}
+	return chatResp.Result.Username, nil
+}
+
+// GetLinkedChatURL запрашивает привязанную группу обсуждений (Linked Chat) для канала.
+func GetLinkedChatURL(ctx context.Context, botToken, channelID string) string {
+	url := fmt.Sprintf(tgAPIGetChat, botToken) + "?chat_id=" + channelID
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return ""
+	}
+	client := &http.Client{Timeout: httpTimeout}
+	resp, err := client.Do(req)
+	if err != nil {
+		return ""
+	}
+	defer resp.Body.Close()
+
+	var chatResp tgChatResponse
+	if err = json.NewDecoder(resp.Body).Decode(&chatResp); err != nil || !chatResp.OK {
+		return ""
+	}
+
+	if chatResp.Result.LinkedChatID == 0 {
+		return ""
+	}
+
+	urlGroup := fmt.Sprintf(tgAPIGetChat, botToken) + fmt.Sprintf("?chat_id=%d", chatResp.Result.LinkedChatID)
+	reqGroup, err := http.NewRequestWithContext(ctx, http.MethodGet, urlGroup, nil)
+	if err != nil {
+		return ""
+	}
+	respGroup, err := client.Do(reqGroup)
+	if err != nil {
+		return ""
+	}
+	defer respGroup.Body.Close()
+
+	var groupResp tgChatResponse
+	if err = json.NewDecoder(respGroup.Body).Decode(&groupResp); err != nil || !groupResp.OK {
+		return ""
+	}
+
+	if groupResp.Result.Username != "" {
+		return fmt.Sprintf("https://t.me/%s", groupResp.Result.Username)
+	}
+	if groupResp.Result.InviteLink != "" {
+		return groupResp.Result.InviteLink
+	}
+
+	clean := strings.TrimPrefix(fmt.Sprintf("%d", chatResp.Result.LinkedChatID), "-100")
+	clean = strings.TrimPrefix(clean, "-")
+	return fmt.Sprintf("https://t.me/c/%s", clean)
+}
+
+// ResolveCommentURL формирует прямую ссылку на чат обсуждений канала или тред комментариев.
+func ResolveCommentURL(ctx context.Context, botToken, channelID string, messageID int64) string {
+	// 1. Если у канала есть привязанная группа обсуждений (LinkedChat) — направляем прямо в чат!
+	if botToken != "" {
+		if linkedURL := GetLinkedChatURL(ctx, botToken, channelID); linkedURL != "" {
+			return linkedURL
+		}
+	}
+
+	// 2. Если канал имеет публичный username
+	if strings.HasPrefix(channelID, "@") {
+		return fmt.Sprintf("https://t.me/%s/%d", strings.TrimPrefix(channelID, "@"), messageID)
+	}
+
+	if botToken != "" {
+		if username, err := GetChatUsername(ctx, botToken, channelID); err == nil && username != "" {
+			return fmt.Sprintf("https://t.me/%s/%d", username, messageID)
+		}
+	}
+
+	cleanID := strings.TrimPrefix(channelID, "-100")
+	cleanID = strings.TrimPrefix(cleanID, "-")
+	return fmt.Sprintf("https://t.me/c/%s/%d", cleanID, messageID)
+}
+
+// EditMessageReplyMarkup обновляет инлайн-клавиатуру отправленного сообщения в канале.
+func EditMessageReplyMarkup(
+	ctx context.Context,
+	botToken, channelID string,
+	messageID int64,
+	keyboard *InlineKeyboardMarkup,
+) error {
+	reqBody := map[string]interface{}{
+		"chat_id":      channelID,
+		"message_id":   messageID,
+		"reply_markup": keyboard,
+	}
+
+	jsonBytes, err := json.Marshal(reqBody)
+	if err != nil {
+		return fmt.Errorf("marshal edit reply markup body: %w", err)
+	}
+
+	url := fmt.Sprintf(tgAPIEditMessageReplyMarkup, botToken)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(jsonBytes))
+	if err != nil {
+		return fmt.Errorf("new editMessageReplyMarkup request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{Timeout: httpTimeout}
+	resp, err := client.Do(req)
+	if err != nil {
+		return fmt.Errorf("http editMessageReplyMarkup: %w", err)
+	}
+	defer resp.Body.Close()
+
+	respBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("read editMessageReplyMarkup response: %w", err)
+	}
+
+	var tgResp tgResponse
+	if err = json.Unmarshal(respBytes, &tgResp); err != nil {
+		return fmt.Errorf("parse editMessageReplyMarkup response: %w", err)
+	}
+	if !tgResp.OK {
+		return fmt.Errorf("telegram api error: %s", tgResp.Description)
+	}
+
+	return nil
+}
+
+// AddDiscussButtonToKeyboard добавляет кнопку «💬 Обсудить» со ссылкой на тред комментариев к существующей клавиатуре сообщения.
+func AddDiscussButtonToKeyboard(
+	ctx context.Context,
+	botToken, channelID string,
+	messageID int64,
+	existingKeyboard *InlineKeyboardMarkup,
+	buttonText ...string,
+) error {
+	commentURL := ResolveCommentURL(ctx, botToken, channelID, messageID)
+
+	text := "💬 Обсудить"
+	if len(buttonText) > 0 && buttonText[0] != "" {
+		text = buttonText[0]
+	}
+
+	newKeyboard := &InlineKeyboardMarkup{}
+	if existingKeyboard != nil {
+		for _, row := range existingKeyboard.InlineKeyboard {
+			rowCopy := make([]InlineKeyboardButton, len(row))
+			copy(rowCopy, row)
+			newKeyboard.InlineKeyboard = append(newKeyboard.InlineKeyboard, rowCopy)
+		}
+	}
+
+	discussButton := InlineKeyboardButton{
+		Text: text,
+		URL:  commentURL,
+	}
+
+	newKeyboard.InlineKeyboard = append(newKeyboard.InlineKeyboard, []InlineKeyboardButton{discussButton})
+	return EditMessageReplyMarkup(ctx, botToken, channelID, messageID, newKeyboard)
+}
+
+// EnsureDiscussButton проверяет наличие кнопки «Обсудить» в клавиатуре и, если её нет, добавляет её.
+// ВАЖНО: если keyboard == nil (пост без кнопок), мы возвращаем nil, чтобы Telegram отображал
+// свою родную нативную плашку «Прокомментировать» с отдельным изолированным тредом.
+func EnsureDiscussButton(ctx context.Context, botToken, channelID string, keyboard *InlineKeyboardMarkup) *InlineKeyboardMarkup {
+	if keyboard == nil {
+		return nil
+	}
+
+	linkedURL := ResolveCommentURL(ctx, botToken, channelID, 0)
+	if linkedURL == "" {
+		return keyboard
+	}
+
+	newKb := &InlineKeyboardMarkup{}
+	if keyboard != nil {
+		for _, row := range keyboard.InlineKeyboard {
+			for _, btn := range row {
+				if strings.Contains(btn.Text, "Обсудить") {
+					return keyboard // кнопка уже присутствует
+				}
+			}
+			rowCopy := make([]InlineKeyboardButton, len(row))
+			copy(rowCopy, row)
+			newKb.InlineKeyboard = append(newKb.InlineKeyboard, rowCopy)
+		}
+	}
+
+	discussBtn := InlineKeyboardButton{
+		Text: "💬 Обсудить",
+		URL:  linkedURL,
+	}
+	newKb.InlineKeyboard = append(newKb.InlineKeyboard, []InlineKeyboardButton{discussBtn})
+	return newKb
+}
+
 // SendRichMessage публикует сообщение через нативный Rich Message API Telegram (Bot API 10.1+),
 // поддерживающий нативные таблицы (InputRichBlockTable) и структурированные блоки.
 func SendRichMessage(
@@ -188,6 +423,8 @@ func SendRichMessage(
 	richMessage RichMessagePayload,
 	keyboard *InlineKeyboardMarkup,
 ) (int64, error) {
+	keyboard = EnsureDiscussButton(ctx, botToken, channelID, keyboard)
+
 	reqBody := map[string]interface{}{
 		"chat_id":      channelID,
 		"rich_message": richMessage,
@@ -233,6 +470,8 @@ func SendRichMessage(
 }
 
 func sendFile(ctx context.Context, botToken, channelID, caption, filePath, formField, endpointFmt string, keyboard *InlineKeyboardMarkup) (int64, error) {
+	keyboard = EnsureDiscussButton(ctx, botToken, channelID, keyboard)
+
 	f, err := os.Open(filePath)
 	if err != nil {
 		return 0, fmt.Errorf("open file: %w", err)

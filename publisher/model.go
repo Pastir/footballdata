@@ -18,6 +18,7 @@ const (
 	PubTypePrediction    PublicationType = "prediction"
 	PubTypeExpress       PublicationType = "express"
 	PubTypeInsight       PublicationType = "insight"
+	PubTypeBanter        PublicationType = "banter"
 )
 
 // PublicationStatus определяет статус жизненного цикла публикации.

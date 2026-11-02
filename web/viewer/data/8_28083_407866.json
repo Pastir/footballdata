@@ -11,20 +11,20 @@
   "summary": {
     "TotalMatches": 10,
     "FinishedMatches": 9,
-    "TotalGoals": 19,
-    "AvgGoals": 2.1,
+    "TotalGoals": 20,
+    "AvgGoals": 2.2,
     "HomeWins": 5,
-    "Draws": 3,
-    "AwayWins": 1,
+    "Draws": 2,
+    "AwayWins": 2,
     "BTTSCount": 3,
     "Over25Count": 2,
-    "FavoritesWon": 4,
-    "FavoritesFailed": 5,
+    "FavoritesWon": 5,
+    "FavoritesFailed": 4,
     "TopScoringMatch": "Ковентри — Сандерленд (4 голов)",
     "TopScoringGoals": 4,
     "TopUpsetMatch": "Ман Сити — Брайтон (победа гостей за кэф 4.33)",
     "TopUpsetOdds": 4.33,
-    "TotalYellowCards": 35,
+    "TotalYellowCards": 43,
     "TotalRedCards": 1,
     "LateDramaEvent": "Гол Amine Adli на 90' мин в матче Борнмут — Лидс (2:0)"
   },
@@ -66,7 +66,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "VAR",
-          "type_name": "VAR",
+          "type_name": "ВАР.",
           "player": "Matheus Cunha",
           "addition": "Goal disallowed"
         },
@@ -75,7 +75,7 @@
           "extra_minute": 0,
           "team_id": 18,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Morgan Rogers",
           "related_player": "R. Lavia",
           "result": "1-0",
@@ -86,7 +86,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "K. Mainoo",
           "related_player": "C. Baleba",
           "addition": "1st Substitution"
@@ -96,7 +96,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Lisandro Martínez ",
           "addition": "1st Yellowcard"
         },
@@ -105,7 +105,7 @@
           "extra_minute": 0,
           "team_id": 18,
           "type": "VAR",
-          "type_name": "VAR",
+          "type_name": "ВАР.",
           "player": "Estêvão",
           "addition": "Penalty awarded"
         },
@@ -114,7 +114,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "YELLOWREDCARD",
-          "type_name": "Yellow/Red card",
+          "type_name": "Жёлтая/красная карточка",
           "player": "Lisandro Martínez ",
           "addition": "1st Yellow/red Card"
         },
@@ -123,7 +123,7 @@
           "extra_minute": 0,
           "team_id": 18,
           "type": "PENALTY",
-          "type_name": "Penalty",
+          "type_name": "Штраф",
           "player": "Cole Palmer",
           "result": "2-0",
           "addition": "1st Penalty"
@@ -133,7 +133,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Harry Maguire",
           "addition": "2nd Yellowcard"
         },
@@ -142,7 +142,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "A. Heaven",
           "related_player": "Andrey Santos",
           "addition": "2nd Substitution"
@@ -152,7 +152,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Mason Mount",
           "related_player": "Matheus Cunha",
           "addition": "3rd Substitution"
@@ -162,7 +162,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "K. Mainoo",
           "addition": "3rd Yellowcard"
         },
@@ -171,7 +171,7 @@
           "extra_minute": 0,
           "team_id": 18,
           "type": "VAR",
-          "type_name": "VAR",
+          "type_name": "ВАР.",
           "player": "Estêvão",
           "addition": "Goal disallowed"
         },
@@ -180,7 +180,7 @@
           "extra_minute": 0,
           "team_id": 18,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Pep Chavarría",
           "related_player": "Marco Palestra",
           "addition": "4th Substitution"
@@ -190,7 +190,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "J. Zirkzee",
           "related_player": "A. Diallo",
           "addition": "5th Substitution"
@@ -200,7 +200,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Bryan Mbeumo",
           "addition": "4th Yellowcard"
         },
@@ -209,7 +209,7 @@
           "extra_minute": 0,
           "team_id": 14,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "J. Zirkzee",
           "addition": "5th Yellowcard"
         },
@@ -218,7 +218,7 @@
           "extra_minute": 0,
           "team_id": 18,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Valentín Barco",
           "related_player": "Pedro Neto",
           "addition": "6th Substitution"
@@ -228,7 +228,7 @@
           "extra_minute": 0,
           "team_id": 18,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "M. Gusto",
           "related_player": "Estêvão",
           "addition": "7th Substitution"
@@ -238,7 +238,7 @@
           "extra_minute": 0,
           "team_id": 18,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Danny Welbeck ",
           "related_player": "Moisés Caicedo",
           "addition": "8th Substitution"
@@ -248,7 +248,7 @@
           "extra_minute": 3,
           "team_id": 18,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Mike Penders",
           "addition": "6th Yellowcard"
         },
@@ -257,7 +257,7 @@
           "extra_minute": 7,
           "team_id": 18,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Geovany Tcherno Quenda",
           "related_player": "Cole Palmer",
           "addition": "9th Substitution"
@@ -266,7 +266,7 @@
       "Stats": {
         "ACCURATE_CROSSES": {
           "type_id": 99,
-          "name": "Accurate Crosses",
+          "name": "Точные кроссовки",
           "code": "accurate-crosses",
           "developer_name": "ACCURATE_CROSSES",
           "home": 4,
@@ -274,7 +274,7 @@
         },
         "ASSISTS": {
           "type_id": 79,
-          "name": "Assists",
+          "name": "Ассисты",
           "code": "assists",
           "developer_name": "ASSISTS",
           "home": 1,
@@ -282,7 +282,7 @@
         },
         "ATTACKS": {
           "type_id": 43,
-          "name": "Attacks",
+          "name": "Атаки",
           "code": "attacks",
           "developer_name": "ATTACKS",
           "home": 103,
@@ -290,7 +290,7 @@
         },
         "BALL_POSSESSION": {
           "type_id": 45,
-          "name": "Ball Possession %",
+          "name": "Владение мячом %",
           "code": "ball-possession",
           "developer_name": "BALL_POSSESSION",
           "home": 58,
@@ -298,7 +298,7 @@
         },
         "BALL_SAFE": {
           "type_id": 46,
-          "name": "Ball Safe",
+          "name": "Шариковый сейф",
           "code": "ball-safe",
           "developer_name": "BALL_SAFE",
           "home": 64,
@@ -306,7 +306,7 @@
         },
         "BIG_CHANCES_CREATED": {
           "type_id": 580,
-          "name": "Big Chances Created",
+          "name": "Большие созданные моменты",
           "code": "big-chances-created",
           "developer_name": "BIG_CHANCES_CREATED",
           "home": 4,
@@ -314,7 +314,7 @@
         },
         "BIG_CHANCES_MISSED": {
           "type_id": 581,
-          "name": "Big Chances Missed",
+          "name": "Упущенные большие шансы",
           "code": "big-chances-missed",
           "developer_name": "BIG_CHANCES_MISSED",
           "home": 2,
@@ -322,7 +322,7 @@
         },
         "CORNERS": {
           "type_id": 34,
-          "name": "Corners",
+          "name": "Углы",
           "code": "corners",
           "developer_name": "CORNERS",
           "home": 8,
@@ -330,7 +330,7 @@
         },
         "DANGEROUS_ATTACKS": {
           "type_id": 44,
-          "name": "Dangerous Attacks",
+          "name": "Опасные атаки",
           "code": "dangerous-attacks",
           "developer_name": "DANGEROUS_ATTACKS",
           "home": 62,
@@ -338,7 +338,7 @@
         },
         "DRIBBLED_ATTEMPTS": {
           "type_id": 108,
-          "name": "Dribble Attempts",
+          "name": "Попытки обводки",
           "code": "dribble-attempts",
           "developer_name": "DRIBBLED_ATTEMPTS",
           "home": 19,
@@ -346,7 +346,7 @@
         },
         "DUELS_WON": {
           "type_id": 106,
-          "name": "Duels Won",
+          "name": "Победы в дуэлях",
           "code": "duels-won",
           "developer_name": "DUELS_WON",
           "home": 61,
@@ -354,7 +354,7 @@
         },
         "FOULS": {
           "type_id": 56,
-          "name": "Fouls",
+          "name": "Фолы",
           "code": "fouls",
           "developer_name": "FOULS",
           "home": 8,
@@ -362,7 +362,7 @@
         },
         "FREE_KICKS": {
           "type_id": 55,
-          "name": "Free Kicks",
+          "name": "Свободные удары",
           "code": "free-kicks",
           "developer_name": "FREE_KICKS",
           "home": 21,
@@ -370,7 +370,7 @@
         },
         "GOALS": {
           "type_id": 52,
-          "name": "Goals",
+          "name": "Цели",
           "code": "goals",
           "developer_name": "GOALS",
           "home": 2,
@@ -378,7 +378,7 @@
         },
         "GOAL_ATTEMPTS": {
           "type_id": 54,
-          "name": "Goal Attempts",
+          "name": "Попытки забить гол",
           "code": "goal-attempts",
           "developer_name": "GOAL_ATTEMPTS",
           "home": 17,
@@ -386,7 +386,7 @@
         },
         "GOAL_KICKS": {
           "type_id": 53,
-          "name": "Goal Kicks",
+          "name": "Вбрасывание от ворот",
           "code": "goals-kicks",
           "developer_name": "GOAL_KICKS",
           "home": 4,
@@ -394,7 +394,7 @@
         },
         "HIT_WOODWORK": {
           "type_id": 64,
-          "name": "Hit Woodwork",
+          "name": "Удар по деревянным элементам",
           "code": "hit-woodwork",
           "developer_name": "HIT_WOODWORK",
           "home": 1,
@@ -402,7 +402,7 @@
         },
         "INJURIES": {
           "type_id": 87,
-          "name": "Injuries",
+          "name": "Травмы",
           "code": "injuries",
           "developer_name": "INJURIES",
           "home": 0,
@@ -410,7 +410,7 @@
         },
         "INTERCEPTIONS": {
           "type_id": 100,
-          "name": "Interceptions",
+          "name": "Перехваты",
           "code": "interceptions",
           "developer_name": "INTERCEPTIONS",
           "home": 16,
@@ -418,7 +418,7 @@
         },
         "KEY_PASSES": {
           "type_id": 117,
-          "name": "Key Passes",
+          "name": "Ключевые передачи",
           "code": "key-passes",
           "developer_name": "KEY_PASSES",
           "home": 14,
@@ -426,7 +426,7 @@
         },
         "LONG_PASSES": {
           "type_id": 62,
-          "name": "Long Passes",
+          "name": "Длинные передачи",
           "code": "long-passes",
           "developer_name": "LONG_PASSES",
           "home": 38,
@@ -434,7 +434,7 @@
         },
         "OFFSIDES": {
           "type_id": 51,
-          "name": "Offsides",
+          "name": "Офсайды",
           "code": "offsides",
           "developer_name": "OFFSIDES",
           "home": 3,
@@ -442,7 +442,7 @@
         },
         "PASSES": {
           "type_id": 80,
-          "name": "Passes",
+          "name": "Пропуски",
           "code": "passes",
           "developer_name": "PASSES",
           "home": 561,
@@ -450,7 +450,7 @@
         },
         "PENALTIES": {
           "type_id": 47,
-          "name": "Penalties",
+          "name": "Наказания",
           "code": "penalties",
           "developer_name": "PENALTIES",
           "home": 1,
@@ -458,7 +458,7 @@
         },
         "REDCARDS": {
           "type_id": 83,
-          "name": "Redcards",
+          "name": "Красные карточки",
           "code": "redcards",
           "developer_name": "REDCARDS",
           "home": 0,
@@ -466,7 +466,7 @@
         },
         "SAVES": {
           "type_id": 57,
-          "name": "Saves",
+          "name": "Сейвы",
           "code": "saves",
           "developer_name": "SAVES",
           "home": 3,
@@ -474,7 +474,7 @@
         },
         "SHOTS_BLOCKED": {
           "type_id": 58,
-          "name": "Shots Blocked",
+          "name": "Блокированные броски",
           "code": "shots-blocked",
           "developer_name": "SHOTS_BLOCKED",
           "home": 3,
@@ -482,7 +482,7 @@
         },
         "SHOTS_INSIDEBOX": {
           "type_id": 49,
-          "name": "Shots Insidebox",
+          "name": "Удары внутри штрафной площади",
           "code": "shots-insidebox",
           "developer_name": "SHOTS_INSIDEBOX",
           "home": 13,
@@ -490,7 +490,7 @@
         },
         "SHOTS_OFF_TARGET": {
           "type_id": 41,
-          "name": "Shots Off Target",
+          "name": "Удары мимо цели",
           "code": "shots-off-target",
           "developer_name": "SHOTS_OFF_TARGET",
           "home": 6,
@@ -498,7 +498,7 @@
         },
         "SHOTS_ON_TARGET": {
           "type_id": 86,
-          "name": "Shots On Target",
+          "name": "Удары в створ ворот",
           "code": "shots-on-target",
           "developer_name": "SHOTS_ON_TARGET",
           "home": 10,
@@ -506,7 +506,7 @@
         },
         "SHOTS_OUTSIDEBOX": {
           "type_id": 50,
-          "name": "Shots Outsidebox",
+          "name": "Удары вне штрафной зоны",
           "code": "shots-outsidebox",
           "developer_name": "SHOTS_OUTSIDEBOX",
           "home": 6,
@@ -514,7 +514,7 @@
         },
         "SHOTS_TOTAL": {
           "type_id": 42,
-          "name": "Shots Total",
+          "name": "Всего бросков",
           "code": "shots-total",
           "developer_name": "SHOTS_TOTAL",
           "home": 19,
@@ -522,7 +522,7 @@
         },
         "SUBSTITUTIONS": {
           "type_id": 59,
-          "name": "Substitutions",
+          "name": "Замены",
           "code": "substitutions",
           "developer_name": "SUBSTITUTIONS",
           "home": 5,
@@ -530,7 +530,7 @@
         },
         "SUCCESSFUL_DRIBBLES": {
           "type_id": 109,
-          "name": "Successful Dribbles",
+          "name": "Успешные дриблинги",
           "code": "successful-dribbles",
           "developer_name": "SUCCESSFUL_DRIBBLES",
           "home": 5,
@@ -538,7 +538,7 @@
         },
         "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
           "type_id": 1605,
-          "name": "Successful Dribbles Percentage",
+          "name": "Процент успешных дриблингов",
           "code": "successful-dribbles-percentage",
           "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
           "home": 42,
@@ -546,7 +546,7 @@
         },
         "SUCCESSFUL_LONG_PASSES": {
           "type_id": 27264,
-          "name": "Successful Long Passes",
+          "name": "Успешные дальние передачи",
           "code": "successful-long-passes",
           "developer_name": "SUCCESSFUL_LONG_PASSES",
           "home": 17,
@@ -554,7 +554,7 @@
         },
         "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
           "type_id": 27265,
-          "name": "Successful Long Passes Percentage",
+          "name": "Процент успешных длинных передач",
           "code": "successful-long-passes-percentage",
           "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
           "home": 45,
@@ -562,7 +562,7 @@
         },
         "SUCCESSFUL_PASSES": {
           "type_id": 81,
-          "name": "Successful Passes",
+          "name": "Успешные передачи",
           "code": "successful-passes",
           "developer_name": "SUCCESSFUL_PASSES",
           "home": 496,
@@ -570,7 +570,7 @@
         },
         "SUCCESSFUL_PASSES_PERCENTAGE": {
           "type_id": 82,
-          "name": "Successful Passes Percentage",
+          "name": "Процент успешных передач",
           "code": "successful-passes-percentage",
           "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
           "home": 88,
@@ -578,7 +578,7 @@
         },
         "TACKLES": {
           "type_id": 78,
-          "name": "Tackles",
+          "name": "Тэклы",
           "code": "tackles",
           "developer_name": "TACKLES",
           "home": 21,
@@ -586,7 +586,7 @@
         },
         "TACKLES_WON": {
           "type_id": 27267,
-          "name": "Tackles Won",
+          "name": "Отборы выигранные",
           "code": "tackles-won",
           "developer_name": "TACKLES_WON",
           "home": 15,
@@ -594,7 +594,7 @@
         },
         "THROWINS": {
           "type_id": 60,
-          "name": "Throwins",
+          "name": "Вбрасывания",
           "code": "throwins",
           "developer_name": "THROWINS",
           "home": 15,
@@ -602,7 +602,7 @@
         },
         "TOTAL_CROSSES": {
           "type_id": 98,
-          "name": "Total Crosses",
+          "name": "Всего пересечений",
           "code": "total-crosses",
           "developer_name": "TOTAL_CROSSES",
           "home": 14,
@@ -610,7 +610,7 @@
         },
         "YELLOWCARDS": {
           "type_id": 84,
-          "name": "Yellowcards",
+          "name": "Жёлтые карточки",
           "code": "yellowcards",
           "developer_name": "YELLOWCARDS",
           "home": 1,
@@ -618,7 +618,7 @@
         },
         "YELLOWRED_CARDS": {
           "type_id": 85,
-          "name": "Yellowred Cards",
+          "name": "Жёлто-красные карточки",
           "code": "yellowred-cards",
           "developer_name": "YELLOWRED_CARDS",
           "home": 0,
@@ -1069,8 +1069,8 @@
         "AwayOdds": "3.40",
         "BookmakerName": "bet365"
       },
-      "home_xg": 2.35,
-      "away_xg": 1.11,
+      "home_xg": 2.44,
+      "away_xg": 1.12,
       "H2H": {
         "summary": {
           "total_matches": 10,
@@ -1095,8 +1095,8 @@
             "away_team_logo": "https://cdn.sportmonks.com/images/soccer/teams/14/14.png",
             "home_score": 2,
             "away_score": 0,
-            "home_xg": 2.35,
-            "away_xg": 1.11
+            "home_xg": 2.44,
+            "away_xg": 1.12
           },
           {
             "fixture_id": 19427501,
@@ -1236,8 +1236,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.246,
-            "xga_per_match": 1.124,
+            "xg_per_match": 1.2639999999999998,
+            "xga_per_match": 1.126,
             "goals_scored_avg": 1.8,
             "goals_conceded_avg": 1.2,
             "btts_percent": 20,
@@ -1247,8 +1247,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.4544444444444444,
-            "xga_per_match": 1.3388888888888888,
+            "xg_per_match": 1.4644444444444444,
+            "xga_per_match": 1.3399999999999999,
             "goals_scored_avg": 2.111111111111111,
             "goals_conceded_avg": 1.6666666666666667,
             "btts_percent": 55,
@@ -1262,8 +1262,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.2120000000000002,
-            "xga_per_match": 1.6420000000000001,
+            "xg_per_match": 1.214,
+            "xga_per_match": 1.6600000000000001,
             "goals_scored_avg": 0.6,
             "goals_conceded_avg": 1.6,
             "btts_percent": 60,
@@ -1273,8 +1273,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.5933333333333333,
-            "xga_per_match": 1.3244444444444445,
+            "xg_per_match": 1.5944444444444443,
+            "xga_per_match": 1.3344444444444445,
             "goals_scored_avg": 1.1111111111111112,
             "goals_conceded_avg": 1.6666666666666667,
             "btts_percent": 55,
@@ -1323,7 +1323,7 @@
           "extra_minute": 0,
           "team_id": 236,
           "type": "OWNGOAL",
-          "type_name": "Own Goal",
+          "type_name": "Автогол",
           "player": "Nikola Milenković",
           "result": "1-0",
           "addition": "1st Own Goal"
@@ -1333,7 +1333,7 @@
           "extra_minute": 0,
           "team_id": 63,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Nikola Milenković",
           "addition": "1st Yellowcard"
         },
@@ -1342,7 +1342,7 @@
           "extra_minute": 0,
           "team_id": 63,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "D. Muñoz",
           "related_player": "Ola Aina ",
           "addition": "1st Substitution"
@@ -1352,7 +1352,7 @@
           "extra_minute": 0,
           "team_id": 63,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Ryan Yates",
           "related_player": "Xaver Schlager",
           "addition": "2nd Substitution"
@@ -1362,7 +1362,7 @@
           "extra_minute": 0,
           "team_id": 236,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Mikkel Damsgaard",
           "related_player": "Mathias Jensen",
           "addition": "3rd Substitution"
@@ -1372,7 +1372,7 @@
           "extra_minute": 0,
           "team_id": 236,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Aaron Hickey",
           "related_player": "Mamadou Sangaré",
           "addition": "4th Substitution"
@@ -1382,7 +1382,7 @@
           "extra_minute": 0,
           "team_id": 63,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "D. Muñoz",
           "addition": "2nd Yellowcard"
         },
@@ -1391,7 +1391,7 @@
           "extra_minute": 0,
           "team_id": 63,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "A. Kalimuendo",
           "related_player": "D. Ndoye",
           "addition": "5th Substitution"
@@ -1401,7 +1401,7 @@
           "extra_minute": 0,
           "team_id": 63,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "C. Wood",
           "related_player": "Liam Delap",
           "addition": "6th Substitution"
@@ -1411,7 +1411,7 @@
           "extra_minute": 0,
           "team_id": 236,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Michael Olabode Kayode",
           "addition": "3rd Yellowcard"
         },
@@ -1420,7 +1420,7 @@
           "extra_minute": 0,
           "team_id": 236,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Jaidon Anthony",
           "related_player": "Dango Ouattara",
           "addition": "7th Substitution"
@@ -1430,7 +1430,7 @@
           "extra_minute": 0,
           "team_id": 236,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Igor Thiago",
           "related_player": "Jaidon Anthony",
           "result": "2-0",
@@ -1441,7 +1441,7 @@
           "extra_minute": 0,
           "team_id": 63,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "J. McAtee",
           "addition": "4th Yellowcard"
         },
@@ -1450,7 +1450,7 @@
           "extra_minute": 0,
           "team_id": 236,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Callum Wilson",
           "related_player": "K. Schade",
           "addition": "8th Substitution"
@@ -1459,7 +1459,7 @@
       "Stats": {
         "ACCURATE_CROSSES": {
           "type_id": 99,
-          "name": "Accurate Crosses",
+          "name": "Точные кроссовки",
           "code": "accurate-crosses",
           "developer_name": "ACCURATE_CROSSES",
           "home": 2,
@@ -1467,7 +1467,7 @@
         },
         "ASSISTS": {
           "type_id": 79,
-          "name": "Assists",
+          "name": "Ассисты",
           "code": "assists",
           "developer_name": "ASSISTS",
           "home": 1,
@@ -1475,7 +1475,7 @@
         },
         "ATTACKS": {
           "type_id": 43,
-          "name": "Attacks",
+          "name": "Атаки",
           "code": "attacks",
           "developer_name": "ATTACKS",
           "home": 77,
@@ -1483,7 +1483,7 @@
         },
         "BALL_POSSESSION": {
           "type_id": 45,
-          "name": "Ball Possession %",
+          "name": "Владение мячом %",
           "code": "ball-possession",
           "developer_name": "BALL_POSSESSION",
           "home": 42,
@@ -1491,7 +1491,7 @@
         },
         "BALL_SAFE": {
           "type_id": 46,
-          "name": "Ball Safe",
+          "name": "Шариковый сейф",
           "code": "ball-safe",
           "developer_name": "BALL_SAFE",
           "home": 89,
@@ -1499,7 +1499,7 @@
         },
         "BIG_CHANCES_CREATED": {
           "type_id": 580,
-          "name": "Big Chances Created",
+          "name": "Большие созданные моменты",
           "code": "big-chances-created",
           "developer_name": "BIG_CHANCES_CREATED",
           "home": 1,
@@ -1507,7 +1507,7 @@
         },
         "BIG_CHANCES_MISSED": {
           "type_id": 581,
-          "name": "Big Chances Missed",
+          "name": "Упущенные большие шансы",
           "code": "big-chances-missed",
           "developer_name": "BIG_CHANCES_MISSED",
           "home": 0,
@@ -1515,7 +1515,7 @@
         },
         "CORNERS": {
           "type_id": 34,
-          "name": "Corners",
+          "name": "Углы",
           "code": "corners",
           "developer_name": "CORNERS",
           "home": 3,
@@ -1523,7 +1523,7 @@
         },
         "DANGEROUS_ATTACKS": {
           "type_id": 44,
-          "name": "Dangerous Attacks",
+          "name": "Опасные атаки",
           "code": "dangerous-attacks",
           "developer_name": "DANGEROUS_ATTACKS",
           "home": 24,
@@ -1531,7 +1531,7 @@
         },
         "DRIBBLED_ATTEMPTS": {
           "type_id": 108,
-          "name": "Dribble Attempts",
+          "name": "Попытки обводки",
           "code": "dribble-attempts",
           "developer_name": "DRIBBLED_ATTEMPTS",
           "home": 14,
@@ -1539,7 +1539,7 @@
         },
         "DUELS_WON": {
           "type_id": 106,
-          "name": "Duels Won",
+          "name": "Победы в дуэлях",
           "code": "duels-won",
           "developer_name": "DUELS_WON",
           "home": 58,
@@ -1547,7 +1547,7 @@
         },
         "FOULS": {
           "type_id": 56,
-          "name": "Fouls",
+          "name": "Фолы",
           "code": "fouls",
           "developer_name": "FOULS",
           "home": 6,
@@ -1555,7 +1555,7 @@
         },
         "FREE_KICKS": {
           "type_id": 55,
-          "name": "Free Kicks",
+          "name": "Свободные удары",
           "code": "free-kicks",
           "developer_name": "FREE_KICKS",
           "home": 18,
@@ -1563,7 +1563,7 @@
         },
         "GOALS": {
           "type_id": 52,
-          "name": "Goals",
+          "name": "Цели",
           "code": "goals",
           "developer_name": "GOALS",
           "home": 2,
@@ -1571,7 +1571,7 @@
         },
         "GOAL_ATTEMPTS": {
           "type_id": 54,
-          "name": "Goal Attempts",
+          "name": "Попытки забить гол",
           "code": "goal-attempts",
           "developer_name": "GOAL_ATTEMPTS",
           "home": 6,
@@ -1579,7 +1579,7 @@
         },
         "GOAL_KICKS": {
           "type_id": 53,
-          "name": "Goal Kicks",
+          "name": "Вбрасывание от ворот",
           "code": "goals-kicks",
           "developer_name": "GOAL_KICKS",
           "home": 12,
@@ -1587,7 +1587,7 @@
         },
         "HIT_WOODWORK": {
           "type_id": 64,
-          "name": "Hit Woodwork",
+          "name": "Удар по деревянным элементам",
           "code": "hit-woodwork",
           "developer_name": "HIT_WOODWORK",
           "home": 1,
@@ -1595,7 +1595,7 @@
         },
         "INJURIES": {
           "type_id": 87,
-          "name": "Injuries",
+          "name": "Травмы",
           "code": "injuries",
           "developer_name": "INJURIES",
           "home": 1,
@@ -1603,7 +1603,7 @@
         },
         "INTERCEPTIONS": {
           "type_id": 100,
-          "name": "Interceptions",
+          "name": "Перехваты",
           "code": "interceptions",
           "developer_name": "INTERCEPTIONS",
           "home": 13,
@@ -1611,7 +1611,7 @@
         },
         "KEY_PASSES": {
           "type_id": 117,
-          "name": "Key Passes",
+          "name": "Ключевые передачи",
           "code": "key-passes",
           "developer_name": "KEY_PASSES",
           "home": 3,
@@ -1619,7 +1619,7 @@
         },
         "LONG_PASSES": {
           "type_id": 62,
-          "name": "Long Passes",
+          "name": "Длинные передачи",
           "code": "long-passes",
           "developer_name": "LONG_PASSES",
           "home": 56,
@@ -1627,7 +1627,7 @@
         },
         "OFFSIDES": {
           "type_id": 51,
-          "name": "Offsides",
+          "name": "Офсайды",
           "code": "offsides",
           "developer_name": "OFFSIDES",
           "home": 1,
@@ -1635,7 +1635,7 @@
         },
         "PASSES": {
           "type_id": 80,
-          "name": "Passes",
+          "name": "Пропуски",
           "code": "passes",
           "developer_name": "PASSES",
           "home": 346,
@@ -1643,7 +1643,7 @@
         },
         "SAVES": {
           "type_id": 57,
-          "name": "Saves",
+          "name": "Сейвы",
           "code": "saves",
           "developer_name": "SAVES",
           "home": 1,
@@ -1651,7 +1651,7 @@
         },
         "SHOTS_BLOCKED": {
           "type_id": 58,
-          "name": "Shots Blocked",
+          "name": "Блокированные броски",
           "code": "shots-blocked",
           "developer_name": "SHOTS_BLOCKED",
           "home": 1,
@@ -1659,7 +1659,7 @@
         },
         "SHOTS_INSIDEBOX": {
           "type_id": 49,
-          "name": "Shots Insidebox",
+          "name": "Удары внутри штрафной площади",
           "code": "shots-insidebox",
           "developer_name": "SHOTS_INSIDEBOX",
           "home": 3,
@@ -1667,7 +1667,7 @@
         },
         "SHOTS_OFF_TARGET": {
           "type_id": 41,
-          "name": "Shots Off Target",
+          "name": "Удары мимо цели",
           "code": "shots-off-target",
           "developer_name": "SHOTS_OFF_TARGET",
           "home": 5,
@@ -1675,7 +1675,7 @@
         },
         "SHOTS_ON_TARGET": {
           "type_id": 86,
-          "name": "Shots On Target",
+          "name": "Удары в створ ворот",
           "code": "shots-on-target",
           "developer_name": "SHOTS_ON_TARGET",
           "home": 1,
@@ -1683,7 +1683,7 @@
         },
         "SHOTS_OUTSIDEBOX": {
           "type_id": 50,
-          "name": "Shots Outsidebox",
+          "name": "Удары вне штрафной зоны",
           "code": "shots-outsidebox",
           "developer_name": "SHOTS_OUTSIDEBOX",
           "home": 4,
@@ -1691,7 +1691,7 @@
         },
         "SHOTS_TOTAL": {
           "type_id": 42,
-          "name": "Shots Total",
+          "name": "Всего бросков",
           "code": "shots-total",
           "developer_name": "SHOTS_TOTAL",
           "home": 7,
@@ -1699,7 +1699,7 @@
         },
         "SUBSTITUTIONS": {
           "type_id": 59,
-          "name": "Substitutions",
+          "name": "Замены",
           "code": "substitutions",
           "developer_name": "SUBSTITUTIONS",
           "home": 4,
@@ -1707,7 +1707,7 @@
         },
         "SUCCESSFUL_DRIBBLES": {
           "type_id": 109,
-          "name": "Successful Dribbles",
+          "name": "Успешные дриблинги",
           "code": "successful-dribbles",
           "developer_name": "SUCCESSFUL_DRIBBLES",
           "home": 6,
@@ -1715,7 +1715,7 @@
         },
         "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
           "type_id": 1605,
-          "name": "Successful Dribbles Percentage",
+          "name": "Процент успешных дриблингов",
           "code": "successful-dribbles-percentage",
           "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
           "home": 43,
@@ -1723,7 +1723,7 @@
         },
         "SUCCESSFUL_LONG_PASSES": {
           "type_id": 27264,
-          "name": "Successful Long Passes",
+          "name": "Успешные дальние передачи",
           "code": "successful-long-passes",
           "developer_name": "SUCCESSFUL_LONG_PASSES",
           "home": 21,
@@ -1731,7 +1731,7 @@
         },
         "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
           "type_id": 27265,
-          "name": "Successful Long Passes Percentage",
+          "name": "Процент успешных длинных передач",
           "code": "successful-long-passes-percentage",
           "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
           "home": 38,
@@ -1739,7 +1739,7 @@
         },
         "SUCCESSFUL_PASSES": {
           "type_id": 81,
-          "name": "Successful Passes",
+          "name": "Успешные передачи",
           "code": "successful-passes",
           "developer_name": "SUCCESSFUL_PASSES",
           "home": 246,
@@ -1747,7 +1747,7 @@
         },
         "SUCCESSFUL_PASSES_PERCENTAGE": {
           "type_id": 82,
-          "name": "Successful Passes Percentage",
+          "name": "Процент успешных передач",
           "code": "successful-passes-percentage",
           "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
           "home": 71,
@@ -1755,7 +1755,7 @@
         },
         "TACKLES": {
           "type_id": 78,
-          "name": "Tackles",
+          "name": "Тэклы",
           "code": "tackles",
           "developer_name": "TACKLES",
           "home": 20,
@@ -1763,7 +1763,7 @@
         },
         "TACKLES_WON": {
           "type_id": 27267,
-          "name": "Tackles Won",
+          "name": "Отборы выигранные",
           "code": "tackles-won",
           "developer_name": "TACKLES_WON",
           "home": 8,
@@ -1771,7 +1771,7 @@
         },
         "THROWINS": {
           "type_id": 60,
-          "name": "Throwins",
+          "name": "Вбрасывания",
           "code": "throwins",
           "developer_name": "THROWINS",
           "home": 8,
@@ -1779,7 +1779,7 @@
         },
         "TOTAL_CROSSES": {
           "type_id": 98,
-          "name": "Total Crosses",
+          "name": "Всего пересечений",
           "code": "total-crosses",
           "developer_name": "TOTAL_CROSSES",
           "home": 10,
@@ -1787,7 +1787,7 @@
         },
         "YELLOWCARDS": {
           "type_id": 84,
-          "name": "Yellowcards",
+          "name": "Жёлтые карточки",
           "code": "yellowcards",
           "developer_name": "YELLOWCARDS",
           "home": 1,
@@ -2200,7 +2200,7 @@
         "BookmakerName": "bet365"
       },
       "home_xg": 0.73,
-      "away_xg": 1.07,
+      "away_xg": 1.08,
       "H2H": {
         "summary": {
           "total_matches": 10,
@@ -2226,7 +2226,7 @@
             "home_score": 2,
             "away_score": 0,
             "home_xg": 0.73,
-            "away_xg": 1.07
+            "away_xg": 1.08
           },
           {
             "fixture_id": 19427458,
@@ -2367,7 +2367,7 @@
           "last_5": {
             "matches_count": 5,
             "xg_per_match": 1.518,
-            "xga_per_match": 1.508,
+            "xga_per_match": 1.51,
             "goals_scored_avg": 1.8,
             "goals_conceded_avg": 1,
             "btts_percent": 60,
@@ -2378,7 +2378,7 @@
           "season": {
             "matches_count": 9,
             "xg_per_match": 1.6944444444444444,
-            "xga_per_match": 1.5022222222222221,
+            "xga_per_match": 1.5033333333333332,
             "goals_scored_avg": 1.7777777777777777,
             "goals_conceded_avg": 1,
             "btts_percent": 66,
@@ -2392,7 +2392,7 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.7419999999999998,
+            "xg_per_match": 1.7440000000000002,
             "xga_per_match": 1.1019999999999999,
             "goals_scored_avg": 0.4,
             "goals_conceded_avg": 1.6,
@@ -2403,7 +2403,7 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.651111111111111,
+            "xg_per_match": 1.6522222222222223,
             "xga_per_match": 1.1500000000000001,
             "goals_scored_avg": 0.6666666666666666,
             "goals_conceded_avg": 1.3333333333333333,
@@ -2453,7 +2453,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Yasin Ayari",
           "related_player": "M. De Cuyper",
           "result": "0-1",
@@ -2464,7 +2464,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "José María Andrés Baixauli",
           "addition": "1st Yellowcard"
         },
@@ -2473,7 +2473,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "M. De Cuyper",
           "addition": "2nd Yellowcard"
         },
@@ -2482,7 +2482,7 @@
           "extra_minute": 0,
           "team_id": 9,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "R. Cherki",
           "related_player": "Ayyoub Bouaddi",
           "addition": "1st Substitution"
@@ -2492,7 +2492,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "J. Hadjam",
           "related_player": "Olivier Boscagli",
           "addition": "2nd Substitution"
@@ -2502,7 +2502,7 @@
           "extra_minute": 0,
           "team_id": 9,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Nico O'Reilly",
           "related_player": "Enzo Fernández",
           "addition": "3rd Substitution"
@@ -2512,7 +2512,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Mats Wieffer",
           "related_player": "José María Andrés Baixauli",
           "addition": "4th Substitution"
@@ -2522,7 +2522,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Jack Hinshelwood",
           "related_player": "Charalampos Kostoulas",
           "addition": "5th Substitution"
@@ -2532,7 +2532,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Malick Junior Yalcouyé",
           "related_player": "M. De Cuyper",
           "addition": "6th Substitution"
@@ -2542,7 +2542,7 @@
           "extra_minute": 0,
           "team_id": 9,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Allan",
           "related_player": "Iliman Ndiaye",
           "addition": "7th Substitution"
@@ -2552,7 +2552,7 @@
           "extra_minute": 0,
           "team_id": 9,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Phil Foden",
           "related_player": "Josko Gvardiol",
           "addition": "8th Substitution"
@@ -2562,7 +2562,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Pascal Groß",
           "addition": "3rd Yellowcard"
         },
@@ -2571,7 +2571,7 @@
           "extra_minute": 0,
           "team_id": 78,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "G. Rutter",
           "related_player": "Diego Alexander Gómez Amarilla",
           "addition": "9th Substitution"
@@ -2580,7 +2580,7 @@
       "Stats": {
         "ACCURATE_CROSSES": {
           "type_id": 99,
-          "name": "Accurate Crosses",
+          "name": "Точные кроссовки",
           "code": "accurate-crosses",
           "developer_name": "ACCURATE_CROSSES",
           "home": 10,
@@ -2588,7 +2588,7 @@
         },
         "ASSISTS": {
           "type_id": 79,
-          "name": "Assists",
+          "name": "Ассисты",
           "code": "assists",
           "developer_name": "ASSISTS",
           "home": 0,
@@ -2596,7 +2596,7 @@
         },
         "ATTACKS": {
           "type_id": 43,
-          "name": "Attacks",
+          "name": "Атаки",
           "code": "attacks",
           "developer_name": "ATTACKS",
           "home": 124,
@@ -2604,7 +2604,7 @@
         },
         "BALL_POSSESSION": {
           "type_id": 45,
-          "name": "Ball Possession %",
+          "name": "Владение мячом %",
           "code": "ball-possession",
           "developer_name": "BALL_POSSESSION",
           "home": 62,
@@ -2612,7 +2612,7 @@
         },
         "BALL_SAFE": {
           "type_id": 46,
-          "name": "Ball Safe",
+          "name": "Шариковый сейф",
           "code": "ball-safe",
           "developer_name": "BALL_SAFE",
           "home": 79,
@@ -2620,7 +2620,7 @@
         },
         "BIG_CHANCES_CREATED": {
           "type_id": 580,
-          "name": "Big Chances Created",
+          "name": "Большие созданные моменты",
           "code": "big-chances-created",
           "developer_name": "BIG_CHANCES_CREATED",
           "home": 5,
@@ -2628,7 +2628,7 @@
         },
         "BIG_CHANCES_MISSED": {
           "type_id": 581,
-          "name": "Big Chances Missed",
+          "name": "Упущенные большие шансы",
           "code": "big-chances-missed",
           "developer_name": "BIG_CHANCES_MISSED",
           "home": 5,
@@ -2636,7 +2636,7 @@
         },
         "CORNERS": {
           "type_id": 34,
-          "name": "Corners",
+          "name": "Углы",
           "code": "corners",
           "developer_name": "CORNERS",
           "home": 8,
@@ -2644,7 +2644,7 @@
         },
         "DANGEROUS_ATTACKS": {
           "type_id": 44,
-          "name": "Dangerous Attacks",
+          "name": "Опасные атаки",
           "code": "dangerous-attacks",
           "developer_name": "DANGEROUS_ATTACKS",
           "home": 63,
@@ -2652,7 +2652,7 @@
         },
         "DRIBBLED_ATTEMPTS": {
           "type_id": 108,
-          "name": "Dribble Attempts",
+          "name": "Попытки обводки",
           "code": "dribble-attempts",
           "developer_name": "DRIBBLED_ATTEMPTS",
           "home": 27,
@@ -2660,7 +2660,7 @@
         },
         "DUELS_WON": {
           "type_id": 106,
-          "name": "Duels Won",
+          "name": "Победы в дуэлях",
           "code": "duels-won",
           "developer_name": "DUELS_WON",
           "home": 60,
@@ -2668,7 +2668,7 @@
         },
         "FOULS": {
           "type_id": 56,
-          "name": "Fouls",
+          "name": "Фолы",
           "code": "fouls",
           "developer_name": "FOULS",
           "home": 9,
@@ -2676,7 +2676,7 @@
         },
         "FREE_KICKS": {
           "type_id": 55,
-          "name": "Free Kicks",
+          "name": "Свободные удары",
           "code": "free-kicks",
           "developer_name": "FREE_KICKS",
           "home": 15,
@@ -2684,7 +2684,7 @@
         },
         "GOALS": {
           "type_id": 52,
-          "name": "Goals",
+          "name": "Цели",
           "code": "goals",
           "developer_name": "GOALS",
           "home": 0,
@@ -2692,7 +2692,7 @@
         },
         "GOAL_ATTEMPTS": {
           "type_id": 54,
-          "name": "Goal Attempts",
+          "name": "Попытки забить гол",
           "code": "goal-attempts",
           "developer_name": "GOAL_ATTEMPTS",
           "home": 12,
@@ -2700,7 +2700,7 @@
         },
         "GOAL_KICKS": {
           "type_id": 53,
-          "name": "Goal Kicks",
+          "name": "Вбрасывание от ворот",
           "code": "goals-kicks",
           "developer_name": "GOAL_KICKS",
           "home": 3,
@@ -2708,7 +2708,7 @@
         },
         "HIT_WOODWORK": {
           "type_id": 64,
-          "name": "Hit Woodwork",
+          "name": "Удар по деревянным элементам",
           "code": "hit-woodwork",
           "developer_name": "HIT_WOODWORK",
           "home": 2,
@@ -2716,7 +2716,7 @@
         },
         "INJURIES": {
           "type_id": 87,
-          "name": "Injuries",
+          "name": "Травмы",
           "code": "injuries",
           "developer_name": "INJURIES",
           "home": 1,
@@ -2724,7 +2724,7 @@
         },
         "INTERCEPTIONS": {
           "type_id": 100,
-          "name": "Interceptions",
+          "name": "Перехваты",
           "code": "interceptions",
           "developer_name": "INTERCEPTIONS",
           "home": 5,
@@ -2732,7 +2732,7 @@
         },
         "KEY_PASSES": {
           "type_id": 117,
-          "name": "Key Passes",
+          "name": "Ключевые передачи",
           "code": "key-passes",
           "developer_name": "KEY_PASSES",
           "home": 18,
@@ -2740,7 +2740,7 @@
         },
         "LONG_PASSES": {
           "type_id": 62,
-          "name": "Long Passes",
+          "name": "Длинные передачи",
           "code": "long-passes",
           "developer_name": "LONG_PASSES",
           "home": 47,
@@ -2748,7 +2748,7 @@
         },
         "OFFSIDES": {
           "type_id": 51,
-          "name": "Offsides",
+          "name": "Офсайды",
           "code": "offsides",
           "developer_name": "OFFSIDES",
           "home": 2,
@@ -2756,7 +2756,7 @@
         },
         "PASSES": {
           "type_id": 80,
-          "name": "Passes",
+          "name": "Пропуски",
           "code": "passes",
           "developer_name": "PASSES",
           "home": 611,
@@ -2764,7 +2764,7 @@
         },
         "SAVES": {
           "type_id": 57,
-          "name": "Saves",
+          "name": "Сейвы",
           "code": "saves",
           "developer_name": "SAVES",
           "home": 2,
@@ -2772,7 +2772,7 @@
         },
         "SHOTS_BLOCKED": {
           "type_id": 58,
-          "name": "Shots Blocked",
+          "name": "Блокированные броски",
           "code": "shots-blocked",
           "developer_name": "SHOTS_BLOCKED",
           "home": 8,
@@ -2780,7 +2780,7 @@
         },
         "SHOTS_INSIDEBOX": {
           "type_id": 49,
-          "name": "Shots Insidebox",
+          "name": "Удары внутри штрафной площади",
           "code": "shots-insidebox",
           "developer_name": "SHOTS_INSIDEBOX",
           "home": 19,
@@ -2788,7 +2788,7 @@
         },
         "SHOTS_OFF_TARGET": {
           "type_id": 41,
-          "name": "Shots Off Target",
+          "name": "Удары мимо цели",
           "code": "shots-off-target",
           "developer_name": "SHOTS_OFF_TARGET",
           "home": 7,
@@ -2796,7 +2796,7 @@
         },
         "SHOTS_ON_TARGET": {
           "type_id": 86,
-          "name": "Shots On Target",
+          "name": "Удары в створ ворот",
           "code": "shots-on-target",
           "developer_name": "SHOTS_ON_TARGET",
           "home": 6,
@@ -2804,7 +2804,7 @@
         },
         "SHOTS_OUTSIDEBOX": {
           "type_id": 50,
-          "name": "Shots Outsidebox",
+          "name": "Удары вне штрафной зоны",
           "code": "shots-outsidebox",
           "developer_name": "SHOTS_OUTSIDEBOX",
           "home": 2,
@@ -2812,7 +2812,7 @@
         },
         "SHOTS_TOTAL": {
           "type_id": 42,
-          "name": "Shots Total",
+          "name": "Всего бросков",
           "code": "shots-total",
           "developer_name": "SHOTS_TOTAL",
           "home": 21,
@@ -2820,7 +2820,7 @@
         },
         "SUBSTITUTIONS": {
           "type_id": 59,
-          "name": "Substitutions",
+          "name": "Замены",
           "code": "substitutions",
           "developer_name": "SUBSTITUTIONS",
           "home": 4,
@@ -2828,7 +2828,7 @@
         },
         "SUCCESSFUL_DRIBBLES": {
           "type_id": 109,
-          "name": "Successful Dribbles",
+          "name": "Успешные дриблинги",
           "code": "successful-dribbles",
           "developer_name": "SUCCESSFUL_DRIBBLES",
           "home": 15,
@@ -2836,7 +2836,7 @@
         },
         "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
           "type_id": 1605,
-          "name": "Successful Dribbles Percentage",
+          "name": "Процент успешных дриблингов",
           "code": "successful-dribbles-percentage",
           "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
           "home": 56,
@@ -2844,7 +2844,7 @@
         },
         "SUCCESSFUL_LONG_PASSES": {
           "type_id": 27264,
-          "name": "Successful Long Passes",
+          "name": "Успешные дальние передачи",
           "code": "successful-long-passes",
           "developer_name": "SUCCESSFUL_LONG_PASSES",
           "home": 23,
@@ -2852,7 +2852,7 @@
         },
         "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
           "type_id": 27265,
-          "name": "Successful Long Passes Percentage",
+          "name": "Процент успешных длинных передач",
           "code": "successful-long-passes-percentage",
           "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
           "home": 49,
@@ -2860,7 +2860,7 @@
         },
         "SUCCESSFUL_PASSES": {
           "type_id": 81,
-          "name": "Successful Passes",
+          "name": "Успешные передачи",
           "code": "successful-passes",
           "developer_name": "SUCCESSFUL_PASSES",
           "home": 518,
@@ -2868,7 +2868,7 @@
         },
         "SUCCESSFUL_PASSES_PERCENTAGE": {
           "type_id": 82,
-          "name": "Successful Passes Percentage",
+          "name": "Процент успешных передач",
           "code": "successful-passes-percentage",
           "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
           "home": 85,
@@ -2876,7 +2876,7 @@
         },
         "TACKLES": {
           "type_id": 78,
-          "name": "Tackles",
+          "name": "Тэклы",
           "code": "tackles",
           "developer_name": "TACKLES",
           "home": 19,
@@ -2884,7 +2884,7 @@
         },
         "TACKLES_WON": {
           "type_id": 27267,
-          "name": "Tackles Won",
+          "name": "Отборы выигранные",
           "code": "tackles-won",
           "developer_name": "TACKLES_WON",
           "home": 11,
@@ -2892,7 +2892,7 @@
         },
         "THROWINS": {
           "type_id": 60,
-          "name": "Throwins",
+          "name": "Вбрасывания",
           "code": "throwins",
           "developer_name": "THROWINS",
           "home": 14,
@@ -2900,7 +2900,7 @@
         },
         "TOTAL_CROSSES": {
           "type_id": 98,
-          "name": "Total Crosses",
+          "name": "Всего пересечений",
           "code": "total-crosses",
           "developer_name": "TOTAL_CROSSES",
           "home": 24,
@@ -2908,7 +2908,7 @@
         },
         "YELLOWCARDS": {
           "type_id": 84,
-          "name": "Yellowcards",
+          "name": "Жёлтые карточки",
           "code": "yellowcards",
           "developer_name": "YELLOWCARDS",
           "home": 0,
@@ -3321,8 +3321,8 @@
         "AwayOdds": "4.33",
         "BookmakerName": "bet365"
       },
-      "home_xg": 2.05,
-      "away_xg": 0.98,
+      "home_xg": 2.06,
+      "away_xg": 0.97,
       "H2H": {
         "summary": {
           "total_matches": 10,
@@ -3347,8 +3347,8 @@
             "away_team_logo": "https://cdn.sportmonks.com/images/soccer/teams/14/78.png",
             "home_score": 0,
             "away_score": 1,
-            "home_xg": 2.05,
-            "away_xg": 0.98
+            "home_xg": 2.06,
+            "away_xg": 0.97
           },
           {
             "fixture_id": 19427476,
@@ -3488,8 +3488,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 2.13,
-            "xga_per_match": 1.416,
+            "xg_per_match": 2.132,
+            "xga_per_match": 1.414,
             "goals_scored_avg": 2.4,
             "goals_conceded_avg": 1.6,
             "btts_percent": 60,
@@ -3499,8 +3499,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 2.011111111111111,
-            "xga_per_match": 1.0911111111111111,
+            "xg_per_match": 2.0122222222222224,
+            "xga_per_match": 1.0899999999999999,
             "goals_scored_avg": 2.2222222222222223,
             "goals_conceded_avg": 1.1111111111111112,
             "btts_percent": 55,
@@ -3514,8 +3514,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.534,
-            "xga_per_match": 1.268,
+            "xg_per_match": 1.532,
+            "xga_per_match": 1.27,
             "goals_scored_avg": 2.2,
             "goals_conceded_avg": 0.4,
             "btts_percent": 0,
@@ -3525,8 +3525,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.8933333333333333,
-            "xga_per_match": 1.5077777777777777,
+            "xg_per_match": 1.8922222222222222,
+            "xga_per_match": 1.508888888888889,
             "goals_scored_avg": 2.6666666666666665,
             "goals_conceded_avg": 0.7777777777777778,
             "btts_percent": 22,
@@ -3575,7 +3575,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "VAR",
-          "type_name": "VAR",
+          "type_name": "ВАР.",
           "player": "Dominic Calvert-Lewin",
           "addition": "Goal disallowed"
         },
@@ -3584,7 +3584,7 @@
           "extra_minute": 0,
           "team_id": 52,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Evanilson ",
           "related_player": "Justin Kluivert",
           "result": "1-0",
@@ -3595,7 +3595,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Nico Elvedi",
           "addition": "1st Yellowcard"
         },
@@ -3604,7 +3604,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "",
           "addition": "2nd Yellowcard"
         },
@@ -3613,7 +3613,7 @@
           "extra_minute": 2,
           "team_id": 52,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Ryan Christie",
           "addition": "3rd Yellowcard"
         },
@@ -3622,7 +3622,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Ethan Ampadu",
           "addition": "4th Yellowcard"
         },
@@ -3631,7 +3631,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Sean Longstaff",
           "related_player": "Gabriel Gudmundsson ",
           "addition": "1st Substitution"
@@ -3641,7 +3641,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Lukas Nmecha ",
           "related_player": "Daniel James",
           "addition": "2nd Substitution"
@@ -3651,7 +3651,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "A. Stach",
           "related_player": "A. Tanaka",
           "addition": "3rd Substitution"
@@ -3661,7 +3661,7 @@
           "extra_minute": 0,
           "team_id": 52,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Lewis Cook",
           "related_player": "Ryan Christie",
           "addition": "4th Substitution"
@@ -3671,7 +3671,7 @@
           "extra_minute": 0,
           "team_id": 52,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Eli Junior Kroupi",
           "related_player": "Justin Kluivert",
           "addition": "5th Substitution"
@@ -3681,7 +3681,7 @@
           "extra_minute": 0,
           "team_id": 52,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Tyler Adams",
           "addition": "5th Yellowcard"
         },
@@ -3690,7 +3690,7 @@
           "extra_minute": 0,
           "team_id": 52,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Á. Rodríguez",
           "related_player": "Evanilson ",
           "addition": "6th Substitution"
@@ -3700,7 +3700,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Brenden Aaronson",
           "related_player": "Harry Wilson",
           "addition": "7th Substitution"
@@ -3710,7 +3710,7 @@
           "extra_minute": 0,
           "team_id": 71,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "J. Bahoya",
           "related_player": "J. Justin",
           "addition": "8th Substitution"
@@ -3720,7 +3720,7 @@
           "extra_minute": 0,
           "team_id": 52,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Amine Adli",
           "related_player": "Rayan",
           "addition": "9th Substitution"
@@ -3730,7 +3730,7 @@
           "extra_minute": 0,
           "team_id": 52,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "B. Diakité",
           "related_player": "Adam Smith",
           "addition": "10th Substitution"
@@ -3740,7 +3740,7 @@
           "extra_minute": 4,
           "team_id": 52,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Amine Adli",
           "related_player": "Eli Junior Kroupi",
           "result": "2-0",
@@ -3750,7 +3750,7 @@
       "Stats": {
         "ACCURATE_CROSSES": {
           "type_id": 99,
-          "name": "Accurate Crosses",
+          "name": "Точные кроссовки",
           "code": "accurate-crosses",
           "developer_name": "ACCURATE_CROSSES",
           "home": 2,
@@ -3758,7 +3758,7 @@
         },
         "ASSISTS": {
           "type_id": 79,
-          "name": "Assists",
+          "name": "Ассисты",
           "code": "assists",
           "developer_name": "ASSISTS",
           "home": 2,
@@ -3766,7 +3766,7 @@
         },
         "ATTACKS": {
           "type_id": 43,
-          "name": "Attacks",
+          "name": "Атаки",
           "code": "attacks",
           "developer_name": "ATTACKS",
           "home": 112,
@@ -3774,7 +3774,7 @@
         },
         "BALL_POSSESSION": {
           "type_id": 45,
-          "name": "Ball Possession %",
+          "name": "Владение мячом %",
           "code": "ball-possession",
           "developer_name": "BALL_POSSESSION",
           "home": 44,
@@ -3782,7 +3782,7 @@
         },
         "BALL_SAFE": {
           "type_id": 46,
-          "name": "Ball Safe",
+          "name": "Шариковый сейф",
           "code": "ball-safe",
           "developer_name": "BALL_SAFE",
           "home": 88,
@@ -3790,7 +3790,7 @@
         },
         "BIG_CHANCES_CREATED": {
           "type_id": 580,
-          "name": "Big Chances Created",
+          "name": "Большие созданные моменты",
           "code": "big-chances-created",
           "developer_name": "BIG_CHANCES_CREATED",
           "home": 2,
@@ -3798,7 +3798,7 @@
         },
         "BIG_CHANCES_MISSED": {
           "type_id": 581,
-          "name": "Big Chances Missed",
+          "name": "Упущенные большие шансы",
           "code": "big-chances-missed",
           "developer_name": "BIG_CHANCES_MISSED",
           "home": 0,
@@ -3806,7 +3806,7 @@
         },
         "CORNERS": {
           "type_id": 34,
-          "name": "Corners",
+          "name": "Углы",
           "code": "corners",
           "developer_name": "CORNERS",
           "home": 4,
@@ -3814,7 +3814,7 @@
         },
         "DANGEROUS_ATTACKS": {
           "type_id": 44,
-          "name": "Dangerous Attacks",
+          "name": "Опасные атаки",
           "code": "dangerous-attacks",
           "developer_name": "DANGEROUS_ATTACKS",
           "home": 22,
@@ -3822,7 +3822,7 @@
         },
         "DRIBBLED_ATTEMPTS": {
           "type_id": 108,
-          "name": "Dribble Attempts",
+          "name": "Попытки обводки",
           "code": "dribble-attempts",
           "developer_name": "DRIBBLED_ATTEMPTS",
           "home": 13,
@@ -3830,7 +3830,7 @@
         },
         "DUELS_WON": {
           "type_id": 106,
-          "name": "Duels Won",
+          "name": "Победы в дуэлях",
           "code": "duels-won",
           "developer_name": "DUELS_WON",
           "home": 48,
@@ -3838,7 +3838,7 @@
         },
         "FOULS": {
           "type_id": 56,
-          "name": "Fouls",
+          "name": "Фолы",
           "code": "fouls",
           "developer_name": "FOULS",
           "home": 12,
@@ -3846,7 +3846,7 @@
         },
         "FREE_KICKS": {
           "type_id": 55,
-          "name": "Free Kicks",
+          "name": "Свободные удары",
           "code": "free-kicks",
           "developer_name": "FREE_KICKS",
           "home": 16,
@@ -3854,7 +3854,7 @@
         },
         "GOALS": {
           "type_id": 52,
-          "name": "Goals",
+          "name": "Цели",
           "code": "goals",
           "developer_name": "GOALS",
           "home": 2,
@@ -3862,7 +3862,7 @@
         },
         "GOAL_ATTEMPTS": {
           "type_id": 54,
-          "name": "Goal Attempts",
+          "name": "Попытки забить гол",
           "code": "goal-attempts",
           "developer_name": "GOAL_ATTEMPTS",
           "home": 8,
@@ -3870,7 +3870,7 @@
         },
         "GOAL_KICKS": {
           "type_id": 53,
-          "name": "Goal Kicks",
+          "name": "Вбрасывание от ворот",
           "code": "goals-kicks",
           "developer_name": "GOAL_KICKS",
           "home": 8,
@@ -3878,7 +3878,7 @@
         },
         "INTERCEPTIONS": {
           "type_id": 100,
-          "name": "Interceptions",
+          "name": "Перехваты",
           "code": "interceptions",
           "developer_name": "INTERCEPTIONS",
           "home": 14,
@@ -3886,7 +3886,7 @@
         },
         "KEY_PASSES": {
           "type_id": 117,
-          "name": "Key Passes",
+          "name": "Ключевые передачи",
           "code": "key-passes",
           "developer_name": "KEY_PASSES",
           "home": 9,
@@ -3894,7 +3894,7 @@
         },
         "LONG_PASSES": {
           "type_id": 62,
-          "name": "Long Passes",
+          "name": "Длинные передачи",
           "code": "long-passes",
           "developer_name": "LONG_PASSES",
           "home": 66,
@@ -3902,7 +3902,7 @@
         },
         "OFFSIDES": {
           "type_id": 51,
-          "name": "Offsides",
+          "name": "Офсайды",
           "code": "offsides",
           "developer_name": "OFFSIDES",
           "home": 0,
@@ -3910,7 +3910,7 @@
         },
         "PASSES": {
           "type_id": 80,
-          "name": "Passes",
+          "name": "Пропуски",
           "code": "passes",
           "developer_name": "PASSES",
           "home": 420,
@@ -3918,7 +3918,7 @@
         },
         "SAVES": {
           "type_id": 57,
-          "name": "Saves",
+          "name": "Сейвы",
           "code": "saves",
           "developer_name": "SAVES",
           "home": 1,
@@ -3926,7 +3926,7 @@
         },
         "SHOTS_BLOCKED": {
           "type_id": 58,
-          "name": "Shots Blocked",
+          "name": "Блокированные броски",
           "code": "shots-blocked",
           "developer_name": "SHOTS_BLOCKED",
           "home": 3,
@@ -3934,7 +3934,7 @@
         },
         "SHOTS_INSIDEBOX": {
           "type_id": 49,
-          "name": "Shots Insidebox",
+          "name": "Удары внутри штрафной площади",
           "code": "shots-insidebox",
           "developer_name": "SHOTS_INSIDEBOX",
           "home": 5,
@@ -3942,7 +3942,7 @@
         },
         "SHOTS_OFF_TARGET": {
           "type_id": 41,
-          "name": "Shots Off Target",
+          "name": "Удары мимо цели",
           "code": "shots-off-target",
           "developer_name": "SHOTS_OFF_TARGET",
           "home": 3,
@@ -3950,7 +3950,7 @@
         },
         "SHOTS_ON_TARGET": {
           "type_id": 86,
-          "name": "Shots On Target",
+          "name": "Удары в створ ворот",
           "code": "shots-on-target",
           "developer_name": "SHOTS_ON_TARGET",
           "home": 5,
@@ -3958,7 +3958,7 @@
         },
         "SHOTS_OUTSIDEBOX": {
           "type_id": 50,
-          "name": "Shots Outsidebox",
+          "name": "Удары вне штрафной зоны",
           "code": "shots-outsidebox",
           "developer_name": "SHOTS_OUTSIDEBOX",
           "home": 6,
@@ -3966,7 +3966,7 @@
         },
         "SHOTS_TOTAL": {
           "type_id": 42,
-          "name": "Shots Total",
+          "name": "Всего бросков",
           "code": "shots-total",
           "developer_name": "SHOTS_TOTAL",
           "home": 11,
@@ -3974,7 +3974,7 @@
         },
         "SUBSTITUTIONS": {
           "type_id": 59,
-          "name": "Substitutions",
+          "name": "Замены",
           "code": "substitutions",
           "developer_name": "SUBSTITUTIONS",
           "home": 5,
@@ -3982,7 +3982,7 @@
         },
         "SUCCESSFUL_DRIBBLES": {
           "type_id": 109,
-          "name": "Successful Dribbles",
+          "name": "Успешные дриблинги",
           "code": "successful-dribbles",
           "developer_name": "SUCCESSFUL_DRIBBLES",
           "home": 7,
@@ -3990,7 +3990,7 @@
         },
         "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
           "type_id": 1605,
-          "name": "Successful Dribbles Percentage",
+          "name": "Процент успешных дриблингов",
           "code": "successful-dribbles-percentage",
           "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
           "home": 54,
@@ -3998,7 +3998,7 @@
         },
         "SUCCESSFUL_LONG_PASSES": {
           "type_id": 27264,
-          "name": "Successful Long Passes",
+          "name": "Успешные дальние передачи",
           "code": "successful-long-passes",
           "developer_name": "SUCCESSFUL_LONG_PASSES",
           "home": 24,
@@ -4006,7 +4006,7 @@
         },
         "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
           "type_id": 27265,
-          "name": "Successful Long Passes Percentage",
+          "name": "Процент успешных длинных передач",
           "code": "successful-long-passes-percentage",
           "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
           "home": 36,
@@ -4014,7 +4014,7 @@
         },
         "SUCCESSFUL_PASSES": {
           "type_id": 81,
-          "name": "Successful Passes",
+          "name": "Успешные передачи",
           "code": "successful-passes",
           "developer_name": "SUCCESSFUL_PASSES",
           "home": 323,
@@ -4022,7 +4022,7 @@
         },
         "SUCCESSFUL_PASSES_PERCENTAGE": {
           "type_id": 82,
-          "name": "Successful Passes Percentage",
+          "name": "Процент успешных передач",
           "code": "successful-passes-percentage",
           "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
           "home": 77,
@@ -4030,7 +4030,7 @@
         },
         "TACKLES": {
           "type_id": 78,
-          "name": "Tackles",
+          "name": "Тэклы",
           "code": "tackles",
           "developer_name": "TACKLES",
           "home": 8,
@@ -4038,7 +4038,7 @@
         },
         "TACKLES_WON": {
           "type_id": 27267,
-          "name": "Tackles Won",
+          "name": "Отборы выигранные",
           "code": "tackles-won",
           "developer_name": "TACKLES_WON",
           "home": 6,
@@ -4046,7 +4046,7 @@
         },
         "THROWINS": {
           "type_id": 60,
-          "name": "Throwins",
+          "name": "Вбрасывания",
           "code": "throwins",
           "developer_name": "THROWINS",
           "home": 14,
@@ -4054,7 +4054,7 @@
         },
         "TOTAL_CROSSES": {
           "type_id": 98,
-          "name": "Total Crosses",
+          "name": "Всего пересечений",
           "code": "total-crosses",
           "developer_name": "TOTAL_CROSSES",
           "home": 10,
@@ -4062,7 +4062,7 @@
         },
         "YELLOWCARDS": {
           "type_id": 84,
-          "name": "Yellowcards",
+          "name": "Жёлтые карточки",
           "code": "yellowcards",
           "developer_name": "YELLOWCARDS",
           "home": 2,
@@ -4475,8 +4475,8 @@
         "AwayOdds": "3.70",
         "BookmakerName": "bet365"
       },
-      "home_xg": 0.93,
-      "away_xg": 0.94,
+      "home_xg": 1.03,
+      "away_xg": 0.99,
       "H2H": {
         "summary": {
           "total_matches": 8,
@@ -4501,8 +4501,8 @@
             "away_team_logo": "https://cdn.sportmonks.com/images/soccer/teams/7/71.png",
             "home_score": 2,
             "away_score": 0,
-            "home_xg": 0.93,
-            "away_xg": 0.94
+            "home_xg": 1.03,
+            "away_xg": 0.99
           },
           {
             "fixture_id": 19427510,
@@ -4612,8 +4612,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.55,
-            "xga_per_match": 0.984,
+            "xg_per_match": 1.5699999999999998,
+            "xga_per_match": 0.994,
             "goals_scored_avg": 1.6,
             "goals_conceded_avg": 1.2,
             "btts_percent": 20,
@@ -4623,8 +4623,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.5799999999999998,
-            "xga_per_match": 1.0566666666666666,
+            "xg_per_match": 1.5911111111111111,
+            "xga_per_match": 1.0622222222222222,
             "goals_scored_avg": 1.5555555555555556,
             "goals_conceded_avg": 1.4444444444444444,
             "btts_percent": 55,
@@ -4638,8 +4638,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.1,
-            "xga_per_match": 1.22,
+            "xg_per_match": 1.1099999999999999,
+            "xga_per_match": 1.2399999999999998,
             "goals_scored_avg": 0.4,
             "goals_conceded_avg": 1,
             "btts_percent": 40,
@@ -4649,8 +4649,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.2555555555555555,
-            "xga_per_match": 1.3244444444444445,
+            "xg_per_match": 1.2611111111111108,
+            "xga_per_match": 1.3355555555555556,
             "goals_scored_avg": 1,
             "goals_conceded_avg": 0.8888888888888888,
             "btts_percent": 55,
@@ -4699,7 +4699,7 @@
           "extra_minute": 0,
           "team_id": 117,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Victor Torp",
           "addition": "1st Yellowcard"
         },
@@ -4708,7 +4708,7 @@
           "extra_minute": 0,
           "team_id": 117,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Tatsuhiro Sakamoto",
           "result": "1-0",
           "addition": "1st Goal"
@@ -4718,7 +4718,7 @@
           "extra_minute": 0,
           "team_id": 117,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "T. Awoniyi",
           "result": "2-0",
           "addition": "2nd Goal"
@@ -4728,7 +4728,7 @@
           "extra_minute": 0,
           "team_id": 117,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Jack Rudoni",
           "related_player": "Victor Torp",
           "result": "3-0",
@@ -4739,7 +4739,7 @@
           "extra_minute": 0,
           "team_id": 117,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Tatsuhiro Sakamoto",
           "addition": "2nd Yellowcard"
         },
@@ -4748,7 +4748,7 @@
           "extra_minute": 0,
           "team_id": 3,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Wilson Isidor",
           "related_player": "N. Angulo",
           "addition": "1st Substitution"
@@ -4758,7 +4758,7 @@
           "extra_minute": 0,
           "team_id": 3,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "C. Talbi",
           "related_player": "Chris Rigg",
           "addition": "2nd Substitution"
@@ -4768,7 +4768,7 @@
           "extra_minute": 0,
           "team_id": 3,
           "type": "VAR",
-          "type_name": "VAR",
+          "type_name": "ВАР.",
           "player": "Reinildo Mandava",
           "addition": "Penalty awarded"
         },
@@ -4777,7 +4777,7 @@
           "extra_minute": 0,
           "team_id": 3,
           "type": "PENALTY",
-          "type_name": "Penalty",
+          "type_name": "Штраф",
           "player": "E. Le Fée",
           "result": "3-1",
           "addition": "1st Penalty"
@@ -4787,7 +4787,7 @@
           "extra_minute": 0,
           "team_id": 117,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Brandon Thomas-Asante",
           "related_player": "Yann Gboho",
           "addition": "3rd Substitution"
@@ -4797,7 +4797,7 @@
           "extra_minute": 0,
           "team_id": 117,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Sidiki Chérif",
           "related_player": "T. Awoniyi",
           "addition": "4th Substitution"
@@ -4807,7 +4807,7 @@
           "extra_minute": 0,
           "team_id": 3,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "M. Fofana",
           "related_player": "N. Sadiki",
           "addition": "5th Substitution"
@@ -4817,7 +4817,7 @@
           "extra_minute": 0,
           "team_id": 3,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Thomas Meunier",
           "related_player": "Trai Hume",
           "addition": "6th Substitution"
@@ -4827,7 +4827,7 @@
           "extra_minute": 0,
           "team_id": 117,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Matt Grimes",
           "related_player": "Victor Torp",
           "addition": "7th Substitution"
@@ -4837,7 +4837,7 @@
           "extra_minute": 4,
           "team_id": 3,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Omar Alderete",
           "addition": "3rd Yellowcard"
         },
@@ -4846,7 +4846,7 @@
           "extra_minute": 9,
           "team_id": 3,
           "type": "YELLOWREDCARD",
-          "type_name": "Yellow/Red card",
+          "type_name": "Жёлтая/красная карточка",
           "player": "Omar Alderete",
           "addition": "1st Yellow/red Card"
         }
@@ -4854,7 +4854,7 @@
       "Stats": {
         "ACCURATE_CROSSES": {
           "type_id": 99,
-          "name": "Accurate Crosses",
+          "name": "Точные кроссовки",
           "code": "accurate-crosses",
           "developer_name": "ACCURATE_CROSSES",
           "home": 5,
@@ -4862,7 +4862,7 @@
         },
         "ASSISTS": {
           "type_id": 79,
-          "name": "Assists",
+          "name": "Ассисты",
           "code": "assists",
           "developer_name": "ASSISTS",
           "home": 1,
@@ -4870,7 +4870,7 @@
         },
         "ATTACKS": {
           "type_id": 43,
-          "name": "Attacks",
+          "name": "Атаки",
           "code": "attacks",
           "developer_name": "ATTACKS",
           "home": 88,
@@ -4878,7 +4878,7 @@
         },
         "BALL_POSSESSION": {
           "type_id": 45,
-          "name": "Ball Possession %",
+          "name": "Владение мячом %",
           "code": "ball-possession",
           "developer_name": "BALL_POSSESSION",
           "home": 43,
@@ -4886,7 +4886,7 @@
         },
         "BALL_SAFE": {
           "type_id": 46,
-          "name": "Ball Safe",
+          "name": "Шариковый сейф",
           "code": "ball-safe",
           "developer_name": "BALL_SAFE",
           "home": 62,
@@ -4894,7 +4894,7 @@
         },
         "BIG_CHANCES_CREATED": {
           "type_id": 580,
-          "name": "Big Chances Created",
+          "name": "Большие созданные моменты",
           "code": "big-chances-created",
           "developer_name": "BIG_CHANCES_CREATED",
           "home": 1,
@@ -4902,7 +4902,7 @@
         },
         "CORNERS": {
           "type_id": 34,
-          "name": "Corners",
+          "name": "Углы",
           "code": "corners",
           "developer_name": "CORNERS",
           "home": 4,
@@ -4910,7 +4910,7 @@
         },
         "DANGEROUS_ATTACKS": {
           "type_id": 44,
-          "name": "Dangerous Attacks",
+          "name": "Опасные атаки",
           "code": "dangerous-attacks",
           "developer_name": "DANGEROUS_ATTACKS",
           "home": 36,
@@ -4918,7 +4918,7 @@
         },
         "DRIBBLED_ATTEMPTS": {
           "type_id": 108,
-          "name": "Dribble Attempts",
+          "name": "Попытки обводки",
           "code": "dribble-attempts",
           "developer_name": "DRIBBLED_ATTEMPTS",
           "home": 12,
@@ -4926,7 +4926,7 @@
         },
         "DUELS_WON": {
           "type_id": 106,
-          "name": "Duels Won",
+          "name": "Победы в дуэлях",
           "code": "duels-won",
           "developer_name": "DUELS_WON",
           "home": 42,
@@ -4934,7 +4934,7 @@
         },
         "FOULS": {
           "type_id": 56,
-          "name": "Fouls",
+          "name": "Фолы",
           "code": "fouls",
           "developer_name": "FOULS",
           "home": 16,
@@ -4942,7 +4942,7 @@
         },
         "FREE_KICKS": {
           "type_id": 55,
-          "name": "Free Kicks",
+          "name": "Свободные удары",
           "code": "free-kicks",
           "developer_name": "FREE_KICKS",
           "home": 10,
@@ -4950,7 +4950,7 @@
         },
         "GOALS": {
           "type_id": 52,
-          "name": "Goals",
+          "name": "Цели",
           "code": "goals",
           "developer_name": "GOALS",
           "home": 3,
@@ -4958,7 +4958,7 @@
         },
         "GOAL_ATTEMPTS": {
           "type_id": 54,
-          "name": "Goal Attempts",
+          "name": "Попытки забить гол",
           "code": "goal-attempts",
           "developer_name": "GOAL_ATTEMPTS",
           "home": 7,
@@ -4966,7 +4966,7 @@
         },
         "GOAL_KICKS": {
           "type_id": 53,
-          "name": "Goal Kicks",
+          "name": "Вбрасывание от ворот",
           "code": "goals-kicks",
           "developer_name": "GOAL_KICKS",
           "home": 11,
@@ -4974,7 +4974,7 @@
         },
         "INJURIES": {
           "type_id": 87,
-          "name": "Injuries",
+          "name": "Травмы",
           "code": "injuries",
           "developer_name": "INJURIES",
           "home": 1,
@@ -4982,7 +4982,7 @@
         },
         "INTERCEPTIONS": {
           "type_id": 100,
-          "name": "Interceptions",
+          "name": "Перехваты",
           "code": "interceptions",
           "developer_name": "INTERCEPTIONS",
           "home": 7,
@@ -4990,7 +4990,7 @@
         },
         "KEY_PASSES": {
           "type_id": 117,
-          "name": "Key Passes",
+          "name": "Ключевые передачи",
           "code": "key-passes",
           "developer_name": "KEY_PASSES",
           "home": 7,
@@ -4998,7 +4998,7 @@
         },
         "LONG_PASSES": {
           "type_id": 62,
-          "name": "Long Passes",
+          "name": "Длинные передачи",
           "code": "long-passes",
           "developer_name": "LONG_PASSES",
           "home": 71,
@@ -5006,7 +5006,7 @@
         },
         "OFFSIDES": {
           "type_id": 51,
-          "name": "Offsides",
+          "name": "Офсайды",
           "code": "offsides",
           "developer_name": "OFFSIDES",
           "home": 2,
@@ -5014,7 +5014,7 @@
         },
         "PASSES": {
           "type_id": 80,
-          "name": "Passes",
+          "name": "Пропуски",
           "code": "passes",
           "developer_name": "PASSES",
           "home": 338,
@@ -5022,7 +5022,7 @@
         },
         "PENALTIES": {
           "type_id": 47,
-          "name": "Penalties",
+          "name": "Наказания",
           "code": "penalties",
           "developer_name": "PENALTIES",
           "home": 0,
@@ -5030,7 +5030,7 @@
         },
         "REDCARDS": {
           "type_id": 83,
-          "name": "Redcards",
+          "name": "Красные карточки",
           "code": "redcards",
           "developer_name": "REDCARDS",
           "home": 0,
@@ -5038,7 +5038,7 @@
         },
         "SAVES": {
           "type_id": 57,
-          "name": "Saves",
+          "name": "Сейвы",
           "code": "saves",
           "developer_name": "SAVES",
           "home": 1,
@@ -5046,7 +5046,7 @@
         },
         "SHOTS_BLOCKED": {
           "type_id": 58,
-          "name": "Shots Blocked",
+          "name": "Блокированные броски",
           "code": "shots-blocked",
           "developer_name": "SHOTS_BLOCKED",
           "home": 4,
@@ -5054,7 +5054,7 @@
         },
         "SHOTS_INSIDEBOX": {
           "type_id": 49,
-          "name": "Shots Insidebox",
+          "name": "Удары внутри штрафной площади",
           "code": "shots-insidebox",
           "developer_name": "SHOTS_INSIDEBOX",
           "home": 4,
@@ -5062,7 +5062,7 @@
         },
         "SHOTS_OFF_TARGET": {
           "type_id": 41,
-          "name": "Shots Off Target",
+          "name": "Удары мимо цели",
           "code": "shots-off-target",
           "developer_name": "SHOTS_OFF_TARGET",
           "home": 4,
@@ -5070,7 +5070,7 @@
         },
         "SHOTS_ON_TARGET": {
           "type_id": 86,
-          "name": "Shots On Target",
+          "name": "Удары в створ ворот",
           "code": "shots-on-target",
           "developer_name": "SHOTS_ON_TARGET",
           "home": 4,
@@ -5078,7 +5078,7 @@
         },
         "SHOTS_OUTSIDEBOX": {
           "type_id": 50,
-          "name": "Shots Outsidebox",
+          "name": "Удары вне штрафной зоны",
           "code": "shots-outsidebox",
           "developer_name": "SHOTS_OUTSIDEBOX",
           "home": 8,
@@ -5086,7 +5086,7 @@
         },
         "SHOTS_TOTAL": {
           "type_id": 42,
-          "name": "Shots Total",
+          "name": "Всего бросков",
           "code": "shots-total",
           "developer_name": "SHOTS_TOTAL",
           "home": 12,
@@ -5094,7 +5094,7 @@
         },
         "SUBSTITUTIONS": {
           "type_id": 59,
-          "name": "Substitutions",
+          "name": "Замены",
           "code": "substitutions",
           "developer_name": "SUBSTITUTIONS",
           "home": 3,
@@ -5102,7 +5102,7 @@
         },
         "SUCCESSFUL_DRIBBLES": {
           "type_id": 109,
-          "name": "Successful Dribbles",
+          "name": "Успешные дриблинги",
           "code": "successful-dribbles",
           "developer_name": "SUCCESSFUL_DRIBBLES",
           "home": 5,
@@ -5110,7 +5110,7 @@
         },
         "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
           "type_id": 1605,
-          "name": "Successful Dribbles Percentage",
+          "name": "Процент успешных дриблингов",
           "code": "successful-dribbles-percentage",
           "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
           "home": 42,
@@ -5118,7 +5118,7 @@
         },
         "SUCCESSFUL_LONG_PASSES": {
           "type_id": 27264,
-          "name": "Successful Long Passes",
+          "name": "Успешные дальние передачи",
           "code": "successful-long-passes",
           "developer_name": "SUCCESSFUL_LONG_PASSES",
           "home": 34,
@@ -5126,7 +5126,7 @@
         },
         "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
           "type_id": 27265,
-          "name": "Successful Long Passes Percentage",
+          "name": "Процент успешных длинных передач",
           "code": "successful-long-passes-percentage",
           "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
           "home": 48,
@@ -5134,7 +5134,7 @@
         },
         "SUCCESSFUL_PASSES": {
           "type_id": 81,
-          "name": "Successful Passes",
+          "name": "Успешные передачи",
           "code": "successful-passes",
           "developer_name": "SUCCESSFUL_PASSES",
           "home": 255,
@@ -5142,7 +5142,7 @@
         },
         "SUCCESSFUL_PASSES_PERCENTAGE": {
           "type_id": 82,
-          "name": "Successful Passes Percentage",
+          "name": "Процент успешных передач",
           "code": "successful-passes-percentage",
           "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
           "home": 75,
@@ -5150,7 +5150,7 @@
         },
         "TACKLES": {
           "type_id": 78,
-          "name": "Tackles",
+          "name": "Тэклы",
           "code": "tackles",
           "developer_name": "TACKLES",
           "home": 12,
@@ -5158,7 +5158,7 @@
         },
         "TACKLES_WON": {
           "type_id": 27267,
-          "name": "Tackles Won",
+          "name": "Отборы выигранные",
           "code": "tackles-won",
           "developer_name": "TACKLES_WON",
           "home": 6,
@@ -5166,7 +5166,7 @@
         },
         "THROWINS": {
           "type_id": 60,
-          "name": "Throwins",
+          "name": "Вбрасывания",
           "code": "throwins",
           "developer_name": "THROWINS",
           "home": 21,
@@ -5174,7 +5174,7 @@
         },
         "TOTAL_CROSSES": {
           "type_id": 98,
-          "name": "Total Crosses",
+          "name": "Всего пересечений",
           "code": "total-crosses",
           "developer_name": "TOTAL_CROSSES",
           "home": 13,
@@ -5182,7 +5182,7 @@
         },
         "YELLOWCARDS": {
           "type_id": 84,
-          "name": "Yellowcards",
+          "name": "Жёлтые карточки",
           "code": "yellowcards",
           "developer_name": "YELLOWCARDS",
           "home": 2,
@@ -5190,7 +5190,7 @@
         },
         "YELLOWRED_CARDS": {
           "type_id": 85,
-          "name": "Yellowred Cards",
+          "name": "Жёлто-красные карточки",
           "code": "yellowred-cards",
           "developer_name": "YELLOWRED_CARDS",
           "home": 0,
@@ -5602,8 +5602,8 @@
         "AwayOdds": "2.37",
         "BookmakerName": "bet365"
       },
-      "home_xg": 0.75,
-      "away_xg": 2.05,
+      "home_xg": 0.76,
+      "away_xg": 2.07,
       "H2H": {
         "summary": {
           "total_matches": 10,
@@ -5628,8 +5628,8 @@
             "away_team_logo": "https://cdn.sportmonks.com/images/soccer/teams/3/3.png",
             "home_score": 3,
             "away_score": 1,
-            "home_xg": 0.75,
-            "away_xg": 2.05
+            "home_xg": 0.76,
+            "away_xg": 2.07
           },
           {
             "fixture_id": 19419259,
@@ -5765,8 +5765,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 0.9420000000000002,
-            "xga_per_match": 1.52,
+            "xg_per_match": 0.9440000000000002,
+            "xga_per_match": 1.524,
             "goals_scored_avg": 1.8,
             "goals_conceded_avg": 1.2,
             "btts_percent": 60,
@@ -5776,8 +5776,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 0.9255555555555556,
-            "xga_per_match": 1.6288888888888886,
+            "xg_per_match": 0.9266666666666666,
+            "xga_per_match": 1.6311111111111112,
             "goals_scored_avg": 1,
             "goals_conceded_avg": 1.7777777777777777,
             "btts_percent": 33,
@@ -5791,8 +5791,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.3860000000000001,
-            "xga_per_match": 1.734,
+            "xg_per_match": 1.3900000000000001,
+            "xga_per_match": 1.736,
             "goals_scored_avg": 0.8,
             "goals_conceded_avg": 2.4,
             "btts_percent": 40,
@@ -5802,8 +5802,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.4933333333333334,
-            "xga_per_match": 1.5644444444444443,
+            "xg_per_match": 1.4955555555555557,
+            "xga_per_match": 1.5655555555555556,
             "goals_scored_avg": 0.7777777777777778,
             "goals_conceded_avg": 1.8888888888888888,
             "btts_percent": 44,
@@ -5852,7 +5852,7 @@
           "extra_minute": 0,
           "team_id": 116,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Florentino",
           "related_player": "Guemissongui Ouattara",
           "result": "0-1",
@@ -5863,7 +5863,7 @@
           "extra_minute": 0,
           "team_id": 116,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Exequiel Palacios",
           "addition": "1st Yellowcard"
         },
@@ -5872,7 +5872,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Matt Crooks",
           "related_player": "John Egan",
           "addition": "1st Substitution"
@@ -5882,7 +5882,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "E. Stroud",
           "addition": "2nd Yellowcard"
         },
@@ -5891,7 +5891,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "T. Iroegbunam",
           "related_player": "Oliver McBurnie",
           "result": "1-1",
@@ -5902,7 +5902,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Momo Cho",
           "related_player": "E. Stroud",
           "addition": "2nd Substitution"
@@ -5912,7 +5912,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Matt Crooks",
           "addition": "3rd Yellowcard"
         },
@@ -5921,7 +5921,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Oliver McBurnie",
           "result": "2-1",
           "addition": "3rd Goal"
@@ -5931,7 +5931,7 @@
           "extra_minute": 0,
           "team_id": 116,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Jack Clarke",
           "related_player": "J. Philogene",
           "addition": "3rd Substitution"
@@ -5941,7 +5941,7 @@
           "extra_minute": 0,
           "team_id": 116,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Daizen Maeda",
           "related_player": "Issahaku Fatawu",
           "addition": "4th Substitution"
@@ -5951,7 +5951,7 @@
           "extra_minute": 0,
           "team_id": 116,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Azor Matusiwa",
           "related_player": "Florentino",
           "addition": "5th Substitution"
@@ -5961,7 +5961,7 @@
           "extra_minute": 0,
           "team_id": 116,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "J. Enciso",
           "related_player": "Azor Matusiwa",
           "result": "2-2",
@@ -5972,7 +5972,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "B. Norton-Cuffy",
           "related_player": "Lewie Coyle",
           "addition": "6th Substitution"
@@ -5982,7 +5982,7 @@
           "extra_minute": 0,
           "team_id": 116,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Zian Flemming",
           "related_player": "Emersonn",
           "addition": "7th Substitution"
@@ -5992,7 +5992,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Hidemasa Morita",
           "related_player": "T. Iroegbunam",
           "addition": "8th Substitution"
@@ -6002,7 +6002,7 @@
           "extra_minute": 0,
           "team_id": 116,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "J. Enciso",
           "addition": "4th Yellowcard"
         },
@@ -6011,7 +6011,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Semi Ajayi",
           "addition": "5th Yellowcard"
         },
@@ -6020,7 +6020,7 @@
           "extra_minute": 0,
           "team_id": 22,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "J. Gelhardt",
           "related_player": "Regan Slater",
           "addition": "9th Substitution"
@@ -6030,7 +6030,7 @@
           "extra_minute": 2,
           "team_id": 116,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Issa Diop",
           "addition": "6th Yellowcard"
         },
@@ -6039,7 +6039,7 @@
           "extra_minute": 5,
           "team_id": 116,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Chuba Akpom",
           "related_player": "J. Enciso",
           "addition": "10th Substitution"
@@ -6048,7 +6048,7 @@
       "Stats": {
         "ACCURATE_CROSSES": {
           "type_id": 99,
-          "name": "Accurate Crosses",
+          "name": "Точные кроссовки",
           "code": "accurate-crosses",
           "developer_name": "ACCURATE_CROSSES",
           "home": 3,
@@ -6056,7 +6056,7 @@
         },
         "ASSISTS": {
           "type_id": 79,
-          "name": "Assists",
+          "name": "Ассисты",
           "code": "assists",
           "developer_name": "ASSISTS",
           "home": 1,
@@ -6064,7 +6064,7 @@
         },
         "ATTACKS": {
           "type_id": 43,
-          "name": "Attacks",
+          "name": "Атаки",
           "code": "attacks",
           "developer_name": "ATTACKS",
           "home": 58,
@@ -6072,7 +6072,7 @@
         },
         "BALL_POSSESSION": {
           "type_id": 45,
-          "name": "Ball Possession %",
+          "name": "Владение мячом %",
           "code": "ball-possession",
           "developer_name": "BALL_POSSESSION",
           "home": 39,
@@ -6080,7 +6080,7 @@
         },
         "BALL_SAFE": {
           "type_id": 46,
-          "name": "Ball Safe",
+          "name": "Шариковый сейф",
           "code": "ball-safe",
           "developer_name": "BALL_SAFE",
           "home": 59,
@@ -6088,7 +6088,7 @@
         },
         "BIG_CHANCES_CREATED": {
           "type_id": 580,
-          "name": "Big Chances Created",
+          "name": "Большие созданные моменты",
           "code": "big-chances-created",
           "developer_name": "BIG_CHANCES_CREATED",
           "home": 1,
@@ -6096,7 +6096,7 @@
         },
         "BIG_CHANCES_MISSED": {
           "type_id": 581,
-          "name": "Big Chances Missed",
+          "name": "Упущенные большие шансы",
           "code": "big-chances-missed",
           "developer_name": "BIG_CHANCES_MISSED",
           "home": 0,
@@ -6104,7 +6104,7 @@
         },
         "CORNERS": {
           "type_id": 34,
-          "name": "Corners",
+          "name": "Углы",
           "code": "corners",
           "developer_name": "CORNERS",
           "home": 6,
@@ -6112,7 +6112,7 @@
         },
         "DANGEROUS_ATTACKS": {
           "type_id": 44,
-          "name": "Dangerous Attacks",
+          "name": "Опасные атаки",
           "code": "dangerous-attacks",
           "developer_name": "DANGEROUS_ATTACKS",
           "home": 34,
@@ -6120,7 +6120,7 @@
         },
         "DRIBBLED_ATTEMPTS": {
           "type_id": 108,
-          "name": "Dribble Attempts",
+          "name": "Попытки обводки",
           "code": "dribble-attempts",
           "developer_name": "DRIBBLED_ATTEMPTS",
           "home": 9,
@@ -6128,7 +6128,7 @@
         },
         "DUELS_WON": {
           "type_id": 106,
-          "name": "Duels Won",
+          "name": "Победы в дуэлях",
           "code": "duels-won",
           "developer_name": "DUELS_WON",
           "home": 58,
@@ -6136,7 +6136,7 @@
         },
         "FOULS": {
           "type_id": 56,
-          "name": "Fouls",
+          "name": "Фолы",
           "code": "fouls",
           "developer_name": "FOULS",
           "home": 13,
@@ -6144,7 +6144,7 @@
         },
         "FREE_KICKS": {
           "type_id": 55,
-          "name": "Free Kicks",
+          "name": "Свободные удары",
           "code": "free-kicks",
           "developer_name": "FREE_KICKS",
           "home": 15,
@@ -6152,7 +6152,7 @@
         },
         "GOALS": {
           "type_id": 52,
-          "name": "Goals",
+          "name": "Цели",
           "code": "goals",
           "developer_name": "GOALS",
           "home": 2,
@@ -6160,7 +6160,7 @@
         },
         "GOAL_ATTEMPTS": {
           "type_id": 54,
-          "name": "Goal Attempts",
+          "name": "Попытки забить гол",
           "code": "goal-attempts",
           "developer_name": "GOAL_ATTEMPTS",
           "home": 6,
@@ -6168,7 +6168,7 @@
         },
         "GOAL_KICKS": {
           "type_id": 53,
-          "name": "Goal Kicks",
+          "name": "Вбрасывание от ворот",
           "code": "goals-kicks",
           "developer_name": "GOAL_KICKS",
           "home": 7,
@@ -6176,7 +6176,7 @@
         },
         "INTERCEPTIONS": {
           "type_id": 100,
-          "name": "Interceptions",
+          "name": "Перехваты",
           "code": "interceptions",
           "developer_name": "INTERCEPTIONS",
           "home": 6,
@@ -6184,7 +6184,7 @@
         },
         "KEY_PASSES": {
           "type_id": 117,
-          "name": "Key Passes",
+          "name": "Ключевые передачи",
           "code": "key-passes",
           "developer_name": "KEY_PASSES",
           "home": 5,
@@ -6192,7 +6192,7 @@
         },
         "LONG_PASSES": {
           "type_id": 62,
-          "name": "Long Passes",
+          "name": "Длинные передачи",
           "code": "long-passes",
           "developer_name": "LONG_PASSES",
           "home": 65,
@@ -6200,7 +6200,7 @@
         },
         "OFFSIDES": {
           "type_id": 51,
-          "name": "Offsides",
+          "name": "Офсайды",
           "code": "offsides",
           "developer_name": "OFFSIDES",
           "home": 4,
@@ -6208,7 +6208,7 @@
         },
         "PASSES": {
           "type_id": 80,
-          "name": "Passes",
+          "name": "Пропуски",
           "code": "passes",
           "developer_name": "PASSES",
           "home": 344,
@@ -6216,7 +6216,7 @@
         },
         "SAVES": {
           "type_id": 57,
-          "name": "Saves",
+          "name": "Сейвы",
           "code": "saves",
           "developer_name": "SAVES",
           "home": 1,
@@ -6224,7 +6224,7 @@
         },
         "SHOTS_BLOCKED": {
           "type_id": 58,
-          "name": "Shots Blocked",
+          "name": "Блокированные броски",
           "code": "shots-blocked",
           "developer_name": "SHOTS_BLOCKED",
           "home": 1,
@@ -6232,7 +6232,7 @@
         },
         "SHOTS_INSIDEBOX": {
           "type_id": 49,
-          "name": "Shots Insidebox",
+          "name": "Удары внутри штрафной площади",
           "code": "shots-insidebox",
           "developer_name": "SHOTS_INSIDEBOX",
           "home": 5,
@@ -6240,7 +6240,7 @@
         },
         "SHOTS_OFF_TARGET": {
           "type_id": 41,
-          "name": "Shots Off Target",
+          "name": "Удары мимо цели",
           "code": "shots-off-target",
           "developer_name": "SHOTS_OFF_TARGET",
           "home": 5,
@@ -6248,7 +6248,7 @@
         },
         "SHOTS_ON_TARGET": {
           "type_id": 86,
-          "name": "Shots On Target",
+          "name": "Удары в створ ворот",
           "code": "shots-on-target",
           "developer_name": "SHOTS_ON_TARGET",
           "home": 3,
@@ -6256,7 +6256,7 @@
         },
         "SHOTS_OUTSIDEBOX": {
           "type_id": 50,
-          "name": "Shots Outsidebox",
+          "name": "Удары вне штрафной зоны",
           "code": "shots-outsidebox",
           "developer_name": "SHOTS_OUTSIDEBOX",
           "home": 4,
@@ -6264,7 +6264,7 @@
         },
         "SHOTS_TOTAL": {
           "type_id": 42,
-          "name": "Shots Total",
+          "name": "Всего бросков",
           "code": "shots-total",
           "developer_name": "SHOTS_TOTAL",
           "home": 9,
@@ -6272,7 +6272,7 @@
         },
         "SUBSTITUTIONS": {
           "type_id": 59,
-          "name": "Substitutions",
+          "name": "Замены",
           "code": "substitutions",
           "developer_name": "SUBSTITUTIONS",
           "home": 5,
@@ -6280,7 +6280,7 @@
         },
         "SUCCESSFUL_DRIBBLES": {
           "type_id": 109,
-          "name": "Successful Dribbles",
+          "name": "Успешные дриблинги",
           "code": "successful-dribbles",
           "developer_name": "SUCCESSFUL_DRIBBLES",
           "home": 7,
@@ -6288,7 +6288,7 @@
         },
         "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
           "type_id": 1605,
-          "name": "Successful Dribbles Percentage",
+          "name": "Процент успешных дриблингов",
           "code": "successful-dribbles-percentage",
           "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
           "home": 89,
@@ -6296,7 +6296,7 @@
         },
         "SUCCESSFUL_LONG_PASSES": {
           "type_id": 27264,
-          "name": "Successful Long Passes",
+          "name": "Успешные дальние передачи",
           "code": "successful-long-passes",
           "developer_name": "SUCCESSFUL_LONG_PASSES",
           "home": 28,
@@ -6304,7 +6304,7 @@
         },
         "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
           "type_id": 27265,
-          "name": "Successful Long Passes Percentage",
+          "name": "Процент успешных длинных передач",
           "code": "successful-long-passes-percentage",
           "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
           "home": 43,
@@ -6312,7 +6312,7 @@
         },
         "SUCCESSFUL_PASSES": {
           "type_id": 81,
-          "name": "Successful Passes",
+          "name": "Успешные передачи",
           "code": "successful-passes",
           "developer_name": "SUCCESSFUL_PASSES",
           "home": 252,
@@ -6320,7 +6320,7 @@
         },
         "SUCCESSFUL_PASSES_PERCENTAGE": {
           "type_id": 82,
-          "name": "Successful Passes Percentage",
+          "name": "Процент успешных передач",
           "code": "successful-passes-percentage",
           "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
           "home": 73,
@@ -6328,7 +6328,7 @@
         },
         "TACKLES": {
           "type_id": 78,
-          "name": "Tackles",
+          "name": "Тэклы",
           "code": "tackles",
           "developer_name": "TACKLES",
           "home": 20,
@@ -6336,7 +6336,7 @@
         },
         "TACKLES_WON": {
           "type_id": 27267,
-          "name": "Tackles Won",
+          "name": "Отборы выигранные",
           "code": "tackles-won",
           "developer_name": "TACKLES_WON",
           "home": 5,
@@ -6344,7 +6344,7 @@
         },
         "THROWINS": {
           "type_id": 60,
-          "name": "Throwins",
+          "name": "Вбрасывания",
           "code": "throwins",
           "developer_name": "THROWINS",
           "home": 16,
@@ -6352,7 +6352,7 @@
         },
         "TOTAL_CROSSES": {
           "type_id": 98,
-          "name": "Total Crosses",
+          "name": "Всего пересечений",
           "code": "total-crosses",
           "developer_name": "TOTAL_CROSSES",
           "home": 16,
@@ -6360,7 +6360,7 @@
         },
         "YELLOWCARDS": {
           "type_id": 84,
-          "name": "Yellowcards",
+          "name": "Жёлтые карточки",
           "code": "yellowcards",
           "developer_name": "YELLOWCARDS",
           "home": 3,
@@ -6773,8 +6773,8 @@
         "AwayOdds": "2.50",
         "BookmakerName": "bet365"
       },
-      "home_xg": 0.67,
-      "away_xg": 1.21,
+      "home_xg": 0.68,
+      "away_xg": 1.12,
       "H2H": {
         "summary": {
           "total_matches": 10,
@@ -6799,8 +6799,8 @@
             "away_team_logo": "https://cdn.sportmonks.com/images/soccer/teams/20/116.png",
             "home_score": 2,
             "away_score": 2,
-            "home_xg": 0.67,
-            "away_xg": 1.21
+            "home_xg": 0.68,
+            "away_xg": 1.12
           },
           {
             "fixture_id": 18849160,
@@ -6936,8 +6936,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.118,
-            "xga_per_match": 1.568,
+            "xg_per_match": 1.12,
+            "xga_per_match": 1.55,
             "goals_scored_avg": 1.2,
             "goals_conceded_avg": 1.6,
             "btts_percent": 80,
@@ -6947,8 +6947,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.0244444444444445,
-            "xga_per_match": 1.511111111111111,
+            "xg_per_match": 1.0255555555555556,
+            "xga_per_match": 1.501111111111111,
             "goals_scored_avg": 1.2222222222222223,
             "goals_conceded_avg": 1.1111111111111112,
             "btts_percent": 55,
@@ -6962,8 +6962,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.1480000000000001,
-            "xga_per_match": 1.8960000000000001,
+            "xg_per_match": 1.1300000000000001,
+            "xga_per_match": 1.8980000000000001,
             "goals_scored_avg": 1.4,
             "goals_conceded_avg": 1.6,
             "btts_percent": 80,
@@ -6973,8 +6973,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.2122222222222223,
-            "xga_per_match": 1.8266666666666664,
+            "xg_per_match": 1.2022222222222223,
+            "xga_per_match": 1.8277777777777777,
             "goals_scored_avg": 1.5555555555555556,
             "goals_conceded_avg": 2,
             "btts_percent": 77,
@@ -7023,7 +7023,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "VAR",
-          "type_name": "VAR",
+          "type_name": "ВАР.",
           "player": "J. Mateta",
           "addition": "Yellow card cancelled"
         },
@@ -7032,7 +7032,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "VAR_CARD",
-          "type_name": "VAR_CARD",
+          "type_name": "ВАР_КАРТА",
           "player": "J. Mateta",
           "addition": "Card adjusted"
         },
@@ -7041,7 +7041,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "REDCARD",
-          "type_name": "Redcard",
+          "type_name": "Редкард",
           "player": "J. Mateta",
           "addition": "1st Redcard"
         },
@@ -7050,7 +7050,7 @@
           "extra_minute": 0,
           "team_id": 6,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Archie Gray",
           "addition": "1st Yellowcard"
         },
@@ -7059,7 +7059,7 @@
           "extra_minute": 0,
           "team_id": 6,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Archie Gray",
           "related_player": "Mohammed Kudus ",
           "result": "1-0",
@@ -7070,7 +7070,7 @@
           "extra_minute": 0,
           "team_id": 6,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Pedro Porro",
           "related_player": "Archie Gray",
           "addition": "1st Substitution"
@@ -7080,7 +7080,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Óscar Mingueza",
           "addition": "2nd Yellowcard"
         },
@@ -7089,7 +7089,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "A. Khalaili",
           "related_player": "Óscar Mingueza",
           "addition": "2nd Substitution"
@@ -7099,7 +7099,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "E. Nketiah",
           "related_player": "Yéremy Pino",
           "addition": "3rd Substitution"
@@ -7109,7 +7109,7 @@
           "extra_minute": 0,
           "team_id": 6,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Conor Gallagher",
           "related_player": "Dominic Solanke",
           "addition": "4th Substitution"
@@ -7119,9 +7119,8 @@
           "extra_minute": 0,
           "team_id": 6,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "J. van Hecke",
-          "related_player": "Mateus Fernandes",
           "result": "2-0",
           "addition": "2nd Goal"
         },
@@ -7130,7 +7129,7 @@
           "extra_minute": 0,
           "team_id": 6,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Dejan Kulusevski",
           "related_player": "Omar Marmoush",
           "addition": "5th Substitution"
@@ -7140,7 +7139,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Darío Osorio",
           "related_player": "Dwight McNeil",
           "addition": "6th Substitution"
@@ -7150,7 +7149,7 @@
           "extra_minute": 0,
           "team_id": 6,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Destiny Udogie",
           "related_player": "Andrew Robertson",
           "addition": "7th Substitution"
@@ -7160,8 +7159,8 @@
           "extra_minute": 0,
           "team_id": 6,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
-          "player": "",
+          "type_name": "Замещение",
+          "player": "Luca Williams-Barnett",
           "related_player": "M. Tel",
           "addition": "8th Substitution"
         },
@@ -7170,7 +7169,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "W. Hughes",
           "related_player": "Daichi Kamada",
           "addition": "9th Substitution"
@@ -7180,7 +7179,7 @@
           "extra_minute": 0,
           "team_id": 51,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "J. Lerma",
           "related_player": "A. Wharton",
           "addition": "10th Substitution"
@@ -7189,7 +7188,7 @@
       "Stats": {
         "ACCURATE_CROSSES": {
           "type_id": 99,
-          "name": "Accurate Crosses",
+          "name": "Точные кроссовки",
           "code": "accurate-crosses",
           "developer_name": "ACCURATE_CROSSES",
           "home": 10,
@@ -7197,7 +7196,7 @@
         },
         "ASSISTS": {
           "type_id": 79,
-          "name": "Assists",
+          "name": "Ассисты",
           "code": "assists",
           "developer_name": "ASSISTS",
           "home": 1,
@@ -7205,7 +7204,7 @@
         },
         "ATTACKS": {
           "type_id": 43,
-          "name": "Attacks",
+          "name": "Атаки",
           "code": "attacks",
           "developer_name": "ATTACKS",
           "home": 147,
@@ -7213,7 +7212,7 @@
         },
         "BALL_POSSESSION": {
           "type_id": 45,
-          "name": "Ball Possession %",
+          "name": "Владение мячом %",
           "code": "ball-possession",
           "developer_name": "BALL_POSSESSION",
           "home": 79,
@@ -7221,7 +7220,7 @@
         },
         "BALL_SAFE": {
           "type_id": 46,
-          "name": "Ball Safe",
+          "name": "Шариковый сейф",
           "code": "ball-safe",
           "developer_name": "BALL_SAFE",
           "home": 56,
@@ -7229,7 +7228,7 @@
         },
         "BIG_CHANCES_CREATED": {
           "type_id": 580,
-          "name": "Big Chances Created",
+          "name": "Большие созданные моменты",
           "code": "big-chances-created",
           "developer_name": "BIG_CHANCES_CREATED",
           "home": 6,
@@ -7237,7 +7236,7 @@
         },
         "BIG_CHANCES_MISSED": {
           "type_id": 581,
-          "name": "Big Chances Missed",
+          "name": "Упущенные большие шансы",
           "code": "big-chances-missed",
           "developer_name": "BIG_CHANCES_MISSED",
           "home": 4,
@@ -7245,7 +7244,7 @@
         },
         "CORNERS": {
           "type_id": 34,
-          "name": "Corners",
+          "name": "Углы",
           "code": "corners",
           "developer_name": "CORNERS",
           "home": 19,
@@ -7253,7 +7252,7 @@
         },
         "DANGEROUS_ATTACKS": {
           "type_id": 44,
-          "name": "Dangerous Attacks",
+          "name": "Опасные атаки",
           "code": "dangerous-attacks",
           "developer_name": "DANGEROUS_ATTACKS",
           "home": 126,
@@ -7261,7 +7260,7 @@
         },
         "DRIBBLED_ATTEMPTS": {
           "type_id": 108,
-          "name": "Dribble Attempts",
+          "name": "Попытки обводки",
           "code": "dribble-attempts",
           "developer_name": "DRIBBLED_ATTEMPTS",
           "home": 25,
@@ -7269,7 +7268,7 @@
         },
         "DUELS_WON": {
           "type_id": 106,
-          "name": "Duels Won",
+          "name": "Победы в дуэлях",
           "code": "duels-won",
           "developer_name": "DUELS_WON",
           "home": 57,
@@ -7277,7 +7276,7 @@
         },
         "FOULS": {
           "type_id": 56,
-          "name": "Fouls",
+          "name": "Фолы",
           "code": "fouls",
           "developer_name": "FOULS",
           "home": 8,
@@ -7285,7 +7284,7 @@
         },
         "FREE_KICKS": {
           "type_id": 55,
-          "name": "Free Kicks",
+          "name": "Свободные удары",
           "code": "free-kicks",
           "developer_name": "FREE_KICKS",
           "home": 11,
@@ -7293,7 +7292,7 @@
         },
         "GOALS": {
           "type_id": 52,
-          "name": "Goals",
+          "name": "Цели",
           "code": "goals",
           "developer_name": "GOALS",
           "home": 2,
@@ -7301,7 +7300,7 @@
         },
         "GOAL_ATTEMPTS": {
           "type_id": 54,
-          "name": "Goal Attempts",
+          "name": "Попытки забить гол",
           "code": "goal-attempts",
           "developer_name": "GOAL_ATTEMPTS",
           "home": 18,
@@ -7309,7 +7308,7 @@
         },
         "GOAL_KICKS": {
           "type_id": 53,
-          "name": "Goal Kicks",
+          "name": "Вбрасывание от ворот",
           "code": "goals-kicks",
           "developer_name": "GOAL_KICKS",
           "home": 0,
@@ -7317,7 +7316,7 @@
         },
         "HIT_WOODWORK": {
           "type_id": 64,
-          "name": "Hit Woodwork",
+          "name": "Удар по деревянным элементам",
           "code": "hit-woodwork",
           "developer_name": "HIT_WOODWORK",
           "home": 1,
@@ -7325,7 +7324,7 @@
         },
         "INTERCEPTIONS": {
           "type_id": 100,
-          "name": "Interceptions",
+          "name": "Перехваты",
           "code": "interceptions",
           "developer_name": "INTERCEPTIONS",
           "home": 9,
@@ -7333,7 +7332,7 @@
         },
         "KEY_PASSES": {
           "type_id": 117,
-          "name": "Key Passes",
+          "name": "Ключевые передачи",
           "code": "key-passes",
           "developer_name": "KEY_PASSES",
           "home": 27,
@@ -7341,7 +7340,7 @@
         },
         "LONG_PASSES": {
           "type_id": 62,
-          "name": "Long Passes",
+          "name": "Длинные передачи",
           "code": "long-passes",
           "developer_name": "LONG_PASSES",
           "home": 15,
@@ -7349,7 +7348,7 @@
         },
         "OFFSIDES": {
           "type_id": 51,
-          "name": "Offsides",
+          "name": "Офсайды",
           "code": "offsides",
           "developer_name": "OFFSIDES",
           "home": 2,
@@ -7357,7 +7356,7 @@
         },
         "PASSES": {
           "type_id": 80,
-          "name": "Passes",
+          "name": "Пропуски",
           "code": "passes",
           "developer_name": "PASSES",
           "home": 815,
@@ -7365,7 +7364,7 @@
         },
         "REDCARDS": {
           "type_id": 83,
-          "name": "Redcards",
+          "name": "Красные карточки",
           "code": "redcards",
           "developer_name": "REDCARDS",
           "home": 0,
@@ -7373,7 +7372,7 @@
         },
         "SAVES": {
           "type_id": 57,
-          "name": "Saves",
+          "name": "Сейвы",
           "code": "saves",
           "developer_name": "SAVES",
           "home": 1,
@@ -7381,7 +7380,7 @@
         },
         "SHOTS_BLOCKED": {
           "type_id": 58,
-          "name": "Shots Blocked",
+          "name": "Блокированные броски",
           "code": "shots-blocked",
           "developer_name": "SHOTS_BLOCKED",
           "home": 13,
@@ -7389,7 +7388,7 @@
         },
         "SHOTS_INSIDEBOX": {
           "type_id": 49,
-          "name": "Shots Insidebox",
+          "name": "Удары внутри штрафной площади",
           "code": "shots-insidebox",
           "developer_name": "SHOTS_INSIDEBOX",
           "home": 24,
@@ -7397,7 +7396,7 @@
         },
         "SHOTS_OFF_TARGET": {
           "type_id": 41,
-          "name": "Shots Off Target",
+          "name": "Удары мимо цели",
           "code": "shots-off-target",
           "developer_name": "SHOTS_OFF_TARGET",
           "home": 12,
@@ -7405,7 +7404,7 @@
         },
         "SHOTS_ON_TARGET": {
           "type_id": 86,
-          "name": "Shots On Target",
+          "name": "Удары в створ ворот",
           "code": "shots-on-target",
           "developer_name": "SHOTS_ON_TARGET",
           "home": 9,
@@ -7413,7 +7412,7 @@
         },
         "SHOTS_OUTSIDEBOX": {
           "type_id": 50,
-          "name": "Shots Outsidebox",
+          "name": "Удары вне штрафной зоны",
           "code": "shots-outsidebox",
           "developer_name": "SHOTS_OUTSIDEBOX",
           "home": 10,
@@ -7421,7 +7420,7 @@
         },
         "SHOTS_TOTAL": {
           "type_id": 42,
-          "name": "Shots Total",
+          "name": "Всего бросков",
           "code": "shots-total",
           "developer_name": "SHOTS_TOTAL",
           "home": 34,
@@ -7429,7 +7428,7 @@
         },
         "SUBSTITUTIONS": {
           "type_id": 59,
-          "name": "Substitutions",
+          "name": "Замены",
           "code": "substitutions",
           "developer_name": "SUBSTITUTIONS",
           "home": 5,
@@ -7437,7 +7436,7 @@
         },
         "SUCCESSFUL_DRIBBLES": {
           "type_id": 109,
-          "name": "Successful Dribbles",
+          "name": "Успешные дриблинги",
           "code": "successful-dribbles",
           "developer_name": "SUCCESSFUL_DRIBBLES",
           "home": 15,
@@ -7445,7 +7444,7 @@
         },
         "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
           "type_id": 1605,
-          "name": "Successful Dribbles Percentage",
+          "name": "Процент успешных дриблингов",
           "code": "successful-dribbles-percentage",
           "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
           "home": 56,
@@ -7453,7 +7452,7 @@
         },
         "SUCCESSFUL_LONG_PASSES": {
           "type_id": 27264,
-          "name": "Successful Long Passes",
+          "name": "Успешные дальние передачи",
           "code": "successful-long-passes",
           "developer_name": "SUCCESSFUL_LONG_PASSES",
           "home": 9,
@@ -7461,7 +7460,7 @@
         },
         "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
           "type_id": 27265,
-          "name": "Successful Long Passes Percentage",
+          "name": "Процент успешных длинных передач",
           "code": "successful-long-passes-percentage",
           "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
           "home": 60,
@@ -7469,7 +7468,7 @@
         },
         "SUCCESSFUL_PASSES": {
           "type_id": 81,
-          "name": "Successful Passes",
+          "name": "Успешные передачи",
           "code": "successful-passes",
           "developer_name": "SUCCESSFUL_PASSES",
           "home": 759,
@@ -7477,7 +7476,7 @@
         },
         "SUCCESSFUL_PASSES_PERCENTAGE": {
           "type_id": 82,
-          "name": "Successful Passes Percentage",
+          "name": "Процент успешных передач",
           "code": "successful-passes-percentage",
           "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
           "home": 93,
@@ -7485,7 +7484,7 @@
         },
         "TACKLES": {
           "type_id": 78,
-          "name": "Tackles",
+          "name": "Тэклы",
           "code": "tackles",
           "developer_name": "TACKLES",
           "home": 16,
@@ -7493,7 +7492,7 @@
         },
         "TACKLES_WON": {
           "type_id": 27267,
-          "name": "Tackles Won",
+          "name": "Отборы выигранные",
           "code": "tackles-won",
           "developer_name": "TACKLES_WON",
           "home": 11,
@@ -7501,7 +7500,7 @@
         },
         "THROWINS": {
           "type_id": 60,
-          "name": "Throwins",
+          "name": "Вбрасывания",
           "code": "throwins",
           "developer_name": "THROWINS",
           "home": 21,
@@ -7509,7 +7508,7 @@
         },
         "TOTAL_CROSSES": {
           "type_id": 98,
-          "name": "Total Crosses",
+          "name": "Всего пересечений",
           "code": "total-crosses",
           "developer_name": "TOTAL_CROSSES",
           "home": 39,
@@ -7517,7 +7516,7 @@
         },
         "YELLOWCARDS": {
           "type_id": 84,
-          "name": "Yellowcards",
+          "name": "Жёлтые карточки",
           "code": "yellowcards",
           "developer_name": "YELLOWCARDS",
           "home": 1,
@@ -7831,7 +7830,8 @@
           },
           {
             "player_id": 37728388,
-            "name": "",
+            "name": "Luca Williams-Barnett",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/4/37728388.png",
             "number": 68,
             "position_id": 26,
             "formation_position": 0,
@@ -7929,7 +7929,7 @@
         "AwayOdds": "5.00",
         "BookmakerName": "bet365"
       },
-      "home_xg": 3.89,
+      "home_xg": 4.08,
       "away_xg": 0.21,
       "H2H": {
         "summary": {
@@ -7955,7 +7955,7 @@
             "away_team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/51.png",
             "home_score": 2,
             "away_score": 0,
-            "home_xg": 3.89,
+            "home_xg": 4.08,
             "away_xg": 0.21
           },
           {
@@ -8094,7 +8094,7 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.7879999999999998,
+            "xg_per_match": 1.8259999999999998,
             "xga_per_match": 0.8200000000000001,
             "goals_scored_avg": 2,
             "goals_conceded_avg": 1,
@@ -8105,7 +8105,7 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.41,
+            "xg_per_match": 1.431111111111111,
             "xga_per_match": 1.2133333333333336,
             "goals_scored_avg": 1.1111111111111112,
             "goals_conceded_avg": 1.1111111111111112,
@@ -8121,7 +8121,7 @@
           "last_5": {
             "matches_count": 5,
             "xg_per_match": 1.2,
-            "xga_per_match": 2.2800000000000002,
+            "xga_per_match": 2.318,
             "goals_scored_avg": 0.6,
             "goals_conceded_avg": 2,
             "btts_percent": 20,
@@ -8132,7 +8132,7 @@
           "season": {
             "matches_count": 9,
             "xg_per_match": 1.1388888888888888,
-            "xga_per_match": 2.3622222222222224,
+            "xga_per_match": 2.3833333333333333,
             "goals_scored_avg": 1,
             "goals_conceded_avg": 2.3333333333333335,
             "btts_percent": 44,
@@ -8181,7 +8181,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "VAR",
-          "type_name": "VAR",
+          "type_name": "ВАР.",
           "player": "Leon Goretzka",
           "addition": "Penalty awarded"
         },
@@ -8190,7 +8190,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "MISSED_PENALTY",
-          "type_name": "Missed Penalty",
+          "type_name": "Промах с пенальти",
           "player": "John McGinn",
           "addition": "Woodwork"
         },
@@ -8199,7 +8199,7 @@
           "extra_minute": 0,
           "team_id": 11,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "D. Affengruber",
           "addition": "1st Yellowcard"
         },
@@ -8208,7 +8208,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "GOAL",
-          "type_name": "Goal",
+          "type_name": "Цель",
           "player": "Nicolas Jackson",
           "related_player": "Johan Manzambi",
           "result": "1-0",
@@ -8219,7 +8219,7 @@
           "extra_minute": 4,
           "team_id": 11,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Calvin Bassey",
           "addition": "2nd Yellowcard"
         },
@@ -8228,7 +8228,7 @@
           "extra_minute": 0,
           "team_id": 11,
           "type": "OWNGOAL",
-          "type_name": "Own Goal",
+          "type_name": "Автогол",
           "player": "Zion Suzuki",
           "result": "1-1",
           "addition": "1st Own Goal"
@@ -8238,7 +8238,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "E. Buendía",
           "related_player": "Alysson",
           "addition": "1st Substitution"
@@ -8248,7 +8248,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "João Gomes",
           "related_player": "Johan Manzambi",
           "addition": "2nd Substitution"
@@ -8258,7 +8258,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Ibrahim Mbaye",
           "related_player": "Leon Goretzka",
           "addition": "3rd Substitution"
@@ -8268,7 +8268,7 @@
           "extra_minute": 0,
           "team_id": 11,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Tom Cairney",
           "related_player": "Alex Iwobi",
           "addition": "4th Substitution"
@@ -8278,7 +8278,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Matty Cash",
           "addition": "3rd Yellowcard"
         },
@@ -8287,7 +8287,7 @@
           "extra_minute": 0,
           "team_id": 11,
           "type": "YELLOWCARD",
-          "type_name": "Yellowcard",
+          "type_name": "Йеллоукард.",
           "player": "Tom Cairney",
           "addition": "4th Yellowcard"
         },
@@ -8296,7 +8296,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Ross Barkley",
           "related_player": "B. Kamara",
           "addition": "5th Substitution"
@@ -8306,7 +8306,7 @@
           "extra_minute": 0,
           "team_id": 11,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "César Palacios Pérez",
           "related_player": "Joshua King",
           "addition": "6th Substitution"
@@ -8316,7 +8316,7 @@
           "extra_minute": 0,
           "team_id": 11,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Kenny Tete",
           "related_player": "Oscar Bobb",
           "addition": "7th Substitution"
@@ -8326,7 +8326,7 @@
           "extra_minute": 0,
           "team_id": 15,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Alejandro Garnacho",
           "related_player": "John McGinn",
           "addition": "8th Substitution"
@@ -8336,7 +8336,7 @@
           "extra_minute": 0,
           "team_id": 11,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "H. Larsson",
           "related_player": "Timothy Castagne",
           "addition": "9th Substitution"
@@ -8346,7 +8346,7 @@
           "extra_minute": 0,
           "team_id": 11,
           "type": "SUBSTITUTION",
-          "type_name": "Substitution",
+          "type_name": "Замещение",
           "player": "Rodrigo Muniz",
           "related_player": "Gonzalo García Torres",
           "addition": "10th Substitution"
@@ -8355,7 +8355,7 @@
       "Stats": {
         "ACCURATE_CROSSES": {
           "type_id": 99,
-          "name": "Accurate Crosses",
+          "name": "Точные кроссовки",
           "code": "accurate-crosses",
           "developer_name": "ACCURATE_CROSSES",
           "home": 6,
@@ -8363,7 +8363,7 @@
         },
         "ASSISTS": {
           "type_id": 79,
-          "name": "Assists",
+          "name": "Ассисты",
           "code": "assists",
           "developer_name": "ASSISTS",
           "home": 1,
@@ -8371,7 +8371,7 @@
         },
         "ATTACKS": {
           "type_id": 43,
-          "name": "Attacks",
+          "name": "Атаки",
           "code": "attacks",
           "developer_name": "ATTACKS",
           "home": 87,
@@ -8379,7 +8379,7 @@
         },
         "BALL_POSSESSION": {
           "type_id": 45,
-          "name": "Ball Possession %",
+          "name": "Владение мячом %",
           "code": "ball-possession",
           "developer_name": "BALL_POSSESSION",
           "home": 45,
@@ -8387,7 +8387,7 @@
         },
         "BALL_SAFE": {
           "type_id": 46,
-          "name": "Ball Safe",
+          "name": "Шариковый сейф",
           "code": "ball-safe",
           "developer_name": "BALL_SAFE",
           "home": 63,
@@ -8395,7 +8395,7 @@
         },
         "BIG_CHANCES_CREATED": {
           "type_id": 580,
-          "name": "Big Chances Created",
+          "name": "Большие созданные моменты",
           "code": "big-chances-created",
           "developer_name": "BIG_CHANCES_CREATED",
           "home": 4,
@@ -8403,7 +8403,7 @@
         },
         "BIG_CHANCES_MISSED": {
           "type_id": 581,
-          "name": "Big Chances Missed",
+          "name": "Упущенные большие шансы",
           "code": "big-chances-missed",
           "developer_name": "BIG_CHANCES_MISSED",
           "home": 3,
@@ -8411,7 +8411,7 @@
         },
         "CORNERS": {
           "type_id": 34,
-          "name": "Corners",
+          "name": "Углы",
           "code": "corners",
           "developer_name": "CORNERS",
           "home": 7,
@@ -8419,7 +8419,7 @@
         },
         "DANGEROUS_ATTACKS": {
           "type_id": 44,
-          "name": "Dangerous Attacks",
+          "name": "Опасные атаки",
           "code": "dangerous-attacks",
           "developer_name": "DANGEROUS_ATTACKS",
           "home": 57,
@@ -8427,7 +8427,7 @@
         },
         "DRIBBLED_ATTEMPTS": {
           "type_id": 108,
-          "name": "Dribble Attempts",
+          "name": "Попытки обводки",
           "code": "dribble-attempts",
           "developer_name": "DRIBBLED_ATTEMPTS",
           "home": 16,
@@ -8435,7 +8435,7 @@
         },
         "DUELS_WON": {
           "type_id": 106,
-          "name": "Duels Won",
+          "name": "Победы в дуэлях",
           "code": "duels-won",
           "developer_name": "DUELS_WON",
           "home": 45,
@@ -8443,7 +8443,7 @@
         },
         "FOULS": {
           "type_id": 56,
-          "name": "Fouls",
+          "name": "Фолы",
           "code": "fouls",
           "developer_name": "FOULS",
           "home": 7,
@@ -8451,7 +8451,7 @@
         },
         "FREE_KICKS": {
           "type_id": 55,
-          "name": "Free Kicks",
+          "name": "Свободные удары",
           "code": "free-kicks",
           "developer_name": "FREE_KICKS",
           "home": 15,
@@ -8459,7 +8459,7 @@
         },
         "GOALS": {
           "type_id": 52,
-          "name": "Goals",
+          "name": "Цели",
           "code": "goals",
           "developer_name": "GOALS",
           "home": 1,
@@ -8467,7 +8467,7 @@
         },
         "GOAL_ATTEMPTS": {
           "type_id": 54,
-          "name": "Goal Attempts",
+          "name": "Попытки забить гол",
           "code": "goal-attempts",
           "developer_name": "GOAL_ATTEMPTS",
           "home": 10,
@@ -8475,7 +8475,7 @@
         },
         "GOAL_KICKS": {
           "type_id": 53,
-          "name": "Goal Kicks",
+          "name": "Вбрасывание от ворот",
           "code": "goals-kicks",
           "developer_name": "GOAL_KICKS",
           "home": 7,
@@ -8483,7 +8483,7 @@
         },
         "HIT_WOODWORK": {
           "type_id": 64,
-          "name": "Hit Woodwork",
+          "name": "Удар по деревянным элементам",
           "code": "hit-woodwork",
           "developer_name": "HIT_WOODWORK",
           "home": 1,
@@ -8491,7 +8491,7 @@
         },
         "INTERCEPTIONS": {
           "type_id": 100,
-          "name": "Interceptions",
+          "name": "Перехваты",
           "code": "interceptions",
           "developer_name": "INTERCEPTIONS",
           "home": 5,
@@ -8499,7 +8499,7 @@
         },
         "KEY_PASSES": {
           "type_id": 117,
-          "name": "Key Passes",
+          "name": "Ключевые передачи",
           "code": "key-passes",
           "developer_name": "KEY_PASSES",
           "home": 12,
@@ -8507,7 +8507,7 @@
         },
         "LONG_PASSES": {
           "type_id": 62,
-          "name": "Long Passes",
+          "name": "Длинные передачи",
           "code": "long-passes",
           "developer_name": "LONG_PASSES",
           "home": 36,
@@ -8515,7 +8515,7 @@
         },
         "OFFSIDES": {
           "type_id": 51,
-          "name": "Offsides",
+          "name": "Офсайды",
           "code": "offsides",
           "developer_name": "OFFSIDES",
           "home": 2,
@@ -8523,7 +8523,7 @@
         },
         "PASSES": {
           "type_id": 80,
-          "name": "Passes",
+          "name": "Пропуски",
           "code": "passes",
           "developer_name": "PASSES",
           "home": 434,
@@ -8531,7 +8531,7 @@
         },
         "PENALTIES": {
           "type_id": 47,
-          "name": "Penalties",
+          "name": "Наказания",
           "code": "penalties",
           "developer_name": "PENALTIES",
           "home": 1,
@@ -8539,7 +8539,7 @@
         },
         "SAVES": {
           "type_id": 57,
-          "name": "Saves",
+          "name": "Сейвы",
           "code": "saves",
           "developer_name": "SAVES",
           "home": 4,
@@ -8547,7 +8547,7 @@
         },
         "SHOTS_BLOCKED": {
           "type_id": 58,
-          "name": "Shots Blocked",
+          "name": "Блокированные броски",
           "code": "shots-blocked",
           "developer_name": "SHOTS_BLOCKED",
           "home": 6,
@@ -8555,7 +8555,7 @@
         },
         "SHOTS_INSIDEBOX": {
           "type_id": 49,
-          "name": "Shots Insidebox",
+          "name": "Удары внутри штрафной площади",
           "code": "shots-insidebox",
           "developer_name": "SHOTS_INSIDEBOX",
           "home": 12,
@@ -8563,7 +8563,7 @@
         },
         "SHOTS_OFF_TARGET": {
           "type_id": 41,
-          "name": "Shots Off Target",
+          "name": "Удары мимо цели",
           "code": "shots-off-target",
           "developer_name": "SHOTS_OFF_TARGET",
           "home": 7,
@@ -8571,7 +8571,7 @@
         },
         "SHOTS_ON_TARGET": {
           "type_id": 86,
-          "name": "Shots On Target",
+          "name": "Удары в створ ворот",
           "code": "shots-on-target",
           "developer_name": "SHOTS_ON_TARGET",
           "home": 3,
@@ -8579,7 +8579,7 @@
         },
         "SHOTS_OUTSIDEBOX": {
           "type_id": 50,
-          "name": "Shots Outsidebox",
+          "name": "Удары вне штрафной зоны",
           "code": "shots-outsidebox",
           "developer_name": "SHOTS_OUTSIDEBOX",
           "home": 4,
@@ -8587,7 +8587,7 @@
         },
         "SHOTS_TOTAL": {
           "type_id": 42,
-          "name": "Shots Total",
+          "name": "Всего бросков",
           "code": "shots-total",
           "developer_name": "SHOTS_TOTAL",
           "home": 16,
@@ -8595,7 +8595,7 @@
         },
         "SUBSTITUTIONS": {
           "type_id": 59,
-          "name": "Substitutions",
+          "name": "Замены",
           "code": "substitutions",
           "developer_name": "SUBSTITUTIONS",
           "home": 5,
@@ -8603,7 +8603,7 @@
         },
         "SUCCESSFUL_DRIBBLES": {
           "type_id": 109,
-          "name": "Successful Dribbles",
+          "name": "Успешные дриблинги",
           "code": "successful-dribbles",
           "developer_name": "SUCCESSFUL_DRIBBLES",
           "home": 7,
@@ -8611,7 +8611,7 @@
         },
         "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
           "type_id": 1605,
-          "name": "Successful Dribbles Percentage",
+          "name": "Процент успешных дриблингов",
           "code": "successful-dribbles-percentage",
           "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
           "home": 44,
@@ -8619,7 +8619,7 @@
         },
         "SUCCESSFUL_LONG_PASSES": {
           "type_id": 27264,
-          "name": "Successful Long Passes",
+          "name": "Успешные дальние передачи",
           "code": "successful-long-passes",
           "developer_name": "SUCCESSFUL_LONG_PASSES",
           "home": 20,
@@ -8627,7 +8627,7 @@
         },
         "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
           "type_id": 27265,
-          "name": "Successful Long Passes Percentage",
+          "name": "Процент успешных длинных передач",
           "code": "successful-long-passes-percentage",
           "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
           "home": 56,
@@ -8635,7 +8635,7 @@
         },
         "SUCCESSFUL_PASSES": {
           "type_id": 81,
-          "name": "Successful Passes",
+          "name": "Успешные передачи",
           "code": "successful-passes",
           "developer_name": "SUCCESSFUL_PASSES",
           "home": 374,
@@ -8643,7 +8643,7 @@
         },
         "SUCCESSFUL_PASSES_PERCENTAGE": {
           "type_id": 82,
-          "name": "Successful Passes Percentage",
+          "name": "Процент успешных передач",
           "code": "successful-passes-percentage",
           "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
           "home": 86,
@@ -8651,7 +8651,7 @@
         },
         "TACKLES": {
           "type_id": 78,
-          "name": "Tackles",
+          "name": "Тэклы",
           "code": "tackles",
           "developer_name": "TACKLES",
           "home": 18,
@@ -8659,7 +8659,7 @@
         },
         "TACKLES_WON": {
           "type_id": 27267,
-          "name": "Tackles Won",
+          "name": "Отборы выигранные",
           "code": "tackles-won",
           "developer_name": "TACKLES_WON",
           "home": 9,
@@ -8667,7 +8667,7 @@
         },
         "THROWINS": {
           "type_id": 60,
-          "name": "Throwins",
+          "name": "Вбрасывания",
           "code": "throwins",
           "developer_name": "THROWINS",
           "home": 15,
@@ -8675,7 +8675,7 @@
         },
         "TOTAL_CROSSES": {
           "type_id": 98,
-          "name": "Total Crosses",
+          "name": "Всего пересечений",
           "code": "total-crosses",
           "developer_name": "TOTAL_CROSSES",
           "home": 17,
@@ -8683,7 +8683,7 @@
         },
         "YELLOWCARDS": {
           "type_id": 84,
-          "name": "Yellowcards",
+          "name": "Жёлтые карточки",
           "code": "yellowcards",
           "developer_name": "YELLOWCARDS",
           "home": 1,
@@ -9096,8 +9096,8 @@
         "AwayOdds": "3.70",
         "BookmakerName": "bet365"
       },
-      "home_xg": 1.74,
-      "away_xg": 2.85,
+      "home_xg": 1.8,
+      "away_xg": 2.86,
       "H2H": {
         "summary": {
           "total_matches": 10,
@@ -9122,8 +9122,8 @@
             "away_team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/11.png",
             "home_score": 1,
             "away_score": 1,
-            "home_xg": 1.74,
-            "away_xg": 2.85
+            "home_xg": 1.8,
+            "away_xg": 2.86
           },
           {
             "fixture_id": 19427505,
@@ -9263,8 +9263,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.522,
-            "xga_per_match": 1.77,
+            "xg_per_match": 1.534,
+            "xga_per_match": 1.7719999999999998,
             "goals_scored_avg": 1.8,
             "goals_conceded_avg": 1.2,
             "btts_percent": 80,
@@ -9274,8 +9274,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.1933333333333334,
-            "xga_per_match": 1.8066666666666664,
+            "xg_per_match": 1.2000000000000002,
+            "xga_per_match": 1.8077777777777777,
             "goals_scored_avg": 1.1111111111111112,
             "goals_conceded_avg": 1.4444444444444444,
             "btts_percent": 55,
@@ -9289,8 +9289,8 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.634,
-            "xga_per_match": 1.166,
+            "xg_per_match": 1.636,
+            "xga_per_match": 1.1780000000000002,
             "goals_scored_avg": 1,
             "goals_conceded_avg": 0.8,
             "btts_percent": 60,
@@ -9300,8 +9300,8 @@
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.6655555555555557,
-            "xga_per_match": 1.2844444444444445,
+            "xg_per_match": 1.6666666666666665,
+            "xga_per_match": 1.2911111111111113,
             "goals_scored_avg": 1,
             "goals_conceded_avg": 1.2222222222222223,
             "btts_percent": 55,
@@ -9336,16 +9336,535 @@
       "TeamAwayLogo": "https://cdn.sportmonks.com/images/soccer/teams/19/19.png",
       "TeamAwayWinner": true,
       "TeamAwayResult": "W",
-      "StateShort": "NS",
+      "StateShort": "FT",
       "RefereeName": "Andy Madley",
       "Scores": {
         "HomeCurrent": 0,
-        "AwayCurrent": 0,
+        "AwayCurrent": 1,
         "HomeHT": 0,
-        "AwayHT": 0
+        "AwayHT": 1
       },
-      "Events": [],
-      "Stats": null,
+      "Events": [
+        {
+          "minute": 16,
+          "extra_minute": 0,
+          "team_id": 19,
+          "type": "GOAL",
+          "type_name": "Цель",
+          "player": "Kai Havertz",
+          "related_player": "Declan Rice",
+          "result": "0-1",
+          "addition": "1st Goal"
+        },
+        {
+          "minute": 45,
+          "extra_minute": 3,
+          "team_id": 8,
+          "type": "YELLOWCARD",
+          "type_name": "Йеллоукард.",
+          "player": "B. Barcola",
+          "addition": "1st Yellowcard"
+        },
+        {
+          "minute": 55,
+          "extra_minute": 0,
+          "team_id": 19,
+          "type": "YELLOWCARD",
+          "type_name": "Йеллоукард.",
+          "player": "Noni Madueke",
+          "addition": "2nd Yellowcard"
+        },
+        {
+          "minute": 58,
+          "extra_minute": 0,
+          "team_id": 8,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Dominik Szoboszlai",
+          "related_player": "Trey Nyoni",
+          "addition": "1st Substitution"
+        },
+        {
+          "minute": 62,
+          "extra_minute": 0,
+          "team_id": 19,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Myles Anthony Lewis-Skelly",
+          "related_player": "Bruno Guimarães",
+          "addition": "2nd Substitution"
+        },
+        {
+          "minute": 67,
+          "extra_minute": 0,
+          "team_id": 8,
+          "type": "YELLOWCARD",
+          "type_name": "Йеллоукард.",
+          "player": "M. Kerkez",
+          "addition": "3rd Yellowcard"
+        },
+        {
+          "minute": 67,
+          "extra_minute": 0,
+          "team_id": 8,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Rio Ngumoha",
+          "related_player": "C. Gakpo",
+          "addition": "3rd Substitution"
+        },
+        {
+          "minute": 72,
+          "extra_minute": 0,
+          "team_id": 19,
+          "type": "YELLOWCARD",
+          "type_name": "Йеллоукард.",
+          "player": "Myles Anthony Lewis-Skelly",
+          "addition": "4th Yellowcard"
+        },
+        {
+          "minute": 80,
+          "extra_minute": 0,
+          "team_id": 8,
+          "type": "YELLOWCARD",
+          "type_name": "Йеллоукард.",
+          "player": "A. Mac Allister",
+          "addition": "5th Yellowcard"
+        },
+        {
+          "minute": 80,
+          "extra_minute": 0,
+          "team_id": 19,
+          "type": "YELLOWCARD",
+          "type_name": "Йеллоукард.",
+          "player": "Jurrien Timber",
+          "addition": "6th Yellowcard"
+        },
+        {
+          "minute": 81,
+          "extra_minute": 0,
+          "team_id": 8,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Lewis Koumas",
+          "related_player": "Florian Wirtz",
+          "addition": "4th Substitution"
+        },
+        {
+          "minute": 81,
+          "extra_minute": 0,
+          "team_id": 8,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Víctor Muñoz Villanueva",
+          "related_player": "Ronald Araújo",
+          "addition": "5th Substitution"
+        },
+        {
+          "minute": 81,
+          "extra_minute": 0,
+          "team_id": 8,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Konstantinos Tsimikas",
+          "related_player": "M. Kerkez",
+          "addition": "6th Substitution"
+        },
+        {
+          "minute": 84,
+          "extra_minute": 0,
+          "team_id": 19,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Viktor Gyökeres",
+          "related_player": "Kai Havertz",
+          "addition": "7th Substitution"
+        },
+        {
+          "minute": 84,
+          "extra_minute": 0,
+          "team_id": 19,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Piero Hincapié",
+          "related_player": "C. Tzolis",
+          "addition": "8th Substitution"
+        },
+        {
+          "minute": 88,
+          "extra_minute": 0,
+          "team_id": 19,
+          "type": "SUBSTITUTION",
+          "type_name": "Замещение",
+          "player": "Mikel Merino",
+          "related_player": "Martin Ødegaard",
+          "addition": "9th Substitution"
+        },
+        {
+          "minute": 90,
+          "extra_minute": 3,
+          "team_id": 19,
+          "type": "YELLOWCARD",
+          "type_name": "Йеллоукард.",
+          "player": "David Raya",
+          "addition": "7th Yellowcard"
+        },
+        {
+          "minute": 90,
+          "extra_minute": 7,
+          "team_id": 8,
+          "type": "YELLOWCARD",
+          "type_name": "Йеллоукард.",
+          "player": "Virgil van Dijk ",
+          "addition": "8th Yellowcard"
+        }
+      ],
+      "Stats": {
+        "ACCURATE_CROSSES": {
+          "type_id": 99,
+          "name": "Точные кроссовки",
+          "code": "accurate-crosses",
+          "developer_name": "ACCURATE_CROSSES",
+          "home": 5,
+          "away": 4
+        },
+        "ASSISTS": {
+          "type_id": 79,
+          "name": "Ассисты",
+          "code": "assists",
+          "developer_name": "ASSISTS",
+          "home": 0,
+          "away": 1
+        },
+        "ATTACKS": {
+          "type_id": 43,
+          "name": "Атаки",
+          "code": "attacks",
+          "developer_name": "ATTACKS",
+          "home": 111,
+          "away": 86
+        },
+        "BALL_POSSESSION": {
+          "type_id": 45,
+          "name": "Владение мячом %",
+          "code": "ball-possession",
+          "developer_name": "BALL_POSSESSION",
+          "home": 56,
+          "away": 44
+        },
+        "BALL_SAFE": {
+          "type_id": 46,
+          "name": "Шариковый сейф",
+          "code": "ball-safe",
+          "developer_name": "BALL_SAFE",
+          "home": 75,
+          "away": 82
+        },
+        "BIG_CHANCES_CREATED": {
+          "type_id": 580,
+          "name": "Большие созданные моменты",
+          "code": "big-chances-created",
+          "developer_name": "BIG_CHANCES_CREATED",
+          "home": 1,
+          "away": 2
+        },
+        "BIG_CHANCES_MISSED": {
+          "type_id": 581,
+          "name": "Упущенные большие шансы",
+          "code": "big-chances-missed",
+          "developer_name": "BIG_CHANCES_MISSED",
+          "home": 1,
+          "away": 1
+        },
+        "CORNERS": {
+          "type_id": 34,
+          "name": "Углы",
+          "code": "corners",
+          "developer_name": "CORNERS",
+          "home": 7,
+          "away": 4
+        },
+        "DANGEROUS_ATTACKS": {
+          "type_id": 44,
+          "name": "Опасные атаки",
+          "code": "dangerous-attacks",
+          "developer_name": "DANGEROUS_ATTACKS",
+          "home": 72,
+          "away": 51
+        },
+        "DRIBBLED_ATTEMPTS": {
+          "type_id": 108,
+          "name": "Попытки обводки",
+          "code": "dribble-attempts",
+          "developer_name": "DRIBBLED_ATTEMPTS",
+          "home": 17,
+          "away": 15
+        },
+        "DUELS_WON": {
+          "type_id": 106,
+          "name": "Победы в дуэлях",
+          "code": "duels-won",
+          "developer_name": "DUELS_WON",
+          "home": 58,
+          "away": 67
+        },
+        "FOULS": {
+          "type_id": 56,
+          "name": "Фолы",
+          "code": "fouls",
+          "developer_name": "FOULS",
+          "home": 18,
+          "away": 10
+        },
+        "FREE_KICKS": {
+          "type_id": 55,
+          "name": "Свободные удары",
+          "code": "free-kicks",
+          "developer_name": "FREE_KICKS",
+          "home": 13,
+          "away": 19
+        },
+        "GOALS": {
+          "type_id": 52,
+          "name": "Цели",
+          "code": "goals",
+          "developer_name": "GOALS",
+          "home": 0,
+          "away": 1
+        },
+        "GOAL_ATTEMPTS": {
+          "type_id": 54,
+          "name": "Попытки забить гол",
+          "code": "goal-attempts",
+          "developer_name": "GOAL_ATTEMPTS",
+          "home": 11,
+          "away": 6
+        },
+        "GOAL_KICKS": {
+          "type_id": 53,
+          "name": "Вбрасывание от ворот",
+          "code": "goals-kicks",
+          "developer_name": "GOAL_KICKS",
+          "home": 4,
+          "away": 11
+        },
+        "HIT_WOODWORK": {
+          "type_id": 64,
+          "name": "Удар по деревянным элементам",
+          "code": "hit-woodwork",
+          "developer_name": "HIT_WOODWORK",
+          "home": 1,
+          "away": 0
+        },
+        "INJURIES": {
+          "type_id": 87,
+          "name": "Травмы",
+          "code": "injuries",
+          "developer_name": "INJURIES",
+          "home": 1,
+          "away": 0
+        },
+        "INTERCEPTIONS": {
+          "type_id": 100,
+          "name": "Перехваты",
+          "code": "interceptions",
+          "developer_name": "INTERCEPTIONS",
+          "home": 12,
+          "away": 6
+        },
+        "KEY_PASSES": {
+          "type_id": 117,
+          "name": "Ключевые передачи",
+          "code": "key-passes",
+          "developer_name": "KEY_PASSES",
+          "home": 12,
+          "away": 10
+        },
+        "LONG_PASSES": {
+          "type_id": 62,
+          "name": "Длинные передачи",
+          "code": "long-passes",
+          "developer_name": "LONG_PASSES",
+          "home": 44,
+          "away": 65
+        },
+        "OFFSIDES": {
+          "type_id": 51,
+          "name": "Офсайды",
+          "code": "offsides",
+          "developer_name": "OFFSIDES",
+          "home": 2,
+          "away": 3
+        },
+        "PASSES": {
+          "type_id": 80,
+          "name": "Пропуски",
+          "code": "passes",
+          "developer_name": "PASSES",
+          "home": 464,
+          "away": 372
+        },
+        "SAVES": {
+          "type_id": 57,
+          "name": "Сейвы",
+          "code": "saves",
+          "developer_name": "SAVES",
+          "home": 2,
+          "away": 1
+        },
+        "SHOTS_BLOCKED": {
+          "type_id": 58,
+          "name": "Блокированные броски",
+          "code": "shots-blocked",
+          "developer_name": "SHOTS_BLOCKED",
+          "home": 9,
+          "away": 3
+        },
+        "SHOTS_INSIDEBOX": {
+          "type_id": 49,
+          "name": "Удары внутри штрафной площади",
+          "code": "shots-insidebox",
+          "developer_name": "SHOTS_INSIDEBOX",
+          "home": 14,
+          "away": 6
+        },
+        "SHOTS_OFF_TARGET": {
+          "type_id": 41,
+          "name": "Удары мимо цели",
+          "code": "shots-off-target",
+          "developer_name": "SHOTS_OFF_TARGET",
+          "home": 8,
+          "away": 4
+        },
+        "SHOTS_ON_TARGET": {
+          "type_id": 86,
+          "name": "Удары в створ ворот",
+          "code": "shots-on-target",
+          "developer_name": "SHOTS_ON_TARGET",
+          "home": 0,
+          "away": 3
+        },
+        "SHOTS_OUTSIDEBOX": {
+          "type_id": 50,
+          "name": "Удары вне штрафной зоны",
+          "code": "shots-outsidebox",
+          "developer_name": "SHOTS_OUTSIDEBOX",
+          "home": 3,
+          "away": 4
+        },
+        "SHOTS_TOTAL": {
+          "type_id": 42,
+          "name": "Всего бросков",
+          "code": "shots-total",
+          "developer_name": "SHOTS_TOTAL",
+          "home": 17,
+          "away": 10
+        },
+        "SUBSTITUTIONS": {
+          "type_id": 59,
+          "name": "Замены",
+          "code": "substitutions",
+          "developer_name": "SUBSTITUTIONS",
+          "home": 5,
+          "away": 4
+        },
+        "SUCCESSFUL_DRIBBLES": {
+          "type_id": 109,
+          "name": "Успешные дриблинги",
+          "code": "successful-dribbles",
+          "developer_name": "SUCCESSFUL_DRIBBLES",
+          "home": 6,
+          "away": 6
+        },
+        "SUCCESSFUL_DRIBBLES_PERCENTAGE": {
+          "type_id": 1605,
+          "name": "Процент успешных дриблингов",
+          "code": "successful-dribbles-percentage",
+          "developer_name": "SUCCESSFUL_DRIBBLES_PERCENTAGE",
+          "home": 35,
+          "away": 47
+        },
+        "SUCCESSFUL_HEADERS": {
+          "type_id": 65,
+          "name": "Успешные заголовки",
+          "code": "successful-headers",
+          "developer_name": "SUCCESSFUL_HEADERS",
+          "home": 25,
+          "away": 17
+        },
+        "SUCCESSFUL_LONG_PASSES": {
+          "type_id": 27264,
+          "name": "Успешные дальние передачи",
+          "code": "successful-long-passes",
+          "developer_name": "SUCCESSFUL_LONG_PASSES",
+          "home": 11,
+          "away": 23
+        },
+        "SUCCESSFUL_LONG_PASSES_PERCENTAGE": {
+          "type_id": 27265,
+          "name": "Процент успешных длинных передач",
+          "code": "successful-long-passes-percentage",
+          "developer_name": "SUCCESSFUL_LONG_PASSES_PERCENTAGE",
+          "home": 25,
+          "away": 35
+        },
+        "SUCCESSFUL_PASSES": {
+          "type_id": 81,
+          "name": "Успешные передачи",
+          "code": "successful-passes",
+          "developer_name": "SUCCESSFUL_PASSES",
+          "home": 380,
+          "away": 269
+        },
+        "SUCCESSFUL_PASSES_PERCENTAGE": {
+          "type_id": 82,
+          "name": "Процент успешных передач",
+          "code": "successful-passes-percentage",
+          "developer_name": "SUCCESSFUL_PASSES_PERCENTAGE",
+          "home": 82,
+          "away": 72
+        },
+        "TACKLES": {
+          "type_id": 78,
+          "name": "Тэклы",
+          "code": "tackles",
+          "developer_name": "TACKLES",
+          "home": 17,
+          "away": 24
+        },
+        "TACKLES_WON": {
+          "type_id": 27267,
+          "name": "Отборы выигранные",
+          "code": "tackles-won",
+          "developer_name": "TACKLES_WON",
+          "home": 11,
+          "away": 16
+        },
+        "THROWINS": {
+          "type_id": 60,
+          "name": "Вбрасывания",
+          "code": "throwins",
+          "developer_name": "THROWINS",
+          "home": 25,
+          "away": 18
+        },
+        "TOTAL_CROSSES": {
+          "type_id": 98,
+          "name": "Всего пересечений",
+          "code": "total-crosses",
+          "developer_name": "TOTAL_CROSSES",
+          "home": 33,
+          "away": 10
+        },
+        "YELLOWCARDS": {
+          "type_id": 84,
+          "name": "Жёлтые карточки",
+          "code": "yellowcards",
+          "developer_name": "YELLOWCARDS",
+          "home": 4,
+          "away": 4
+        }
+      },
       "Lineups": {
         "away": [
           {
@@ -9423,7 +9942,7 @@
             "name": "Noni Madueke",
             "image_path": "https://cdn.sportmonks.com/images/soccer/players/30/25217662.png",
             "number": 20,
-            "position_id": 27,
+            "position_id": 26,
             "formation_field": "4:3",
             "formation_position": 8,
             "is_starter": true
@@ -9592,31 +10111,31 @@
             "is_starter": true
           },
           {
-            "player_id": 37669492,
-            "name": "Trey Nyoni",
-            "image_path": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-            "number": 42,
+            "player_id": 216612,
+            "name": "A. Mac Allister",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/4/216612.png",
+            "number": 10,
             "position_id": 26,
             "formation_field": "3:1",
             "formation_position": 6,
             "is_starter": true
           },
           {
-            "player_id": 216612,
-            "name": "A. Mac Allister",
-            "image_path": "https://cdn.sportmonks.com/images/soccer/players/4/216612.png",
-            "number": 10,
+            "player_id": 37669492,
+            "name": "Trey Nyoni",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
+            "number": 42,
             "position_id": 26,
             "formation_field": "3:2",
             "formation_position": 7,
             "is_starter": true
           },
           {
-            "player_id": 37317369,
-            "name": "B. Barcola",
-            "image_path": "https://cdn.sportmonks.com/images/soccer/players/25/37317369.png",
-            "number": 29,
-            "position_id": 27,
+            "player_id": 30062,
+            "name": "C. Gakpo",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/14/30062.png",
+            "number": 18,
+            "position_id": 26,
             "formation_field": "4:1",
             "formation_position": 8,
             "is_starter": true
@@ -9632,10 +10151,10 @@
             "is_starter": true
           },
           {
-            "player_id": 30062,
-            "name": "C. Gakpo",
-            "image_path": "https://cdn.sportmonks.com/images/soccer/players/14/30062.png",
-            "number": 18,
+            "player_id": 37317369,
+            "name": "B. Barcola",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/25/37317369.png",
+            "number": 29,
             "position_id": 26,
             "formation_field": "4:3",
             "formation_position": 10,
@@ -9710,7 +10229,7 @@
             "name": "Víctor Muñoz Villanueva",
             "image_path": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
             "number": 23,
-            "position_id": 26,
+            "position_id": 27,
             "formation_position": 0,
             "is_starter": false
           },
@@ -9747,20 +10266,22 @@
         }
       },
       "Odds": {
-        "HomeOdds": "2.80",
-        "DrawOdds": "3.30",
-        "AwayOdds": "2.55",
+        "HomeOdds": "2.75",
+        "DrawOdds": "3.60",
+        "AwayOdds": "2.45",
         "BookmakerName": "bet365"
       },
+      "home_xg": 1.7,
+      "away_xg": 0.83,
       "H2H": {
         "summary": {
           "total_matches": 10,
           "home_wins": 3,
-          "draws": 5,
-          "away_wins": 2,
+          "draws": 4,
+          "away_wins": 3,
           "home_goals": 15,
-          "away_goals": 13,
-          "avg_goals": 2.8
+          "away_goals": 14,
+          "avg_goals": 2.9
         },
         "matches": [
           {
@@ -9775,7 +10296,9 @@
             "away_team_name": "Арсенал",
             "away_team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/19.png",
             "home_score": 0,
-            "away_score": 0
+            "away_score": 1,
+            "home_xg": 1.7,
+            "away_xg": 0.83
           },
           {
             "fixture_id": 19427479,
@@ -9915,25 +10438,25 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.4625000000000001,
-            "xga_per_match": 1.3499999999999999,
+            "xg_per_match": 1.51,
+            "xga_per_match": 1.246,
             "goals_scored_avg": 1,
-            "goals_conceded_avg": 0.8,
+            "goals_conceded_avg": 1,
             "btts_percent": 20,
             "over25_percent": 40,
-            "shots_on_target_avg": 4.5,
-            "possession_avg": 46.25
+            "shots_on_target_avg": 3.6,
+            "possession_avg": 48.2
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.6900000000000004,
-            "xga_per_match": 1.3599999999999999,
+            "xg_per_match": 1.6911111111111115,
+            "xga_per_match": 1.301111111111111,
             "goals_scored_avg": 1.2222222222222223,
-            "goals_conceded_avg": 0.8888888888888888,
+            "goals_conceded_avg": 1,
             "btts_percent": 33,
             "over25_percent": 44,
-            "shots_on_target_avg": 4.875,
-            "possession_avg": 53.25
+            "shots_on_target_avg": 4.333333333333333,
+            "possession_avg": 53.55555555555556
           }
         },
         "away": {
@@ -9941,25 +10464,25 @@
           "team_name": "",
           "last_5": {
             "matches_count": 5,
-            "xg_per_match": 1.8325,
-            "xga_per_match": 0.9725,
-            "goals_scored_avg": 1,
+            "xg_per_match": 1.6320000000000001,
+            "xga_per_match": 1.1179999999999999,
+            "goals_scored_avg": 1.2,
             "goals_conceded_avg": 0.8,
             "btts_percent": 20,
             "over25_percent": 40,
-            "shots_on_target_avg": 3.25,
-            "possession_avg": 62.5
+            "shots_on_target_avg": 3.2,
+            "possession_avg": 58.8
           },
           "season": {
             "matches_count": 9,
-            "xg_per_match": 1.8624999999999998,
-            "xga_per_match": 0.86,
-            "goals_scored_avg": 1.4444444444444444,
+            "xg_per_match": 1.7477777777777777,
+            "xga_per_match": 0.9533333333333334,
+            "goals_scored_avg": 1.5555555555555556,
             "goals_conceded_avg": 0.5555555555555556,
             "btts_percent": 22,
             "over25_percent": 44,
-            "shots_on_target_avg": 4.375,
-            "possession_avg": 60.875
+            "shots_on_target_avg": 4.222222222222222,
+            "possession_avg": 59
           }
         }
       },
@@ -10021,6 +10544,26 @@
             "is_starter": true
           },
           {
+            "player_id": 4344,
+            "name": "A. Maitland-Niles",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/24/4344.png",
+            "number": 2,
+            "position_id": 25,
+            "formation_field": "2:4",
+            "formation_position": 2,
+            "is_starter": true
+          },
+          {
+            "player_id": 1639,
+            "name": "James Tarkowski",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/7/1639.png",
+            "number": 6,
+            "position_id": 25,
+            "formation_field": "2:3",
+            "formation_position": 3,
+            "is_starter": true
+          },
+          {
             "player_id": 37528754,
             "name": "Jake O´Brien",
             "image_path": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
@@ -10031,23 +10574,13 @@
             "is_starter": true
           },
           {
-            "player_id": 1639,
-            "name": "James Tarkowski",
-            "image_path": "https://cdn.sportmonks.com/images/soccer/players/7/1639.png",
-            "number": 6,
+            "player_id": 32404895,
+            "name": "Jarrad Branthwaite",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/31/32404895.png",
+            "number": 4,
             "position_id": 25,
             "formation_field": "2:2",
             "formation_position": 4,
-            "is_starter": true
-          },
-          {
-            "player_id": 25188269,
-            "name": "H. Hackney",
-            "image_path": "https://cdn.sportmonks.com/images/soccer/players/13/25188269.png",
-            "number": 30,
-            "position_id": 26,
-            "formation_field": "2:1",
-            "formation_position": 5,
             "is_starter": true
           },
           {
@@ -10056,6 +10589,16 @@
             "image_path": "https://cdn.sportmonks.com/images/soccer/players/23/537271.png",
             "number": 16,
             "position_id": 25,
+            "formation_field": "2:1",
+            "formation_position": 5,
+            "is_starter": true
+          },
+          {
+            "player_id": 25188269,
+            "name": "H. Hackney",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/13/25188269.png",
+            "number": 30,
+            "position_id": 26,
             "formation_field": "2:1",
             "formation_position": 5,
             "is_starter": true
@@ -10153,10 +10696,30 @@
             "is_starter": true
           },
           {
+            "player_id": 21762216,
+            "name": "M. Thiaw",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/8/21762216.png",
+            "number": 12,
+            "position_id": 25,
+            "formation_field": "2:2",
+            "formation_position": 3,
+            "is_starter": true
+          },
+          {
             "player_id": 2815,
             "name": "Dan Burn",
             "image_path": "https://cdn.sportmonks.com/images/soccer/players/31/2815.png",
             "number": 33,
+            "position_id": 25,
+            "formation_field": "2:3",
+            "formation_position": 4,
+            "is_starter": true
+          },
+          {
+            "player_id": 5270468,
+            "name": "Sven Botman",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/4/5270468.png",
+            "number": 4,
             "position_id": 25,
             "formation_field": "2:3",
             "formation_position": 4,
@@ -10217,19 +10780,9 @@
             "name": "Harvey Barnes",
             "image_path": "https://cdn.sportmonks.com/images/soccer/players/9/10601.png",
             "number": 11,
-            "position_id": 27,
+            "position_id": 26,
             "formation_field": "4:3",
             "formation_position": 10,
-            "is_starter": true
-          },
-          {
-            "player_id": 96928,
-            "name": "Yoane Wissa",
-            "image_path": "https://cdn.sportmonks.com/images/soccer/players/0/96928.png",
-            "number": 9,
-            "position_id": 27,
-            "formation_field": "5:1",
-            "formation_position": 11,
             "is_starter": true
           },
           {
@@ -10237,6 +10790,16 @@
             "name": "William Osula",
             "image_path": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
             "number": 10,
+            "position_id": 27,
+            "formation_field": "5:1",
+            "formation_position": 11,
+            "is_starter": true
+          },
+          {
+            "player_id": 96928,
+            "name": "Yoane Wissa",
+            "image_path": "https://cdn.sportmonks.com/images/soccer/players/0/96928.png",
+            "number": 9,
             "position_id": 27,
             "formation_field": "5:1",
             "formation_position": 11,
@@ -10257,9 +10820,9 @@
         }
       },
       "Odds": {
-        "HomeOdds": "2.35",
+        "HomeOdds": "2.15",
         "DrawOdds": "3.50",
-        "AwayOdds": "2.90",
+        "AwayOdds": "3.25",
         "BookmakerName": "bet365"
       },
       "H2H": {
@@ -10497,7 +11060,7 @@
         "L",
         "L"
       ],
-      "Rule": "UEFA Champions League",
+      "Rule": "Лига Чемпионов УЕФА",
       "StandingRuleID": 137671,
       "RuleDevName": "UEFA_CHAMPIONS_LEAGUE"
     },
@@ -10517,13 +11080,13 @@
       "GA": 5,
       "GD": 8,
       "Form": [
-        "W",
         "L",
+        "W",
         "W",
         "W",
         "W"
       ],
-      "Rule": "UEFA Champions League",
+      "Rule": "Лига Чемпионов УЕФА",
       "StandingRuleID": 137672,
       "RuleDevName": "UEFA_CHAMPIONS_LEAGUE"
     },
@@ -10549,7 +11112,7 @@
         "L",
         "W"
       ],
-      "Rule": "UEFA Champions League",
+      "Rule": "Лига Чемпионов УЕФА",
       "StandingRuleID": 137673,
       "RuleDevName": "UEFA_CHAMPIONS_LEAGUE"
     },
@@ -10575,7 +11138,7 @@
         "L",
         "W"
       ],
-      "Rule": "UEFA Champions League",
+      "Rule": "Лига Чемпионов УЕФА",
       "StandingRuleID": 137674,
       "RuleDevName": "UEFA_CHAMPIONS_LEAGUE"
     },
@@ -10595,13 +11158,13 @@
       "GA": 8,
       "GD": 3,
       "Form": [
-        "D",
         "W",
         "L",
         "W",
-        "W"
+        "W",
+        "L"
       ],
-      "Rule": "UEFA Europa League",
+      "Rule": "Лига Европы УЕФА",
       "StandingRuleID": 138243,
       "RuleDevName": "UEFA_EUROPA_LEAGUE"
     },
@@ -10939,7 +11502,7 @@
         "L",
         "L"
       ],
-      "Rule": "Relegation",
+      "Rule": "Вывод из высшей лиги",
       "StandingRuleID": 137680,
       "RuleDevName": "RELEGATION"
     },
@@ -10965,7 +11528,7 @@
         "D",
         "L"
       ],
-      "Rule": "Relegation",
+      "Rule": "Вывод из высшей лиги",
       "StandingRuleID": 137681,
       "RuleDevName": "RELEGATION"
     },
@@ -10991,7 +11554,7 @@
         "D",
         "L"
       ],
-      "Rule": "Relegation",
+      "Rule": "Вывод из высшей лиги",
       "StandingRuleID": 137682,
       "RuleDevName": "RELEGATION"
     }

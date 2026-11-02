@@ -1,0 +1,31 @@
+[Unit]
+Description=Football Data Lab REST API & Match Center Service
+Documentation=https://github.com/Pastir/footballdata
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=user
+Group=user
+WorkingDirectory=/home/user/GolandProjects/apisportmonks
+Environment="PGPASSFILE=/home/user/.pgpass"
+ExecStart=/home/user/GolandProjects/apisportmonks/lab -conf /home/user/GolandProjects/apisportmonks/config.yaml -task ApiServer -port 8080 -pollInterval 20s -static /extssd/footballstats/public
+Restart=always
+RestartSec=5s
+
+# Корректное завершение соединений (graceful shutdown)
+KillSignal=SIGTERM
+TimeoutStopSec=15s
+
+# Лимит файловых дескрипторов для сетевых соединений
+LimitNOFILE=65536
+
+# Интеграция с systemd-journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=fdl-api
+
+[Install]
+WantedBy=multi-user.target
+

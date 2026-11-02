@@ -14,7 +14,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 15,
       "secondary_val": 3,
       "metric_label": "голов"
@@ -28,7 +28,7 @@
       "team_name": "Реал Мадрид",
       "team_code": "RMA",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/3468.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 12,
       "secondary_val": 3,
       "metric_label": "голов"
@@ -42,7 +42,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 10,
       "secondary_val": 1,
       "metric_label": "голов"
@@ -56,7 +56,7 @@
       "team_name": "Расинг Сантандер",
       "team_code": "RAC",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/26/9818.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 8,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -112,7 +112,7 @@
       "team_name": "Эльче",
       "team_code": "ELC",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/1099.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 6,
       "secondary_val": 1,
       "metric_label": "голов"
@@ -126,7 +126,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 5,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -140,7 +140,7 @@
       "team_name": "Атлетико Мадрид",
       "team_code": "ATM",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/7980.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 5,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -156,7 +156,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 7,
       "secondary_val": 10,
       "metric_label": "ассистов"
@@ -184,7 +184,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 5,
       "secondary_val": 5,
       "metric_label": "ассистов"
@@ -240,7 +240,7 @@
       "team_name": "Вильярреал",
       "team_code": "VIL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/21/3477.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 4,
       "secondary_val": 2,
       "metric_label": "ассистов"
@@ -254,7 +254,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 3,
       "secondary_val": 15,
       "metric_label": "ассистов"
@@ -268,7 +268,7 @@
       "team_name": "Атлетико Мадрид",
       "team_code": "ATM",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/7980.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 3,
       "secondary_val": 5,
       "metric_label": "ассистов"
@@ -282,7 +282,7 @@
       "team_name": "Реал Мадрид",
       "team_code": "RMA",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/3468.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 3,
       "secondary_val": 4,
       "metric_label": "ассистов"
@@ -298,7 +298,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 18,
       "secondary_val": 15,
       "metric_label": "очков (Г+П)"
@@ -312,7 +312,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 17,
       "secondary_val": 10,
       "metric_label": "очков (Г+П)"
@@ -326,7 +326,7 @@
       "team_name": "Реал Мадрид",
       "team_code": "RMA",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/3468.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 14,
       "secondary_val": 12,
       "metric_label": "очков (Г+П)"
@@ -340,7 +340,7 @@
       "team_name": "Барселона",
       "team_code": "BAR",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/83.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 10,
       "secondary_val": 5,
       "metric_label": "очков (Г+П)"
@@ -368,7 +368,7 @@
       "team_name": "Расинг Сантандер",
       "team_code": "RAC",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/26/9818.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 8,
       "secondary_val": 8,
       "metric_label": "очков (Г+П)"
@@ -382,7 +382,7 @@
       "team_name": "Атлетико Мадрид",
       "team_code": "ATM",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/7980.png",
-      "matches": 11,
+      "matches": 12,
       "primary_val": 8,
       "secondary_val": 5,
       "metric_label": "очков (Г+П)"
@@ -454,9 +454,9 @@
       "team_name": "Атлетик Бильбао",
       "team_code": "ATH",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/10/13258.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 5,
-      "secondary_val": 9,
+      "secondary_val": 10,
       "metric_label": "сухих матчей"
     },
     {
@@ -510,23 +510,23 @@
       "team_name": "Валенсия",
       "team_code": "VAL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/22/214.png",
-      "matches": 10,
-      "primary_val": 3,
+      "matches": 11,
+      "primary_val": 4,
       "secondary_val": 17,
       "metric_label": "сухих матчей"
     },
     {
       "rank": 7,
-      "player_id": 213939,
-      "player_name": "Matías Dituro",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/19/213939.png",
-      "team_id": 1099,
-      "team_name": "Эльче",
-      "team_code": "ELC",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/1099.png",
-      "matches": 10,
+      "player_id": 1314,
+      "player_name": "Thibaut Courtois",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/2/1314.png",
+      "team_id": 3468,
+      "team_name": "Реал Мадрид",
+      "team_code": "RMA",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/3468.png",
+      "matches": 11,
       "primary_val": 3,
-      "secondary_val": 17,
+      "secondary_val": 10,
       "metric_label": "сухих матчей"
     },
     {
@@ -545,6 +545,20 @@
     },
     {
       "rank": 9,
+      "player_id": 213939,
+      "player_name": "Matías Dituro",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/19/213939.png",
+      "team_id": 1099,
+      "team_name": "Эльче",
+      "team_code": "ELC",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/1099.png",
+      "matches": 11,
+      "primary_val": 3,
+      "secondary_val": 18,
+      "metric_label": "сухих матчей"
+    },
+    {
+      "rank": 10,
       "player_id": 31892,
       "player_name": "Odysseas Vlachodimos",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/20/31892.png",
@@ -555,20 +569,6 @@
       "matches": 11,
       "primary_val": 3,
       "secondary_val": 19,
-      "metric_label": "сухих матчей"
-    },
-    {
-      "rank": 10,
-      "player_id": 189296,
-      "player_name": "Sergio Herrera",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/16/189296.png",
-      "team_id": 459,
-      "team_name": "Осасуна",
-      "team_code": "OSA",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/11/459.png",
-      "matches": 5,
-      "primary_val": 2,
-      "secondary_val": 8,
       "metric_label": "сухих матчей"
     }
   ],
@@ -638,7 +638,7 @@
       "team_name": "Хетафе",
       "team_code": "GET",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/10/106.png",
-      "matches": 10,
+      "matches": 11,
       "primary_val": 3,
       "secondary_val": 1,
       "metric_label": "ЖК"

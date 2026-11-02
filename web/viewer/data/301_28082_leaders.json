@@ -7,6 +7,20 @@
   "top_scorers": [
     {
       "rank": 1,
+      "player_id": 7691269,
+      "player_name": "Lassine Sinayoko",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/5/7691269.png",
+      "team_id": 4508,
+      "team_name": "Париж",
+      "team_code": "PFC",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/28/4508.png",
+      "matches": 9,
+      "primary_val": 8,
+      "secondary_val": 3,
+      "metric_label": "голов"
+    },
+    {
+      "rank": 2,
       "player_id": 13187047,
       "player_name": "Esteban Lepaul",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/7/13187047.png",
@@ -20,7 +34,7 @@
       "metric_label": "голов"
     },
     {
-      "rank": 2,
+      "rank": 3,
       "player_id": 28912777,
       "player_name": "Cameron Archer",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/9/28912777.png",
@@ -34,7 +48,7 @@
       "metric_label": "голов"
     },
     {
-      "rank": 3,
+      "rank": 4,
       "player_id": 32387131,
       "player_name": "E. Wahi",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/27/32387131.png",
@@ -45,20 +59,6 @@
       "matches": 8,
       "primary_val": 6,
       "secondary_val": 2,
-      "metric_label": "голов"
-    },
-    {
-      "rank": 4,
-      "player_id": 7691269,
-      "player_name": "Lassine Sinayoko",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/5/7691269.png",
-      "team_id": 4508,
-      "team_name": "Париж",
-      "team_code": "PFC",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/28/4508.png",
-      "matches": 9,
-      "primary_val": 6,
-      "secondary_val": 3,
       "metric_label": "голов"
     },
     {
@@ -112,13 +112,27 @@
       "team_name": "Ренн",
       "team_code": "REN",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/22/598.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 4,
       "secondary_val": 0,
       "metric_label": "голов"
     },
     {
       "rank": 9,
+      "player_id": 37614052,
+      "player_name": "Ernest Nuamah",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
+      "team_id": 79,
+      "team_name": "Олимпик Лион",
+      "team_code": "LYO",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/79.png",
+      "matches": 9,
+      "primary_val": 4,
+      "secondary_val": 0,
+      "metric_label": "голов"
+    },
+    {
+      "rank": 10,
       "player_id": 448389,
       "player_name": "Ferran Torres",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/5/448389.png",
@@ -127,20 +141,6 @@
       "team_code": "PSG",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/591.png",
       "matches": 9,
-      "primary_val": 4,
-      "secondary_val": 0,
-      "metric_label": "голов"
-    },
-    {
-      "rank": 10,
-      "player_id": 37650068,
-      "player_name": "Paris Josua Brunner",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-      "team_id": 6789,
-      "team_name": "Монако",
-      "team_code": "ASM",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/5/6789.png",
-      "matches": 7,
       "primary_val": 4,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -163,6 +163,20 @@
     },
     {
       "rank": 2,
+      "player_id": 7691269,
+      "player_name": "Lassine Sinayoko",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/5/7691269.png",
+      "team_id": 4508,
+      "team_name": "Париж",
+      "team_code": "PFC",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/28/4508.png",
+      "matches": 9,
+      "primary_val": 5,
+      "secondary_val": 8,
+      "metric_label": "ассистов"
+    },
+    {
+      "rank": 3,
       "player_id": 466425,
       "player_name": "Cristian Cásseres Jr.",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/25/466425.png",
@@ -173,20 +187,6 @@
       "matches": 9,
       "primary_val": 5,
       "secondary_val": 0,
-      "metric_label": "ассистов"
-    },
-    {
-      "rank": 3,
-      "player_id": 7691269,
-      "player_name": "Lassine Sinayoko",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/5/7691269.png",
-      "team_id": 4508,
-      "team_name": "Париж",
-      "team_code": "PFC",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/28/4508.png",
-      "matches": 9,
-      "primary_val": 4,
-      "secondary_val": 6,
       "metric_label": "ассистов"
     },
     {
@@ -219,6 +219,20 @@
     },
     {
       "rank": 6,
+      "player_id": 96122,
+      "player_name": "Corentin Tolisso",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/26/96122.png",
+      "team_id": 79,
+      "team_name": "Олимпик Лион",
+      "team_code": "LYO",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/79.png",
+      "matches": 9,
+      "primary_val": 3,
+      "secondary_val": 2,
+      "metric_label": "ассистов"
+    },
+    {
+      "rank": 7,
       "player_id": 37599085,
       "player_name": "Mika Marcel Godts",
       "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
@@ -232,7 +246,7 @@
       "metric_label": "ассистов"
     },
     {
-      "rank": 7,
+      "rank": 8,
       "player_id": 24469162,
       "player_name": "Pavel Sulc",
       "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
@@ -246,7 +260,7 @@
       "metric_label": "ассистов"
     },
     {
-      "rank": 8,
+      "rank": 9,
       "player_id": 10990739,
       "player_name": "Sofiane Diop",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/19/10990739.png",
@@ -260,7 +274,7 @@
       "metric_label": "ассистов"
     },
     {
-      "rank": 9,
+      "rank": 10,
       "player_id": 434243,
       "player_name": "Romain Faivre",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/3/434243.png",
@@ -272,25 +286,25 @@
       "primary_val": 3,
       "secondary_val": 1,
       "metric_label": "ассистов"
-    },
-    {
-      "rank": 10,
-      "player_id": 37653529,
-      "player_name": "P. Katseris",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-      "team_id": 9257,
-      "team_name": "Лорьян",
-      "team_code": "LOR",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/9/9257.png",
-      "matches": 6,
-      "primary_val": 3,
-      "secondary_val": 0,
-      "metric_label": "ассистов"
     }
   ],
   "top_points": [
     {
       "rank": 1,
+      "player_id": 7691269,
+      "player_name": "Lassine Sinayoko",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/5/7691269.png",
+      "team_id": 4508,
+      "team_name": "Париж",
+      "team_code": "PFC",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/28/4508.png",
+      "matches": 9,
+      "primary_val": 13,
+      "secondary_val": 8,
+      "metric_label": "очков (Г+П)"
+    },
+    {
+      "rank": 2,
       "player_id": 4237,
       "player_name": "F. Thauvin",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/13/4237.png",
@@ -301,20 +315,6 @@
       "matches": 9,
       "primary_val": 12,
       "secondary_val": 4,
-      "metric_label": "очков (Г+П)"
-    },
-    {
-      "rank": 2,
-      "player_id": 7691269,
-      "player_name": "Lassine Sinayoko",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/5/7691269.png",
-      "team_id": 4508,
-      "team_name": "Париж",
-      "team_code": "PFC",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/28/4508.png",
-      "matches": 9,
-      "primary_val": 10,
-      "secondary_val": 6,
       "metric_label": "очков (Г+П)"
     },
     {
@@ -417,13 +417,13 @@
     },
     {
       "rank": 10,
-      "player_id": 156180,
-      "player_name": "Sebastian Szymanski",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/20/156180.png",
-      "team_id": 598,
-      "team_name": "Ренн",
-      "team_code": "REN",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/22/598.png",
+      "player_id": 448389,
+      "player_name": "Ferran Torres",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/5/448389.png",
+      "team_id": 591,
+      "team_name": "Пари Сен-Жермен",
+      "team_code": "PSG",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/591.png",
       "matches": 9,
       "primary_val": 5,
       "secondary_val": 4,
@@ -461,6 +461,20 @@
     },
     {
       "rank": 3,
+      "player_id": 181184,
+      "player_name": "Dominik Greif",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/0/181184.png",
+      "team_id": 79,
+      "team_name": "Олимпик Лион",
+      "team_code": "LYO",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/79.png",
+      "matches": 7,
+      "primary_val": 3,
+      "secondary_val": 6,
+      "metric_label": "сухих матчей"
+    },
+    {
+      "rank": 4,
       "player_id": 31053,
       "player_name": "Kevin Trapp",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/13/31053.png",
@@ -468,13 +482,13 @@
       "team_name": "Париж",
       "team_code": "PFC",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/28/4508.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 3,
-      "secondary_val": 9,
+      "secondary_val": 10,
       "metric_label": "сухих матчей"
     },
     {
-      "rank": 4,
+      "rank": 5,
       "player_id": 95617,
       "player_name": "Anthony Lopes",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/1/95617.png",
@@ -482,13 +496,27 @@
       "team_name": "Анже",
       "team_code": "ANG",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/8/776.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 3,
-      "secondary_val": 15,
+      "secondary_val": 17,
       "metric_label": "сухих матчей"
     },
     {
-      "rank": 5,
+      "rank": 6,
+      "player_id": 29186,
+      "player_name": "Jeffrey de Lange",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/2/29186.png",
+      "team_id": 44,
+      "team_name": "Олимпик Марсель",
+      "team_code": "OM",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/44.png",
+      "matches": 9,
+      "primary_val": 3,
+      "secondary_val": 19,
+      "metric_label": "сухих матчей"
+    },
+    {
+      "rank": 7,
       "player_id": 99737,
       "player_name": "Hillel Konaté",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/25/99737.png",
@@ -502,21 +530,7 @@
       "metric_label": "сухих матчей"
     },
     {
-      "rank": 6,
-      "player_id": 181184,
-      "player_name": "Dominik Greif",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/0/181184.png",
-      "team_id": 79,
-      "team_name": "Олимпик Лион",
-      "team_code": "LYO",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/79.png",
-      "matches": 6,
-      "primary_val": 2,
-      "secondary_val": 6,
-      "metric_label": "сухих матчей"
-    },
-    {
-      "rank": 7,
+      "rank": 8,
       "player_id": 32539,
       "player_name": "Lukas Hradecky",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/27/32539.png",
@@ -524,23 +538,9 @@
       "team_name": "Монако",
       "team_code": "ASM",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/5/6789.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 2,
-      "secondary_val": 7,
-      "metric_label": "сухих матчей"
-    },
-    {
-      "rank": 8,
-      "player_id": 37584869,
-      "player_name": "Guillaume Restes",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-      "team_id": 289,
-      "team_name": "Тулуза",
-      "team_code": "TOU",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/1/289.png",
-      "matches": 7,
-      "primary_val": 2,
-      "secondary_val": 9,
+      "secondary_val": 10,
       "metric_label": "сухих матчей"
     },
     {
@@ -559,16 +559,16 @@
     },
     {
       "rank": 10,
-      "player_id": 96030,
-      "player_name": "Brice Samba",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/30/96030.png",
-      "team_id": 598,
-      "team_name": "Ренн",
-      "team_code": "REN",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/22/598.png",
+      "player_id": 37584869,
+      "player_name": "Guillaume Restes",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
+      "team_id": 289,
+      "team_name": "Тулуза",
+      "team_code": "TOU",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/1/289.png",
       "matches": 8,
       "primary_val": 2,
-      "secondary_val": 17,
+      "secondary_val": 11,
       "metric_label": "сухих матчей"
     }
   ],
@@ -603,6 +603,20 @@
     },
     {
       "rank": 3,
+      "player_id": 99138,
+      "player_name": "Jordan Lefort",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
+      "team_id": 776,
+      "team_name": "Анже",
+      "team_code": "ANG",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/8/776.png",
+      "matches": 8,
+      "primary_val": 2,
+      "secondary_val": 1,
+      "metric_label": "ЖК"
+    },
+    {
+      "rank": 4,
       "player_id": 537332,
       "player_name": "Timothy Weah",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/20/537332.png",
@@ -616,7 +630,7 @@
       "metric_label": "ЖК"
     },
     {
-      "rank": 4,
+      "rank": 5,
       "player_id": 766687,
       "player_name": "A. Seko",
       "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
@@ -630,7 +644,7 @@
       "metric_label": "ЖК"
     },
     {
-      "rank": 5,
+      "rank": 6,
       "player_id": 37714946,
       "player_name": "Souleymane Sagnan",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/2/37714946.png",
@@ -639,20 +653,6 @@
       "team_code": "LEN",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/271.png",
       "matches": 4,
-      "primary_val": 1,
-      "secondary_val": 1,
-      "metric_label": "ЖК"
-    },
-    {
-      "rank": 6,
-      "player_id": 99138,
-      "player_name": "Jordan Lefort",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-      "team_id": 776,
-      "team_name": "Анже",
-      "team_code": "ANG",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/8/776.png",
-      "matches": 8,
       "primary_val": 1,
       "secondary_val": 1,
       "metric_label": "ЖК"

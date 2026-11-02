@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{{.BadgeText}} — Football Data Lab</title>
+  <style>
+    :root {
+      --bg-dark: #070a12;
+      --card-bg: rgba(15, 23, 42, 0.85);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-cyan: #38bdf8;
+      --accent-gold: #fbbf24;
+      --accent-emerald: #10b981;
+      --accent-rose: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      background: #030509;
+      color: var(--text-main);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      width: 1200px;
+      height: 1200px;
+      overflow: hidden;
+    }
+
+    .canvas {
+      width: 1200px;
+      height: 1200px;
+      background: radial-gradient(circle at 85% 15%, #182844 0%, #0c1424 55%, #050811 100%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 64px;
+      overflow: hidden;
+    }
+
+    /* Декоративная фоновая сетка поля */
+    .canvas::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.04) 0%, transparent 60%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 80px 80px, 80px 80px;
+      pointer-events: none;
+    }
+
+    /* Фоновые неоновые блики */
+    .glow-1 {
+      position: absolute;
+      top: -150px;
+      left: -150px;
+      width: 600px;
+      height: 600px;
+      background: rgba(56, 189, 248, 0.12);
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+    }
+    .glow-2 {
+      position: absolute;
+      bottom: -150px;
+      right: -150px;
+      width: 600px;
+      height: 600px;
+      background: rgba(244, 63, 94, 0.08);
+      border-radius: 50%;
+      filter: blur(140px);
+      pointer-events: none;
+    }
+
+    .header-bar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .badge-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.35);
+    }
+
+    .badge-pill.amber {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .badge-pill.amber .badge-dot {
+      background: #f59e0b;
+      box-shadow: 0 0 10px #f59e0b;
+    }
+
+    .badge-pill.cyan {
+      background: rgba(6, 182, 212, 0.15);
+      color: #22d3ee;
+      border: 1px solid rgba(6, 182, 212, 0.35);
+    }
+    .badge-pill.cyan .badge-dot {
+      background: #06b6d4;
+      box-shadow: 0 0 10px #06b6d4;
+    }
+
+    .badge-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #f43f5e;
+      box-shadow: 0 0 10px #f43f5e;
+    }
+
+    .league-badge {
+      font-size: 16px;
+      color: #94a3b8;
+      font-family: monospace;
+      font-weight: 700;
+    }
+
+    .tag-badge {
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      background: rgba(30, 41, 59, 0.85);
+      color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Герой матча (Команды или Игрок) */
+    .hero-container {
+      position: relative;
+      z-index: 10;
+      margin: 32px 0;
+    }
+
+    .match-score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      gap: 20px;
+    }
+
+    .team-cell {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .team-cell.away {
+      justify-content: flex-end;
+      text-align: right;
+    }
+
+    .team-logo-box {
+      width: 100px;
+      height: 100px;
+      border-radius: 24px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      flex-shrink: 0;
+    }
+
+    .team-logo-box img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .team-title {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1.15;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .team-title.winner {
+      color: #38bdf8;
+    }
+
+    .team-sub {
+      font-size: 18px;
+      color: #94a3b8;
+      font-family: monospace;
+      white-space: nowrap;
+    }
+
+    .score-center-box {
+      text-align: center;
+      flex-shrink: 0;
+      min-width: 200px;
+    }
+
+    .score-board {
+      font-size: 56px;
+      font-weight: 900;
+      font-family: monospace;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 12px 32px;
+      display: inline-block;
+      white-space: nowrap;
+      letter-spacing: 2px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .score-ft-label {
+      display: block;
+      margin-top: 8px;
+      font-size: 16px;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 0.1em;
+    }
+
+    /* Карточка персонажа/игрока */
+    .player-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 40px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: 28px;
+    }
+
+    .player-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .player-avatar-box {
+      width: 120px;
+      height: 120px;
+      border-radius: 24px;
+      background: #1e293b;
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 12px;
+    }
+
+    .player-avatar-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .player-team {
+      font-size: 16px;
+      color: var(--accent-cyan);
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .player-name {
+      font-size: 38px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+
+    .player-stat-small {
+      font-size: 20px;
+      color: #94a3b8;
+    }
+
+    .player-stat-big {
+      font-size: 48px;
+      font-weight: 900;
+      color: var(--accent-gold);
+      font-family: monospace;
+      text-align: right;
+    }
+
+    .player-mvp-badge {
+      display: block;
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--accent-emerald);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    /* Блок статистики и баров */
+    .stats-section {
+      position: relative;
+      z-index: 10;
+      border-top: 1px solid var(--border-color);
+      padding-top: 28px;
+      margin-top: 16px;
+    }
+
+    .stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      font-size: 16px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #94a3b8;
+    }
+
+    .stats-summary {
+      color: var(--accent-cyan);
+      font-family: monospace;
+      font-weight: 800;
+    }
+
+    .stat-bar-item {
+      margin-bottom: 20px;
+    }
+
+    .stat-labels-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .stat-val {
+      font-family: monospace;
+      font-size: 20px;
+    }
+
+    .stat-name {
+      color: #94a3b8;
+      font-size: 17px;
+    }
+
+    .progress-track {
+      height: 14px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      display: flex;
+      overflow: hidden;
+    }
+
+    .progress-fill-a {
+      height: 100%;
+      background: #38bdf8;
+    }
+
+    .progress-fill-b {
+      height: 100%;
+      background: #f43f5e;
+    }
+
+    /* Подвал */
+    .footer-bar {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-quote-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      max-width: 75%;
+    }
+
+    .footer-icon {
+      font-size: 32px;
+    }
+
+    .footer-title {
+      font-size: 14px;
+      font-weight: 900;
+      color: #64748b;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .footer-quote {
+      font-size: 18px;
+      font-weight: 700;
+      color: #e2e8f0;
+      line-height: 1.3;
+    }
+
+    .footer-brand {
+      text-align: right;
+    }
+
+    .brand-wm {
+      font-size: 15px;
+      font-family: monospace;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      color: #475569;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .brand-url {
+      font-size: 16px;
+      font-family: monospace;
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+
+    <!-- Шапка карточки -->
+    <div class="header-bar">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span class="badge-pill {{.BadgeColor}}">
+          <span class="badge-dot"></span>
+          <span>{{.BadgeText}}</span>
+        </span>
+        <span class="league-badge">{{.LeagueBadge}}</span>
+      </div>
+      <span class="tag-badge">{{.TagText}}</span>
+    </div>
+
+    <!-- Главный блок героя -->
+    <div class="hero-container">
+      {{if .IsHeroPlayer}}
+      <!-- Карточка игрока-героя (Джокер / Киборг / Вратарь) -->
+      <div class="player-card">
+        <div class="player-left">
+          <div class="player-avatar-box">
+            <img src="{{.PlayerAvatar}}" alt="{{.PlayerName}}" />
+          </div>
+          <div>
+            <div class="player-team">{{.PlayerTeam}}</div>
+            <div class="player-name">{{.PlayerName}}</div>
+            <div class="player-stat-small">{{.PlayerStatSmall}}</div>
+          </div>
+        </div>
+        <div style="text-align: right;">
+          <div class="player-stat-big">{{.PlayerStatBig}}</div>
+          <span class="player-mvp-badge">ГЕРОЙ ТУРА</span>
+        </div>
+      </div>
+      {{else}}
+      <!-- Командный счёт матча -->
+      <div class="match-score-row">
+        <div class="team-cell">
+          <div class="team-logo-box">
+            <img src="{{.TeamALogo}}" alt="{{.TeamAName}}" />
+          </div>
+          <div>
+            <div class="team-title {{if .TeamAIsWinner}}winner{{end}}">{{.TeamAName}}</div>
+            <div class="team-sub">xG {{.TeamAXG}} • {{.TeamAPoss}}</div>
+          </div>
+        </div>
+
+        <div class="score-center-box">
+          <div class="score-board">{{.TeamAScore}}&nbsp;:&nbsp;{{.TeamBScore}}</div>
+          <span class="score-ft-label">FT</span>
+        </div>
+
+        <div class="team-cell away">
+          <div>
+            <div class="team-title {{if .TeamBIsWinner}}winner{{end}}">{{.TeamBName}}</div>
+            <div class="team-sub">xG {{.TeamBXG}} • {{.TeamBPoss}}</div>
+          </div>
+          <div class="team-logo-box">
+            <img src="{{.TeamBLogo}}" alt="{{.TeamBName}}" />
+          </div>
+        </div>
+      </div>
+      {{end}}
+    </div>
+
+    <!-- Сравнительная статистика матча -->
+    <div class="stats-section">
+      <div class="stats-header">
+        <span>Ключевые показатели матча</span>
+        <span class="stats-summary">{{.AnomalySummary}}</span>
+      </div>
+
+      {{range .Stats}}
+      <div class="stat-bar-item">
+        <div class="stat-labels-row">
+          <span class="stat-val">{{.ValA}}</span>
+          <span class="stat-name">{{.Label}}</span>
+          <span class="stat-val">{{.ValB}}</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill-a" style="width: {{.PctA}}%;"></div>
+          <div class="progress-fill-b" style="width: calc(100% - {{.PctA}}%);"></div>
+        </div>
+      </div>
+      {{end}}
+    </div>
+
+    <!-- Подвал карточки -->
+    <div class="footer-bar">
+      <div class="footer-quote-box">
+        <span class="footer-icon">{{.FooterIcon}}</span>
+        <div>
+          <div class="footer-title">Футбольный вердикт:</div>
+          <div class="footer-quote">{{.FooterQuote}}</div>
+        </div>
+      </div>
+      <div class="footer-brand">
+        <span class="brand-wm">{{.Watermark}}</span>
+        <span class="brand-url">{{.SiteURL}}</span>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
+

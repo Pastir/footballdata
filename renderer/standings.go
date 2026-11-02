@@ -185,6 +185,10 @@ func screenshotHTML(htmlFilePath string) ([]byte, error) {
 
 	if customPath := os.Getenv("CHROME_PATH"); customPath != "" {
 		opts = append(opts, chromedp.ExecPath(customPath))
+	} else if _, statErr := os.Stat("/opt/google/chrome/google-chrome"); statErr == nil {
+		opts = append(opts, chromedp.ExecPath("/opt/google/chrome/google-chrome"))
+	} else if _, statErr := os.Stat("/usr/bin/google-chrome-stable"); statErr == nil {
+		opts = append(opts, chromedp.ExecPath("/usr/bin/google-chrome-stable"))
 	} else if _, statErr := os.Stat("/usr/bin/google-chrome"); statErr == nil {
 		opts = append(opts, chromedp.ExecPath("/usr/bin/google-chrome"))
 	}

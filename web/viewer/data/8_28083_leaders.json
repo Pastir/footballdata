@@ -14,7 +14,7 @@
       "team_name": "Манчестер Сити",
       "team_code": "MCI",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/9/9.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 9,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -28,7 +28,7 @@
       "team_name": "Ливерпуль",
       "team_code": "LIV",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/8/8.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 6,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -56,7 +56,7 @@
       "team_name": "Челси",
       "team_code": "CHE",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 5,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -70,7 +70,7 @@
       "team_name": "Астон Вилла",
       "team_code": "AVL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/15.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 5,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -84,7 +84,7 @@
       "team_name": "АФК Борнмут",
       "team_code": "BOU",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/20/52.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 5,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -98,7 +98,7 @@
       "team_name": "АФК Борнмут",
       "team_code": "BOU",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/20/52.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 4,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -126,7 +126,7 @@
       "team_name": "Лидс Юнайтед",
       "team_code": "LEE",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/7/71.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 4,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -140,7 +140,7 @@
       "team_name": "Манчестер Юнайтед",
       "team_code": "MUN",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/14/14.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 4,
       "secondary_val": 0,
       "metric_label": "голов"
@@ -149,34 +149,6 @@
   "top_assists": [
     {
       "rank": 1,
-      "player_id": 11298616,
-      "player_name": "Evanilson ",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/24/11298616.png",
-      "team_id": 52,
-      "team_name": "АФК Борнмут",
-      "team_code": "BOU",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/20/52.png",
-      "matches": 9,
-      "primary_val": 4,
-      "secondary_val": 4,
-      "metric_label": "ассистов"
-    },
-    {
-      "rank": 2,
-      "player_id": 31504,
-      "player_name": "Pascal Groß",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/16/31504.png",
-      "team_id": 78,
-      "team_name": "Брайтон энд Хоув Альбион",
-      "team_code": "BHA",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/14/78.png",
-      "matches": 9,
-      "primary_val": 4,
-      "secondary_val": 3,
-      "metric_label": "ассистов"
-    },
-    {
-      "rank": 3,
       "player_id": 5273,
       "player_name": "Declan Rice",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/25/5273.png",
@@ -184,9 +156,37 @@
       "team_name": "Арсенал",
       "team_code": "ARS",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/19.png",
-      "matches": 9,
-      "primary_val": 4,
+      "matches": 10,
+      "primary_val": 5,
       "secondary_val": 0,
+      "metric_label": "ассистов"
+    },
+    {
+      "rank": 2,
+      "player_id": 11298616,
+      "player_name": "Evanilson ",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/24/11298616.png",
+      "team_id": 52,
+      "team_name": "АФК Борнмут",
+      "team_code": "BOU",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/20/52.png",
+      "matches": 10,
+      "primary_val": 4,
+      "secondary_val": 4,
+      "metric_label": "ассистов"
+    },
+    {
+      "rank": 3,
+      "player_id": 31504,
+      "player_name": "Pascal Groß",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/16/31504.png",
+      "team_id": 78,
+      "team_name": "Брайтон энд Хоув Альбион",
+      "team_code": "BHA",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/14/78.png",
+      "matches": 10,
+      "primary_val": 4,
+      "secondary_val": 3,
       "metric_label": "ассистов"
     },
     {
@@ -212,7 +212,7 @@
       "team_name": "Челси",
       "team_code": "CHE",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 3,
       "secondary_val": 3,
       "metric_label": "ассистов"
@@ -240,7 +240,7 @@
       "team_name": "Брайтон энд Хоув Альбион",
       "team_code": "BHA",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/14/78.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 3,
       "secondary_val": 2,
       "metric_label": "ассистов"
@@ -254,7 +254,7 @@
       "team_name": "Астон Вилла",
       "team_code": "AVL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/15.png",
-      "matches": 6,
+      "matches": 7,
       "primary_val": 3,
       "secondary_val": 2,
       "metric_label": "ассистов"
@@ -268,7 +268,7 @@
       "team_name": "Ливерпуль",
       "team_code": "LIV",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/8/8.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 3,
       "secondary_val": 1,
       "metric_label": "ассистов"
@@ -282,7 +282,7 @@
       "team_name": "Астон Вилла",
       "team_code": "AVL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/15.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 3,
       "secondary_val": 1,
       "metric_label": "ассистов"
@@ -298,7 +298,7 @@
       "team_name": "Манчестер Сити",
       "team_code": "MCI",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/9/9.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 9,
       "secondary_val": 9,
       "metric_label": "очков (Г+П)"
@@ -326,7 +326,7 @@
       "team_name": "АФК Борнмут",
       "team_code": "BOU",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/20/52.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 8,
       "secondary_val": 4,
       "metric_label": "очков (Г+П)"
@@ -340,7 +340,7 @@
       "team_name": "Брайтон энд Хоув Альбион",
       "team_code": "BHA",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/14/78.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 7,
       "secondary_val": 3,
       "metric_label": "очков (Г+П)"
@@ -354,7 +354,7 @@
       "team_name": "Ливерпуль",
       "team_code": "LIV",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/8/8.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 6,
       "secondary_val": 6,
       "metric_label": "очков (Г+П)"
@@ -368,7 +368,7 @@
       "team_name": "Челси",
       "team_code": "CHE",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 6,
       "secondary_val": 5,
       "metric_label": "очков (Г+П)"
@@ -396,7 +396,7 @@
       "team_name": "Челси",
       "team_code": "CHE",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 6,
       "secondary_val": 3,
       "metric_label": "очков (Г+П)"
@@ -410,7 +410,7 @@
       "team_name": "Астон Вилла",
       "team_code": "AVL",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/15/15.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 5,
       "secondary_val": 5,
       "metric_label": "очков (Г+П)"
@@ -424,7 +424,7 @@
       "team_name": "АФК Борнмут",
       "team_code": "BOU",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/20/52.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 5,
       "secondary_val": 5,
       "metric_label": "очков (Г+П)"
@@ -433,6 +433,20 @@
   "clean_sheets": [
     {
       "rank": 1,
+      "player_id": 3130,
+      "player_name": "David Raya",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/26/3130.png",
+      "team_id": 19,
+      "team_name": "Арсенал",
+      "team_code": "ARS",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/19.png",
+      "matches": 9,
+      "primary_val": 6,
+      "secondary_val": 5,
+      "metric_label": "сухих матчей"
+    },
+    {
+      "rank": 2,
       "player_id": 37257596,
       "player_name": "B. Verbruggen",
       "player_image": "https://cdn.sportmonks.com/images/soccer/players/28/37257596.png",
@@ -446,20 +460,6 @@
       "metric_label": "сухих матчей"
     },
     {
-      "rank": 2,
-      "player_id": 3130,
-      "player_name": "David Raya",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/players/26/3130.png",
-      "team_id": 19,
-      "team_name": "Арсенал",
-      "team_code": "ARS",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/19/19.png",
-      "matches": 8,
-      "primary_val": 5,
-      "secondary_val": 5,
-      "metric_label": "сухих матчей"
-    },
-    {
       "rank": 3,
       "player_id": 129820,
       "player_name": "Alisson",
@@ -468,9 +468,9 @@
       "team_name": "Ливерпуль",
       "team_code": "LIV",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/8/8.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 4,
-      "secondary_val": 8,
+      "secondary_val": 9,
       "metric_label": "сухих матчей"
     },
     {
@@ -582,7 +582,7 @@
       "team_name": "Брентфорд",
       "team_code": "BRE",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/236.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 5,
       "secondary_val": 1,
       "metric_label": "ЖК"
@@ -596,7 +596,7 @@
       "team_name": "Ипсвич Таун",
       "team_code": "IPS",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/20/116.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 3,
       "secondary_val": 1,
       "metric_label": "ЖК"
@@ -610,7 +610,7 @@
       "team_name": "Челси",
       "team_code": "CHE",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/18/18.png",
-      "matches": 9,
+      "matches": 10,
       "primary_val": 3,
       "secondary_val": 1,
       "metric_label": "ЖК"
@@ -638,7 +638,7 @@
       "team_name": "Сандерленд",
       "team_code": "SUN",
       "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/3/3.png",
-      "matches": 8,
+      "matches": 9,
       "primary_val": 2,
       "secondary_val": 1,
       "metric_label": "ЖК"
@@ -701,14 +701,14 @@
     },
     {
       "rank": 10,
-      "player_id": 37509395,
-      "player_name": "Y. Yarmoliuk",
-      "player_image": "https://cdn.sportmonks.com/images/soccer/placeholder.png",
-      "team_id": 236,
-      "team_name": "Брентфорд",
-      "team_code": "BRE",
-      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/12/236.png",
-      "matches": 7,
+      "player_id": 5270462,
+      "player_name": "R. Gravenberch",
+      "player_image": "https://cdn.sportmonks.com/images/soccer/players/30/5270462.png",
+      "team_id": 8,
+      "team_name": "Ливерпуль",
+      "team_code": "LIV",
+      "team_logo": "https://cdn.sportmonks.com/images/soccer/teams/8/8.png",
+      "matches": 8,
       "primary_val": 1,
       "secondary_val": 1,
       "metric_label": "ЖК"

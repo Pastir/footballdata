@@ -81,8 +81,10 @@ func Dispatch(ctx context.Context, taskData config.TaskData) error {
 		return dispatchSyncAll(ctx, taskData, log)
 	case "express", "accumulator", "smartBet", "smartExpress", "expressBet":
 		return dispatchExpress(ctx, taskData, log)
+	case "banter", "anomaly", "anomalyCard", "banterCard":
+		return dispatchBanter(ctx, taskData, log)
 	default:
-		return fmt.Errorf("unsupported -type '%s'. Valid types: table, roundFixtures, schedule5Leagues, roundResults, express, previewMatch, roundDigest, leaders, facts, recalculateStreaks, catalog, syncAll", pubType)
+		return fmt.Errorf("unsupported -type '%s'. Valid types: table, roundFixtures, schedule5Leagues, roundResults, express, previewMatch, roundDigest, leaders, facts, recalculateStreaks, catalog, syncAll, banter", pubType)
 	}
 }
 

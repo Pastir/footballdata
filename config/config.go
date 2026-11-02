@@ -126,6 +126,21 @@ type (
 		URL   string `yaml:"URL"`
 	}
 
+	// LLMProviderConf — настройки отдельного провайдера языковой модели (Gemini, DeepSeek, OpenAI).
+	LLMProviderConf struct {
+		APIKey  string `yaml:"api_key"`
+		Model   string `yaml:"model"`
+		BaseURL string `yaml:"base_url"`
+		Timeout string `yaml:"timeout"`
+	}
+
+	// LLMConf — мультипровайдерная конфигурация языковых моделей для генерации текстов и дайджеста.
+	LLMConf struct {
+		ActiveProvider string                     `yaml:"active_provider"`
+		FallbackOrder  []string                   `yaml:"fallback_order"`
+		Providers      map[string]LLMProviderConf `yaml:"providers"`
+	}
+
 	Conf struct {
 		Logs      *logs
 		PG        *pg
@@ -134,6 +149,7 @@ type (
 		TG        *tgConf        `yaml:"telegram"`
 		WebApp    *webAppConf    `yaml:"webapp"`
 		Bookmaker *bookmakerConf `yaml:"bookmaker"`
+		LLM       *LLMConf       `yaml:"llm"`
 		Server    service
 		Args      LineArgs
 	}
