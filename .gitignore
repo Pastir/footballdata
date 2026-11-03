@@ -40,6 +40,12 @@ template/*_preview.png
 template/standings.png
 template/round_fixtures.png
 !template/headers/*.png
-!web/viewer/*.png
-!web/viewer/*.jpg
+!web/viewer/banner.jpg
+!web/viewer/logo.jpg
+
+# === Динамические данные Telegram Mini App (генерируются бэкендом в runtime) ===
+web/viewer/data/
+web/viewer/*.json
+web/viewer/leaders.png
+web/viewer/media/
 

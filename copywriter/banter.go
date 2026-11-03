@@ -9,12 +9,21 @@ import (
 )
 
 // GenerateBanterPostHTML формирует остроумный текст для поста в Telegram с карточкой аномалии
-func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string {
-	if miniAppURL == "" {
-		miniAppURL = "https://t.me/football_data_lab_bot/data_lab"
+func GenerateBanterPostHTML(a analytics.MatchAnomaly, matchesURL string, tableURL ...string) string {
+	if matchesURL == "" {
+		matchesURL = "https://t.me/football_data_lab_bot/data_lab"
 	}
-	if !strings.HasPrefix(miniAppURL, "http://") && !strings.HasPrefix(miniAppURL, "https://") {
-		miniAppURL = "https://" + miniAppURL
+	if !strings.HasPrefix(matchesURL, "http://") && !strings.HasPrefix(matchesURL, "https://") {
+		matchesURL = "https://" + matchesURL
+	}
+
+	footer := fmt.Sprintf(`<a href="%s">Все матчи</a>`, matchesURL)
+	if len(tableURL) > 0 && tableURL[0] != "" {
+		tURL := tableURL[0]
+		if !strings.HasPrefix(tURL, "http://") && !strings.HasPrefix(tURL, "https://") {
+			tURL = "https://" + tURL
+		}
+		footer = fmt.Sprintf(`<a href="%s">Все матчи</a> · <a href="%s">Турнирная таблица</a>`, matchesURL, tURL)
 	}
 
 	hXG := 0.0
@@ -50,14 +59,14 @@ func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string 
 • Владение: <b>%d%% vs %d%%</b>
 • Сейвы: <b>%d vs %d</b>
 
-👉 <a href="%s">Смотреть подробный разбор матча в Mini App</a>`,
+%s`,
 			a.TeamHomeName, a.ScoreHome, a.ScoreAway, a.TeamAwayName,
 			winner, winnerXG, loser,
 			hXG, aXG,
 			a.HomeShots, a.AwayShots,
 			a.HomePossession, a.AwayPossession,
 			a.HomeSaves, a.AwaySaves,
-			miniAppURL,
+			footer,
 		)
 
 	case analytics.AnomalyTypeLateDrama:
@@ -77,14 +86,14 @@ func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string 
 
 Никогда не уходите со стадиона и не выключайте трансляцию до финального свистка!
 
-👉 <a href="%s">Смотреть подробный разбор матча в Mini App</a>`,
+%s`,
 				a.TeamHomeName, a.ScoreHome, a.ScoreAway, a.TeamAwayName,
 				a.FooterQuote,
 				hXG, aXG,
 				a.HomeShots, a.AwayShots,
 				a.HomePossession, a.AwayPossession,
 				a.AnomalySummary,
-				miniAppURL,
+				footer,
 			)
 		}
 
@@ -102,14 +111,14 @@ func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string 
 • Владение: <b>%d%% vs %d%%</b>
 • Исход: <b>%s</b>
 
-👉 <a href="%s">Смотреть подробный разбор матча в Mini App</a>`,
+%s`,
 				a.TeamHomeName, a.ScoreHome, a.ScoreAway, a.TeamAwayName,
 				a.FooterQuote,
 				hXG, aXG,
 				a.HomeShots, a.AwayShots,
 				a.HomePossession, a.AwayPossession,
 				a.AnomalySummary,
-				miniAppURL,
+				footer,
 			)
 		}
 
@@ -128,14 +137,14 @@ func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string 
 
 Никогда не выключайте трансляцию до свистка судьи! 
 
-👉 <a href="%s">Смотреть график атак матча в Mini App</a>`,
+%s`,
 			a.TeamHomeName, a.ScoreHome, a.ScoreAway, a.TeamAwayName,
 			a.FooterQuote,
 			hXG, aXG,
 			a.HomeShots, a.AwayShots,
 			a.HomePossession, a.AwayPossession,
 			a.AnomalySummary,
-			miniAppURL,
+			footer,
 		)
 
 	case analytics.AnomalyTypeSuperSub:
@@ -148,11 +157,11 @@ func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string 
 
 Тренер бросил в бой свежие силы со скамейки — и игрок перевернул матч в одиночку: <b>%s</b>! Премия за идеальное чутье тренерского штаба.
 
-👉 <a href="%s">Рейтинг игроков и оценки тура в Mini App</a>`,
+%s`,
 			a.HeroName, a.HeroTeam,
 			a.TeamHomeName, a.ScoreHome, a.ScoreAway, a.TeamAwayName,
 			a.HeroStatBig,
-			miniAppURL,
+			footer,
 		)
 
 	case analytics.AnomalyTypeGoalkeeperWall:
@@ -175,13 +184,13 @@ func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string 
 • Сейвы: <b>%d</b>
 • Спасено от xG: <b>%.2f</b>
 
-👉 <a href="%s">Рейтинг вратарей сезона в Mini App</a>`,
+%s`,
 			a.TeamHomeName, a.ScoreHome, a.ScoreAway, a.TeamAwayName,
 			saves, keeperTeam,
 			a.HomeShots+a.AwayShots-saves,
 			saves,
 			math.Max(hXG, aXG),
-			miniAppURL,
+			footer,
 		)
 
 	default:
@@ -192,11 +201,11 @@ func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string 
 
 %s
 
-👉 <a href="%s">Смотреть подробности в Mini App</a>`,
+%s`,
 			strings.ToUpper(a.BadgeText),
 			a.TeamHomeName, a.ScoreHome, a.ScoreAway, a.TeamAwayName,
 			a.FooterQuote,
-			miniAppURL,
+			footer,
 		)
 	}
 }

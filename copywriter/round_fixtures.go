@@ -1,4 +1,4 @@
-package copywriter
+/*  */ package copywriter
 
 import (
 	"fmt"
@@ -106,10 +106,39 @@ func GenerateRoundFixturesHTMLPost(
 		b.WriteString("\n")
 	}
 
-	// Подсказка для подписчиков
-	b.WriteString("💡 <i>Нажмите на котировки матча, чтобы открыть H2H, xG и составы</i>")
+	// Подсказка для подписчиков и аккуратные ссылки на разделы Mini App
+	b.WriteString("💡 <i>Нажмите на котировки матча, чтобы открыть H2H, xG и составы</i>\n\n")
+
+	matchesURL := buildFixturesMatchMiniAppURL(cfg, 0)
+	tableURL := buildFixturesTableMiniAppURL(cfg)
+	b.WriteString(fmt.Sprintf(`<a href="%s">Все матчи</a> · <a href="%s">Турнирная таблица</a>`, matchesURL, tableURL))
 
 	return b.String()
+}
+
+// buildFixturesTableMiniAppURL генерирует ссылку на турнирную таблицу в Telegram Mini App для предстоящего тура.
+func buildFixturesTableMiniAppURL(cfg RoundFixturesPostConfig) string {
+	botUser := cfg.BotUsername
+	if botUser == "" {
+		if config.Config.WebApp != nil && config.Config.WebApp.BotUsername != "" {
+			botUser = config.Config.WebApp.BotUsername
+		} else {
+			botUser = "football_data_lab_bot"
+		}
+	}
+	shortName := cfg.BotShortName
+	if shortName == "" {
+		if config.Config.WebApp != nil && config.Config.WebApp.BotShortName != "" {
+			shortName = config.Config.WebApp.BotShortName
+		} else {
+			shortName = "data_lab"
+		}
+	}
+
+	if cfg.LeagueID > 0 {
+		return fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, cfg.LeagueID)
+	}
+	return fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 }
 
 // buildFixturesMatchMiniAppURL генерирует ссылку на матч в Telegram Mini App для предстоящего тура.

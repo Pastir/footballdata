@@ -105,10 +105,40 @@ func GenerateRoundResultsHTMLPost(
 		b.WriteString("\n")
 	}
 
-	// Подсказка для читателей
-	b.WriteString("💡 <i>Нажмите на счёт матча, чтобы открыть xG, события и составы</i>")
+	// Подсказка для читателей и аккуратные ссылки на разделы Mini App
+	b.WriteString("💡 <i>Нажмите на счёт матча, чтобы открыть xG, события и составы</i>\n\n")
+
+	matchesURL := buildMatchMiniAppURL(cfg, 0)
+	tableURL := buildTableMiniAppURL(cfg)
+	b.WriteString(fmt.Sprintf(`<a href="%s">Все матчи</a> · <a href="%s">Турнирная таблица</a>`, matchesURL, tableURL))
 
 	return b.String()
+}
+
+// buildTableMiniAppURL генерирует прямую deep link ссылку на турнирную таблицу лиги в Telegram Mini App.
+func buildTableMiniAppURL(cfg RoundResultsPostConfig) string {
+	botUser := cfg.BotUsername
+	if botUser == "" {
+		if config.Config.WebApp != nil && config.Config.WebApp.BotUsername != "" {
+			botUser = config.Config.WebApp.BotUsername
+		} else {
+			botUser = "football_data_lab_bot"
+		}
+	}
+
+	botShort := cfg.BotShortName
+	if botShort == "" {
+		if config.Config.WebApp != nil && config.Config.WebApp.BotShortName != "" {
+			botShort = config.Config.WebApp.BotShortName
+		} else {
+			botShort = "data_lab"
+		}
+	}
+
+	if cfg.LeagueID > 0 {
+		return fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, botShort, cfg.LeagueID)
+	}
+	return fmt.Sprintf("https://t.me/%s/%s", botUser, botShort)
 }
 
 // buildMatchMiniAppURL генерирует прямую deep link ссылку на матч в Telegram Mini App.

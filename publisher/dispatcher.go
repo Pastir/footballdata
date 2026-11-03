@@ -369,20 +369,9 @@ func dispatchRoundDigest(ctx context.Context, taskData config.TaskData, log *zap
 	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
 	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, info.LeagueID)
 
-	keyboard := &InlineKeyboardMarkup{
-		InlineKeyboard: [][]InlineKeyboardButton{
-			{
-				{
-					Text: "📊 Турнирная таблица",
-					URL:  tableURL,
-				},
-				{
-					Text: fmt.Sprintf("📅 Расписание %s-го тура", roundNum),
-					URL:  fixturesURL,
-				},
-			},
-		},
-	}
+	// В новом нативном стиле Telegram ссылки на Mini App размещаются внутри текста,
+	// а инлайн-клавиатура не передается (nil) для отображения нативной плашки комментариев Telegram.
+	var keyboard *InlineKeyboardMarkup = nil
 
 	// 5. Формирование текста поста с динамическим сравнением
 	var postText string
@@ -419,6 +408,7 @@ func dispatchRoundDigest(ctx context.Context, taskData config.TaskData, log *zap
 	} else {
 		postText = copywriter.BuildInteractivePostText(info, fixturesVM, matches, leagueName, roundNum)
 	}
+	postText = fmt.Sprintf("%s\n\n<a href=\"%s\">Все матчи</a> · <a href=\"%s\">Турнирная таблица</a>", postText, fixturesURL, tableURL)
 
 	if !taskData.GetPublish() {
 		fmt.Printf("Интерактивный дайджест готов (-publish=false).\nТаблица: %s\nРасписание: %s\nШапка: %s\nТекст:\n%s\n", standingsPath, fixturesPath, headerPath, postText)
@@ -1026,7 +1016,11 @@ func dispatchLeaders(ctx context.Context, taskData config.TaskData, log *zap.Log
 		BaseURL:      baseURL,
 	}
 
+	leadersURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_leaders", botUser, shortName, info.LeagueID)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
+
 	postText := copywriter.GenerateLeadersHTMLPost(postCfg, leadersData)
+	postText = fmt.Sprintf("%s\n\n<a href=\"%s\">Все лидеры</a> · <a href=\"%s\">Турнирная таблица</a>", postText, leadersURL, tableURL)
 
 	if !taskData.GetPublish() {
 		fmt.Printf("\n=== [Dry Run] Текст лидеров турнира (%s) ===\n\n%s\n\n", info.LeagueName, postText)
@@ -1056,17 +1050,7 @@ func dispatchLeaders(ctx context.Context, taskData config.TaskData, log *zap.Log
 		}
 	}
 
-	leadersURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_leaders", botUser, shortName, info.LeagueID)
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
-
-	keyboard := &InlineKeyboardMarkup{
-		InlineKeyboard: [][]InlineKeyboardButton{
-			{
-				{Text: "👑 Все лидеры и статистика в Mini App", URL: leadersURL},
-				{Text: "📊 Турнирная таблица", URL: tableURL},
-			},
-		},
-	}
+	var keyboard *InlineKeyboardMarkup = nil
 
 	pubCtx, cancel := context.WithTimeout(ctx, 45*time.Second)
 	defer cancel()
@@ -1234,7 +1218,11 @@ func dispatchFacts(ctx context.Context, taskData config.TaskData, log *zap.Logge
 		BaseURL:      baseURL,
 	}
 
+	streakURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, topStreak.LeagueID)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, topStreak.LeagueID)
+
 	postText := copywriter.GenerateFactHTMLPost(topStreak, postCfg)
+	postText = fmt.Sprintf("%s\n\n<a href=\"%s\">Все серии</a> · <a href=\"%s\">Турнирная таблица</a>", postText, streakURL, tableURL)
 
 	// 4. Dry-run режим
 	if !taskData.GetPublish() {
@@ -1269,17 +1257,7 @@ func dispatchFacts(ctx context.Context, taskData config.TaskData, log *zap.Logge
 		seasonID = *topStreak.EndSeasonID
 	}
 
-	streakURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, topStreak.LeagueID)
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, topStreak.LeagueID)
-
-	keyboard := &InlineKeyboardMarkup{
-		InlineKeyboard: [][]InlineKeyboardButton{
-			{
-				{Text: "🔥 Все факты и серии в Mini App", URL: streakURL},
-				{Text: "📊 Турнирная таблица", URL: tableURL},
-			},
-		},
-	}
+	var keyboard *InlineKeyboardMarkup = nil
 
 	pubCtx, cancel := context.WithTimeout(ctx, 45*time.Second)
 	defer cancel()

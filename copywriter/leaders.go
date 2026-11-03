@@ -94,7 +94,7 @@ func GenerateLeadersHTMLPost(cfg LeagueLeadersPostConfig, data *analytics.Season
 		b.WriteString("</code>\n\n")
 	}
 
-	b.WriteString("<i>💡 Полные рейтинги, Гол+Пас, карточки и расширенная статистика доступны в Telegram Mini App по кнопке ниже:</i>")
+	b.WriteString("<i>💡 Полные рейтинги, Гол+Пас, карточки и расширенная статистика доступны в Telegram Mini App:</i>")
 	return b.String()
 }
 

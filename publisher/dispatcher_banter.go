@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/Pastir/footballdata/analytics"
 	"github.com/Pastir/footballdata/config"
@@ -73,13 +74,21 @@ func dispatchBanter(ctx context.Context, taskData config.TaskData, log *zap.Logg
 		outputPath = fmt.Sprintf("banter_%d_%d.png", bestAnomaly.LeagueID, bestAnomaly.FixtureID)
 	}
 
-	webAppURL := "https://data-lab.live/"
-	if config.Config.WebApp != nil && config.Config.WebApp.BaseURL != "" {
-		webAppURL = config.Config.WebApp.BaseURL
+	botUser := "football_data_lab_bot"
+	shortName := "data_lab"
+	if config.Config.WebApp != nil {
+		if config.Config.WebApp.BotUsername != "" {
+			botUser = strings.TrimPrefix(config.Config.WebApp.BotUsername, "@")
+		}
+		if config.Config.WebApp.BotShortName != "" {
+			shortName = config.Config.WebApp.BotShortName
+		}
 	}
 
-	miniAppURL := buildMiniAppDeepLink(webAppURL, bestAnomaly.LeagueID, bestAnomaly.RoundID, bestAnomaly.FixtureID)
-	postHTML := copywriter.GenerateBanterPostHTML(bestAnomaly, miniAppURL)
+	matchesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, bestAnomaly.LeagueID)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, bestAnomaly.LeagueID)
+
+	postHTML := copywriter.GenerateBanterPostHTML(bestAnomaly, matchesURL, tableURL)
 
 	if !taskData.GetPublish() {
 		fmt.Println("==================================================")

@@ -79,7 +79,20 @@ func dispatchTable(ctx context.Context, taskData config.TaskData, log *zap.Logge
 		return nil
 	}
 
-	caption := fmt.Sprintf("📊 <b>%s — Турнирная таблица</b>\nСезон: %s", info.LeagueName, info.SeasonName)
+	botUser := "football_data_lab_bot"
+	shortName := "data_lab"
+	if config.Config.WebApp != nil {
+		if config.Config.WebApp.BotUsername != "" {
+			botUser = strings.TrimPrefix(config.Config.WebApp.BotUsername, "@")
+		}
+		if config.Config.WebApp.BotShortName != "" {
+			shortName = config.Config.WebApp.BotShortName
+		}
+	}
+	matchesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, info.LeagueID)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
+
+	caption := fmt.Sprintf("📊 <b>%s — Турнирная таблица</b>\nСезон: %s\n\n<a href=\"%s\">Все матчи</a> · <a href=\"%s\">Турнирная таблица</a>", info.LeagueName, info.SeasonName, matchesURL, tableURL)
 	return publishToTelegram(ctx, taskData, PubTypeTable, info.LeagueID, info.SeasonID, info.CurrRoundID, 0, info.LeagueName+" — Турнирная таблица", caption, outputPath, log)
 }
 
@@ -235,29 +248,10 @@ func dispatchRoundResults(ctx context.Context, taskData config.TaskData, log *za
 
 	postText := copywriter.GenerateRoundResultsHTMLPost(postCfg, matches, summary)
 
-	// 3. Формирование инлайн-кнопок Mini App (для каналов используются URL deep links)
-	botUser := "football_data_lab_bot"
-	shortName := "data_lab"
-	if config.Config.WebApp != nil {
-		if config.Config.WebApp.BotUsername != "" {
-			botUser = config.Config.WebApp.BotUsername
-		}
-		if config.Config.WebApp.BotShortName != "" {
-			shortName = config.Config.WebApp.BotShortName
-		}
-	}
-
-	resultsURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, info.LeagueID)
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
-
-	keyboard := &InlineKeyboardMarkup{
-		InlineKeyboard: [][]InlineKeyboardButton{
-			{
-				{Text: "📱 Все матчи тура в Mini App", URL: resultsURL},
-				{Text: "📊 Турнирная таблица", URL: tableURL},
-			},
-		},
-	}
+	// В новом нативном стиле Telegram ссылки на Mini App размещены внутри текста поста,
+	// а инлайн-клавиатура не передается (nil), чтобы Telegram отображал свою нативную плашку
+	// комментариев («Прокомментировать» / «N комментариев») с отдельным изолированным тредом.
+	var keyboard *InlineKeyboardMarkup = nil
 
 	fmt.Printf("\n=== ПОСТЕР ТОП-5 ЛИДЕРОВ ===\nФайл: %s\n", top5Path)
 	fmt.Printf("\n=== СГЕНЕРИРОВАННЫЙ ПОСТ РЕЗУЛЬТАТОВ ТУРА ===\n%s\n===========================================\n\n", postText)

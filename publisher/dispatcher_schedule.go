@@ -258,17 +258,10 @@ func processRoundFixturesForLeague(
 		return 0, fmt.Errorf("telegram configuration is missing (BotToken or ChannelID is empty)")
 	}
 
-	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, info.LeagueID)
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
-
-	keyboard := &InlineKeyboardMarkup{
-		InlineKeyboard: [][]InlineKeyboardButton{
-			{
-				{Text: "📱 Все матчи тура в Mini App", URL: fixturesURL},
-				{Text: "📊 Турнирная таблица", URL: tableURL},
-			},
-		},
-	}
+	// В новом нативном стиле Telegram ссылки на Mini App размещены внутри текста поста,
+	// а инлайн-клавиатура не передается (nil), чтобы Telegram отображал свою нативную плашку
+	// комментариев («Прокомментировать» / «N комментариев») с отдельным изолированным тредом.
+	var keyboard *InlineKeyboardMarkup = nil
 
 	channelID, _ := strconv.ParseInt(tg.ChannelID, 10, 64)
 	storage := getStorage(ctx)
