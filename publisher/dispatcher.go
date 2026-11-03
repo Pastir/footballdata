@@ -354,9 +354,9 @@ func dispatchRoundDigest(ctx context.Context, taskData config.TaskData, log *zap
 
 
 
-	// 4. Формирование нативных Mini App ссылок Telegram (t.me/<bot>/<short_name>?startapp=...)
+	// 4. Формирование нативной ссылки на Mini App (t.me/<bot>/<short_name>)
 	botUser := "football_data_lab_bot"
-	shortName := "FDL"
+	shortName := "data_lab"
 	if config.Config.WebApp != nil {
 		if config.Config.WebApp.BotUsername != "" {
 			botUser = config.Config.WebApp.BotUsername
@@ -366,22 +366,18 @@ func dispatchRoundDigest(ctx context.Context, taskData config.TaskData, log *zap
 		}
 	}
 
-	tableStartParam := fmt.Sprintf("%d_%d_table", info.LeagueID, info.SeasonID)
-	fixturesStartParam := fmt.Sprintf("%d_%d_%d_matches", info.LeagueID, info.SeasonID, roundID)
-
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, tableStartParam)
-	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, fixturesStartParam)
+	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
 				{
 					Text: "📊 Турнирная таблица",
-					URL:  tableURL,
+					URL:  miniAppDirectURL,
 				},
 				{
 					Text: fmt.Sprintf("📅 Расписание %s-го тура", roundNum),
-					URL:  fixturesURL,
+					URL:  miniAppDirectURL,
 				},
 			},
 		},
@@ -1005,8 +1001,8 @@ func dispatchLeaders(ctx context.Context, taskData config.TaskData, log *zap.Log
 
 	// 4. Формирование текста поста Telegram
 	botUser := "football_data_lab_bot"
-	shortName := "FDL"
-	baseURL := "https://s.pastir.me"
+	shortName := "data_lab"
+	baseURL := "https://t.me/football_data_lab_bot/data_lab"
 	if config.Config.WebApp != nil {
 		if config.Config.WebApp.BotUsername != "" {
 			botUser = config.Config.WebApp.BotUsername
@@ -1059,17 +1055,13 @@ func dispatchLeaders(ctx context.Context, taskData config.TaskData, log *zap.Log
 		}
 	}
 
-	leadersStartParam := fmt.Sprintf("%d_%d_leaders", info.LeagueID, info.SeasonID)
-	tableStartParam := fmt.Sprintf("%d_%d_table", info.LeagueID, info.SeasonID)
-
-	leadersURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, leadersStartParam)
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, tableStartParam)
+	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
-				{Text: "👑 Все лидеры и статистика в Mini App", URL: leadersURL},
-				{Text: "📊 Турнирная таблица", URL: tableURL},
+				{Text: "👑 Все лидеры и статистика в Mini App", URL: miniAppDirectURL},
+				{Text: "📊 Турнирная таблица", URL: miniAppDirectURL},
 			},
 		},
 	}
@@ -1218,8 +1210,8 @@ func dispatchFacts(ctx context.Context, taskData config.TaskData, log *zap.Logge
 
 	// 3. Формирование текста поста Telegram
 	botUser := "football_data_lab_bot"
-	shortName := "FDL"
-	baseURL := "https://s.pastir.me"
+	shortName := "data_lab"
+	baseURL := "https://t.me/football_data_lab_bot/data_lab"
 	if config.Config.WebApp != nil {
 		if config.Config.WebApp.BotUsername != "" {
 			botUser = config.Config.WebApp.BotUsername
@@ -1270,19 +1262,18 @@ func dispatchFacts(ctx context.Context, taskData config.TaskData, log *zap.Logge
 		}
 	}
 
-	streakURL := copywriter.BuildFactMiniAppURL(postCfg, topStreak)
 	seasonID := 0
 	if topStreak.EndSeasonID != nil {
 		seasonID = *topStreak.EndSeasonID
 	}
-	tableStartParam := fmt.Sprintf("%d_%d_table", topStreak.LeagueID, seasonID)
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, tableStartParam)
+
+	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
-				{Text: "🔥 Все факты и серии в Mini App", URL: streakURL},
-				{Text: "📊 Турнирная таблица", URL: tableURL},
+				{Text: "🔥 Все факты и серии в Mini App", URL: miniAppDirectURL},
+				{Text: "📊 Турнирная таблица", URL: miniAppDirectURL},
 			},
 		},
 	}

@@ -173,12 +173,9 @@ func BuildFactMiniAppURL(cfg FactPostConfig, rec analytics.StreakRecord) string 
 		if config.Config.WebApp != nil && config.Config.WebApp.BotShortName != "" {
 			botShort = config.Config.WebApp.BotShortName
 		} else {
-			botShort = "FDL"
+			botShort = "data_lab"
 		}
 	}
 
-	if rec.ID > 0 {
-		return fmt.Sprintf("https://t.me/%s/%s?startapp=streak_%d", botUser, botShort, rec.ID)
-	}
-	return fmt.Sprintf("https://t.me/%s/%s?startapp=team_%d", botUser, botShort, rec.EntityID)
+	return fmt.Sprintf("https://t.me/%s/%s", botUser, botShort)
 }

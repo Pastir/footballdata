@@ -63,9 +63,17 @@ func (d *Dispatcher) ProcessAndPublishArticle(ctx context.Context, a Article, pu
 		badge = strings.ToUpper(a.Source)
 	}
 
-	miniAppURL := d.webAppURL
-	if !strings.HasPrefix(miniAppURL, "http://") && !strings.HasPrefix(miniAppURL, "https://") {
-		miniAppURL = "https://" + miniAppURL
+	miniAppURL := "https://t.me/football_data_lab_bot/data_lab"
+	if config.Config.WebApp != nil {
+		botUser := config.Config.WebApp.BotUsername
+		if botUser == "" {
+			botUser = "football_data_lab_bot"
+		}
+		shortName := config.Config.WebApp.BotShortName
+		if shortName == "" {
+			shortName = "data_lab"
+		}
+		miniAppURL = fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 	}
 
 	postText := fmt.Sprintf(

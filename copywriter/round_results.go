@@ -127,14 +127,11 @@ func buildMatchMiniAppURL(cfg RoundResultsPostConfig, fixtureID int64) string {
 		if config.Config.WebApp != nil && config.Config.WebApp.BotShortName != "" {
 			botShort = config.Config.WebApp.BotShortName
 		} else {
-			botShort = "FDL"
+			botShort = "data_lab"
 		}
 	}
 
-	if cfg.LeagueID > 0 && cfg.SeasonID > 0 && cfg.RoundID > 0 {
-		return fmt.Sprintf("https://t.me/%s/%s?startapp=match_%d_%d_%d_%d", botUser, botShort, cfg.LeagueID, cfg.SeasonID, cfg.RoundID, fixtureID)
-	}
-	return fmt.Sprintf("https://t.me/%s/%s?startapp=match_%d", botUser, botShort, fixtureID)
+	return fmt.Sprintf("https://t.me/%s/%s", botUser, botShort)
 }
 
 // matchDayGroup группирует матчи одного игрового дня.

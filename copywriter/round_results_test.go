@@ -19,7 +19,7 @@ func TestGenerateRoundResultsHTMLPost(t *testing.T) {
 		SeasonID:     28083,
 		RoundID:      407869,
 		BotUsername:  "football_data_lab_bot",
-		BotShortName: "FDL",
+		BotShortName: "data_lab",
 	}
 
 	matches := []analytics.RoundResultMatch{
@@ -57,7 +57,7 @@ func TestGenerateRoundResultsHTMLPost(t *testing.T) {
 	}
 
 	// 2. Проверяем гиперссылку на счёте
-	expectedLink := "https://t.me/football_data_lab_bot/FDL?startapp=match_8_28083_407869_19722148"
+	expectedLink := "https://t.me/football_data_lab_bot/data_lab"
 	if !strings.Contains(post, expectedLink) {
 		t.Errorf("post missing deep link %q: %s", expectedLink, post)
 	}

@@ -127,11 +127,9 @@ func buildFixturesMatchMiniAppURL(cfg RoundFixturesPostConfig, fixtureID int64) 
 		if config.Config.WebApp != nil && config.Config.WebApp.BotShortName != "" {
 			shortName = config.Config.WebApp.BotShortName
 		} else {
-			shortName = "FDL"
+			shortName = "data_lab"
 		}
 	}
 
-	// Формат deep link: fixture_{leagueId}_{seasonId}_{roundId}_{fixtureId}
-	startAppParam := fmt.Sprintf("fixture_%d_%d_%d_%d", cfg.LeagueID, cfg.SeasonID, cfg.RoundID, fixtureID)
-	return fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, startAppParam)
+	return fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 }

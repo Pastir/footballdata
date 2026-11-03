@@ -15,7 +15,7 @@ func TestGenerateRoundFixturesHTMLPost(t *testing.T) {
 		SeasonID:     28083,
 		RoundID:      407870,
 		BotUsername:  "football_data_lab_bot",
-		BotShortName: "FDL",
+		BotShortName: "data_lab",
 	}
 
 	vm := viewmodel.RoundFixturesViewModel{
@@ -70,8 +70,8 @@ func TestGenerateRoundFixturesHTMLPost(t *testing.T) {
 		t.Errorf("expected odds in post, got:\n%s", post)
 	}
 
-	if !strings.Contains(post, "fixture_8_28083_407870_19722153") {
-		t.Errorf("expected deep link in post, got:\n%s", post)
+	if !strings.Contains(post, "https://t.me/football_data_lab_bot/data_lab") {
+		t.Errorf("expected Mini App link in post, got:\n%s", post)
 	}
 
 	if !strings.Contains(post, "МАТЧ ТУРА: Арсенал — Челси") {

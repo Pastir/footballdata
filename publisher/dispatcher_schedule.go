@@ -221,8 +221,8 @@ func processRoundFixturesForLeague(
 
 	// Формируем лаконичный моноширинный текст с кликабельными ссылками на котировках
 	botUser := "football_data_lab_bot"
-	shortName := "FDL"
-	baseURL := "https://s.pastir.me"
+	shortName := "data_lab"
+	baseURL := "https://t.me/football_data_lab_bot/data_lab"
 	if config.Config.WebApp != nil {
 		if config.Config.WebApp.BotUsername != "" {
 			botUser = config.Config.WebApp.BotUsername
@@ -258,17 +258,13 @@ func processRoundFixturesForLeague(
 		return 0, fmt.Errorf("telegram configuration is missing (BotToken or ChannelID is empty)")
 	}
 
-	fixturesStartParam := fmt.Sprintf("%d_%d_%d_matches", info.LeagueID, info.SeasonID, roundID)
-	tableStartParam := fmt.Sprintf("%d_%d_table", info.LeagueID, info.SeasonID)
-
-	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, fixturesStartParam)
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, tableStartParam)
+	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
-				{Text: "📱 Все матчи тура в Mini App", URL: fixturesURL},
-				{Text: "📊 Турнирная таблица", URL: tableURL},
+				{Text: "📱 Все матчи тура в Mini App", URL: miniAppDirectURL},
+				{Text: "📊 Турнирная таблица", URL: miniAppDirectURL},
 			},
 		},
 	}
@@ -674,7 +670,7 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 
 	// 3. Формирование ссылки на Mini App и клавиатуры
 	botUser := "football_data_lab_bot"
-	shortName := "FDL"
+	shortName := "data_lab"
 	if config.Config.WebApp != nil {
 		if config.Config.WebApp.BotUsername != "" {
 			botUser = config.Config.WebApp.BotUsername
@@ -683,7 +679,7 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 			shortName = config.Config.WebApp.BotShortName
 		}
 	}
-	miniAppURL := fmt.Sprintf("https://t.me/%s/%s?startapp=schedule", botUser, shortName)
+	miniAppURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{

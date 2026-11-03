@@ -11,7 +11,7 @@ import (
 // GenerateBanterPostHTML формирует остроумный текст для поста в Telegram с карточкой аномалии
 func GenerateBanterPostHTML(a analytics.MatchAnomaly, miniAppURL string) string {
 	if miniAppURL == "" {
-		miniAppURL = "https://data-lab.live/"
+		miniAppURL = "https://t.me/football_data_lab_bot/data_lab"
 	}
 	if !strings.HasPrefix(miniAppURL, "http://") && !strings.HasPrefix(miniAppURL, "https://") {
 		miniAppURL = "https://" + miniAppURL

@@ -112,7 +112,7 @@ func dispatchExpress(ctx context.Context, taskData config.TaskData, log *zap.Log
 	}
 
 	botUser := "football_data_lab_bot"
-	shortName := "FDL"
+	shortName := "data_lab"
 	if config.Config.WebApp != nil {
 		if config.Config.WebApp.BotUsername != "" {
 			botUser = config.Config.WebApp.BotUsername
@@ -121,7 +121,7 @@ func dispatchExpress(ctx context.Context, taskData config.TaskData, log *zap.Log
 			shortName = config.Config.WebApp.BotShortName
 		}
 	}
-	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_%d_%d_fixtures", botUser, shortName, leagueID, info.SeasonID, roundID)
+	fixturesURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 
 	style1Text := copywriter.GenerateExpressPostStyle1(postCfg, plan)
 	style2Text := copywriter.GenerateExpressPostStyle2(postCfg, plan)

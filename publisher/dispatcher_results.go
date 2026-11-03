@@ -237,7 +237,7 @@ func dispatchRoundResults(ctx context.Context, taskData config.TaskData, log *za
 
 	// 3. Формирование инлайн-кнопок Mini App (для каналов используются URL deep links)
 	botUser := "football_data_lab_bot"
-	shortName := "FDL"
+	shortName := "data_lab"
 	if config.Config.WebApp != nil {
 		if config.Config.WebApp.BotUsername != "" {
 			botUser = config.Config.WebApp.BotUsername
@@ -247,17 +247,13 @@ func dispatchRoundResults(ctx context.Context, taskData config.TaskData, log *za
 		}
 	}
 
-	resultsStartParam := fmt.Sprintf("%d_%d_%d_matches", info.LeagueID, info.SeasonID, roundID)
-	tableStartParam := fmt.Sprintf("%d_%d_table", info.LeagueID, info.SeasonID)
-
-	resultsURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, resultsStartParam)
-	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%s", botUser, shortName, tableStartParam)
+	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
-				{Text: "📱 Все матчи тура в Mini App", URL: resultsURL},
-				{Text: "📊 Турнирная таблица", URL: tableURL},
+				{Text: "📱 Все матчи тура в Mini App", URL: miniAppDirectURL},
+				{Text: "📊 Турнирная таблица", URL: miniAppDirectURL},
 			},
 		},
 	}

@@ -58,7 +58,7 @@ func TestGenerateFactHTMLPost(t *testing.T) {
 		LeagueName:   "Premier League",
 		LeagueID:     8,
 		BotUsername:  "football_data_lab_bot",
-		BotShortName: "FDL",
+		BotShortName: "data_lab",
 	}
 
 	post := copywriter.GenerateFactHTMLPost(rec, cfg)
@@ -84,7 +84,7 @@ func TestGenerateFactHTMLPost(t *testing.T) {
 	}
 
 	deepLink := copywriter.BuildFactMiniAppURL(cfg, rec)
-	expectedLink := "https://t.me/football_data_lab_bot/FDL?startapp=streak_42"
+	expectedLink := "https://t.me/football_data_lab_bot/data_lab"
 	if deepLink != expectedLink {
 		t.Errorf("expected deep link %s, got %s", expectedLink, deepLink)
 	}

@@ -3,7 +3,6 @@ package publisher
 import (
 	"context"
 	"fmt"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -18,25 +17,17 @@ import (
 )
 
 func buildMiniAppDeepLink(baseURL string, leagueID, roundID int, fixtureID int64) string {
-	if baseURL == "" {
-		baseURL = "https://data-lab.live/"
+	botUser := "football_data_lab_bot"
+	shortName := "data_lab"
+	if config.Config.WebApp != nil {
+		if config.Config.WebApp.BotUsername != "" {
+			botUser = config.Config.WebApp.BotUsername
+		}
+		if config.Config.WebApp.BotShortName != "" {
+			shortName = config.Config.WebApp.BotShortName
+		}
 	}
-	u, err := url.Parse(baseURL)
-	if err != nil {
-		return baseURL
-	}
-	q := u.Query()
-	if leagueID > 0 {
-		q.Set("league", strconv.Itoa(leagueID))
-	}
-	if roundID > 0 {
-		q.Set("round", strconv.Itoa(roundID))
-	}
-	if fixtureID > 0 {
-		q.Set("match", strconv.FormatInt(fixtureID, 10))
-	}
-	u.RawQuery = q.Encode()
-	return u.String()
+	return fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 }
 
 // dispatchBanter обнаруживает аномалии/драму тура и генерирует инфографическую карточку 1200x1200px с постом
