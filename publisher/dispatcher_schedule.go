@@ -258,13 +258,14 @@ func processRoundFixturesForLeague(
 		return 0, fmt.Errorf("telegram configuration is missing (BotToken or ChannelID is empty)")
 	}
 
-	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
+	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, info.LeagueID)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
-				{Text: "📱 Все матчи тура в Mini App", URL: miniAppDirectURL},
-				{Text: "📊 Турнирная таблица", URL: miniAppDirectURL},
+				{Text: "📱 Все матчи тура в Mini App", URL: fixturesURL},
+				{Text: "📊 Турнирная таблица", URL: tableURL},
 			},
 		},
 	}

@@ -27,6 +27,9 @@ func buildMiniAppDeepLink(baseURL string, leagueID, roundID int, fixtureID int64
 			shortName = config.Config.WebApp.BotShortName
 		}
 	}
+	if leagueID > 0 {
+		return fmt.Sprintf("https://t.me/%s/%s?startapp=%d", botUser, shortName, leagueID)
+	}
 	return fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 }
 

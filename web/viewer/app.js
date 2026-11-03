@@ -93,6 +93,12 @@
           initialTab = parts[0];
         } else if (parts[0] === 'fixtures' || parts[0] === 'results') {
           initialTab = 'matches';
+        } else if (/^\d+$/.test(parts[0])) {
+          leagueId = parts[0];
+          initialTab = 'matches';
+        } else if (parts[0].startsWith('league')) {
+          leagueId = parts[0].replace('league', '').replace('-', '').replace('_', '');
+          initialTab = 'matches';
         }
       }
     }

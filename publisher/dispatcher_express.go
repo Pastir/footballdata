@@ -121,7 +121,7 @@ func dispatchExpress(ctx context.Context, taskData config.TaskData, log *zap.Log
 			shortName = config.Config.WebApp.BotShortName
 		}
 	}
-	fixturesURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
+	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, leagueID)
 
 	style1Text := copywriter.GenerateExpressPostStyle1(postCfg, plan)
 	style2Text := copywriter.GenerateExpressPostStyle2(postCfg, plan)

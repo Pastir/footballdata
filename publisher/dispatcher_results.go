@@ -247,13 +247,14 @@ func dispatchRoundResults(ctx context.Context, taskData config.TaskData, log *za
 		}
 	}
 
-	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
+	resultsURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, info.LeagueID)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
-				{Text: "📱 Все матчи тура в Mini App", URL: miniAppDirectURL},
-				{Text: "📊 Турнирная таблица", URL: miniAppDirectURL},
+				{Text: "📱 Все матчи тура в Mini App", URL: resultsURL},
+				{Text: "📊 Турнирная таблица", URL: tableURL},
 			},
 		},
 	}

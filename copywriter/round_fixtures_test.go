@@ -70,7 +70,7 @@ func TestGenerateRoundFixturesHTMLPost(t *testing.T) {
 		t.Errorf("expected odds in post, got:\n%s", post)
 	}
 
-	if !strings.Contains(post, "https://t.me/football_data_lab_bot/data_lab") {
+	if !strings.Contains(post, "https://t.me/football_data_lab_bot/data_lab?startapp=8_matches") {
 		t.Errorf("expected Mini App link in post, got:\n%s", post)
 	}
 

@@ -131,5 +131,8 @@ func buildFixturesMatchMiniAppURL(cfg RoundFixturesPostConfig, fixtureID int64) 
 		}
 	}
 
+	if cfg.LeagueID > 0 {
+		return fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, cfg.LeagueID)
+	}
 	return fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
 }

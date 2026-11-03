@@ -366,18 +366,19 @@ func dispatchRoundDigest(ctx context.Context, taskData config.TaskData, log *zap
 		}
 	}
 
-	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
+	fixturesURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, info.LeagueID)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
 				{
 					Text: "📊 Турнирная таблица",
-					URL:  miniAppDirectURL,
+					URL:  tableURL,
 				},
 				{
 					Text: fmt.Sprintf("📅 Расписание %s-го тура", roundNum),
-					URL:  miniAppDirectURL,
+					URL:  fixturesURL,
 				},
 			},
 		},
@@ -1055,13 +1056,14 @@ func dispatchLeaders(ctx context.Context, taskData config.TaskData, log *zap.Log
 		}
 	}
 
-	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
+	leadersURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_leaders", botUser, shortName, info.LeagueID)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, info.LeagueID)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
-				{Text: "👑 Все лидеры и статистика в Mini App", URL: miniAppDirectURL},
-				{Text: "📊 Турнирная таблица", URL: miniAppDirectURL},
+				{Text: "👑 Все лидеры и статистика в Mini App", URL: leadersURL},
+				{Text: "📊 Турнирная таблица", URL: tableURL},
 			},
 		},
 	}
@@ -1267,13 +1269,14 @@ func dispatchFacts(ctx context.Context, taskData config.TaskData, log *zap.Logge
 		seasonID = *topStreak.EndSeasonID
 	}
 
-	miniAppDirectURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
+	streakURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_matches", botUser, shortName, topStreak.LeagueID)
+	tableURL := fmt.Sprintf("https://t.me/%s/%s?startapp=%d_table", botUser, shortName, topStreak.LeagueID)
 
 	keyboard := &InlineKeyboardMarkup{
 		InlineKeyboard: [][]InlineKeyboardButton{
 			{
-				{Text: "🔥 Все факты и серии в Mini App", URL: miniAppDirectURL},
-				{Text: "📊 Турнирная таблица", URL: miniAppDirectURL},
+				{Text: "🔥 Все факты и серии в Mini App", URL: streakURL},
+				{Text: "📊 Турнирная таблица", URL: tableURL},
 			},
 		},
 	}

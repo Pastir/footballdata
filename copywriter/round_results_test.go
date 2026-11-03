@@ -57,7 +57,7 @@ func TestGenerateRoundResultsHTMLPost(t *testing.T) {
 	}
 
 	// 2. Проверяем гиперссылку на счёте
-	expectedLink := "https://t.me/football_data_lab_bot/data_lab"
+	expectedLink := "https://t.me/football_data_lab_bot/data_lab?startapp=8_matches"
 	if !strings.Contains(post, expectedLink) {
 		t.Errorf("post missing deep link %q: %s", expectedLink, post)
 	}
