@@ -17,6 +17,8 @@ import (
 type ExpressCandidateMatch struct {
 	FixtureID       int       `json:"fixture_id"`
 	LeagueID        int       `json:"league_id"`
+	LeagueName      string    `json:"league_name"`
+	CountryFlag     string    `json:"country_flag"`
 	HomeTeamID      int       `json:"home_team_id"`
 	HomeTeamName    string    `json:"home_team_name"`
 	HomeTeamRu      string    `json:"home_team_ru"`
@@ -255,9 +257,18 @@ func BuildSmartExpress(matches []ExpressCandidateMatch) (*SmartExpressPlan, erro
 				total := options[i].Odds * options[j].Odds * options[k].Odds
 				total = math.Round(total*100) / 100
 
-				// Проверяем попадание в целевой диапазон 3.50–5.20
+				// Проверяем попадание в целевой диапазон 3.50–5.25
 				if total >= 3.50 && total <= 5.25 {
 					diff := math.Abs(total - targetOdds)
+					// Бонус за разнообразие лиг (если события из разных чемпионатов)
+					uniqueLeagues := make(map[int]bool)
+					uniqueLeagues[options[i].Match.LeagueID] = true
+					uniqueLeagues[options[j].Match.LeagueID] = true
+					uniqueLeagues[options[k].Match.LeagueID] = true
+					if len(uniqueLeagues) > 1 {
+						diff -= 0.12 * float64(len(uniqueLeagues)-1)
+					}
+
 					if diff < bestDiff {
 						bestDiff = diff
 						bestTriple = []ExpressSelectionOption{options[i], options[j], options[k]}
@@ -378,11 +389,62 @@ ORDER BY pf.starting_at ASC`
 
 		// Учитываем матчи только с валидными коэффициентами
 		if m.OddsHome > 1.0 && m.OddsAway > 1.0 {
+			m.LeagueName, m.CountryFlag = GetLeagueNameAndFlag(m.LeagueID)
 			matches = append(matches, m)
 		}
 	}
 
 	return matches, nil
+}
+
+// FetchAllLeaguesCandidateMatches загружает матчи ближайшего тура со всех активных лиг.
+func FetchAllLeaguesCandidateMatches(ctx context.Context, pool *pgxpool.Pool) ([]ExpressCandidateMatch, error) {
+	if pool == nil {
+		return nil, fmt.Errorf("pool is nil")
+	}
+
+	catalog, err := GetActiveLeagues(ctx, pool)
+	if err != nil {
+		return nil, fmt.Errorf("GetActiveLeagues: %w", err)
+	}
+
+	var allMatches []ExpressCandidateMatch
+	now := time.Now().UTC()
+
+	for _, item := range catalog.Leagues {
+		targetRoundID := item.NextRoundID
+		if targetRoundID == 0 {
+			targetRoundID = item.CurrRoundID
+		}
+		if targetRoundID == 0 {
+			continue
+		}
+
+		matches, err := FetchRoundCandidateMatches(ctx, pool, item.LeagueID, targetRoundID)
+		if err != nil || len(matches) == 0 {
+			if item.CurrRoundID > 0 && item.CurrRoundID != targetRoundID {
+				matches, _ = FetchRoundCandidateMatches(ctx, pool, item.LeagueID, item.CurrRoundID)
+			}
+		}
+
+		for _, m := range matches {
+			if m.LeagueName == "" {
+				m.LeagueName = item.DisplayName
+				if m.LeagueName == "" {
+					m.LeagueName = item.LeagueName
+				}
+			}
+			if m.CountryFlag == "" {
+				m.CountryFlag = item.CountryFlag
+			}
+			// Отбираем матчи, которые еще не завершились
+			if m.StartingAt.After(now.Add(-2 * time.Hour)) {
+				allMatches = append(allMatches, m)
+			}
+		}
+	}
+
+	return allMatches, nil
 }
 
 // GetUpcomingRound возвращает ID и название ближайшего предстоящего тура текущего сезона на основе get_neighbor_rounds.

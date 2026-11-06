@@ -16,6 +16,7 @@ type ExpressPostConfig struct {
 	PromoCode     string
 	BonusText     string
 	BookmakerURL  string
+	MiniAppURL    string
 }
 
 // GenerateExpressPostStyle1 формирует стиль [1 ТЕСТ]: The Athletic / Financial Times (Интеллектуальная колонка с <blockquote>).
@@ -48,8 +49,15 @@ func GenerateExpressPostStyle1(cfg ExpressPostConfig, plan *analytics.SmartExpre
 		aName := m.AwayDisplayName()
 		timeStr := m.StartingAt.UTC().Format("02.01 · 15:04 UTC")
 
+		badge := ""
+		if m.CountryFlag != "" && m.LeagueName != "" {
+			badge = fmt.Sprintf("%s %s · ", m.CountryFlag, m.LeagueName)
+		} else if m.CountryFlag != "" {
+			badge = fmt.Sprintf("%s ", m.CountryFlag)
+		}
+
 		b.WriteString("<blockquote>")
-		b.WriteString(fmt.Sprintf("<b>%s — %s</b>\n", hName, aName))
+		b.WriteString(fmt.Sprintf("<b>%s%s — %s</b>\n", badge, hName, aName))
 		b.WriteString(fmt.Sprintf("• Время: %s\n", timeStr))
 		b.WriteString(fmt.Sprintf("• Выбор модели: <b>%s</b>  (кэф <b>%.2f</b>)\n", sel.OutcomeDisplayName(), sel.Odds))
 		if sel.Reason != "" {
@@ -59,6 +67,21 @@ func GenerateExpressPostStyle1(cfg ExpressPostConfig, plan *analytics.SmartExpre
 	}
 
 	b.WriteString("\n<blockquote>Все прогнозы верифицируются и сохраняются в открытом реестре Data Lab. Решение о ставке принимайте ответственно на основе банк-ролл менеджмента.</blockquote>")
+
+	var footers1 []string
+	if cfg.BookmakerURL != "" {
+		bk := cfg.BookmakerName
+		if bk == "" {
+			bk = "FONBET"
+		}
+		footers1 = append(footers1, fmt.Sprintf("<a href=\"%s\">Фрибет %s</a>", cfg.BookmakerURL, bk))
+	}
+	if cfg.MiniAppURL != "" {
+		footers1 = append(footers1, fmt.Sprintf("<a href=\"%s\">Все матчи</a>", cfg.MiniAppURL))
+	}
+	if len(footers1) > 0 {
+		b.WriteString("\n\n" + strings.Join(footers1, " · "))
+	}
 
 	return b.String()
 }
@@ -85,7 +108,10 @@ func GenerateExpressPostStyle2(cfg ExpressPostConfig, plan *analytics.SmartExpre
 
 	b.WriteString("<pre>┌────────────────────────────────────────────┐\n")
 	roundNum := strings.TrimSpace(strings.TrimPrefix(strings.TrimPrefix(cfg.RoundName, "ТУР"), "Тур"))
-	headerTitle := fmt.Sprintf(" АНАЛИТИЧЕСКИЙ КУПОН #%s • АПЛ", roundNum)
+	headerTitle := fmt.Sprintf(" АНАЛИТИЧЕСКИЙ КУПОН #%s • %s", roundNum, leagueTitle)
+	if strings.Contains(strings.ToLower(leagueTitle), "европ") {
+		headerTitle = " АНАЛИТИЧЕСКИЙ КУПОН • ЕВРОПА"
+	}
 	headerPad := 42 - utf8.RuneCountInString(headerTitle)
 	if headerPad < 0 {
 		headerPad = 0
@@ -142,9 +168,28 @@ func GenerateExpressPostStyle2(cfg ExpressPostConfig, plan *analytics.SmartExpre
 		m := sel.Match
 		hName := m.HomeDisplayName()
 		aName := m.AwayDisplayName()
-		b.WriteString(fmt.Sprintf("• <b>%s — %s</b>: %s\n", hName, aName, sel.Reason))
+		flag := m.CountryFlag
+		if flag != "" {
+			flag += " "
+		}
+		b.WriteString(fmt.Sprintf("• <b>%s%s — %s</b>: %s\n", flag, hName, aName, sel.Reason))
 	}
 	b.WriteString("\n<i>Верификация исходов фиксируется в системе. Открытая история в Mini App.</i>")
+
+	var footers2 []string
+	if cfg.BookmakerURL != "" {
+		bk := cfg.BookmakerName
+		if bk == "" {
+			bk = "FONBET"
+		}
+		footers2 = append(footers2, fmt.Sprintf("<a href=\"%s\">Фрибет %s</a>", cfg.BookmakerURL, bk))
+	}
+	if cfg.MiniAppURL != "" {
+		footers2 = append(footers2, fmt.Sprintf("<a href=\"%s\">Все матчи</a>", cfg.MiniAppURL))
+	}
+	if len(footers2) > 0 {
+		b.WriteString("\n\n" + strings.Join(footers2, " · "))
+	}
 
 	return b.String()
 }
@@ -159,7 +204,7 @@ func GenerateExpressPostStyle3Caption(cfg ExpressPostConfig, plan *analytics.Sma
 
 	leagueTitle := cfg.LeagueName
 	if leagueTitle == "" {
-		leagueTitle = "Премьер-лига"
+		leagueTitle = "Топ-чемпионаты Европы"
 	}
 	roundTitle := cfg.RoundName
 	if roundTitle != "" && !strings.Contains(strings.ToLower(roundTitle), "тур") {
@@ -183,6 +228,17 @@ func GenerateExpressPostStyle3Caption(cfg ExpressPostConfig, plan *analytics.Sma
 	}
 	b.WriteString(fmt.Sprintf("🎁 <i>Фрибет по промокоду <code>%s</code> в %s.</i>\n", promo, bkName))
 	b.WriteString("<i>Все исходы и коэффициенты верифицируются в реестре Data Lab.</i>")
+
+	var footers3 []string
+	if cfg.BookmakerURL != "" {
+		footers3 = append(footers3, fmt.Sprintf("<a href=\"%s\">Фрибет %s</a>", cfg.BookmakerURL, bkName))
+	}
+	if cfg.MiniAppURL != "" {
+		footers3 = append(footers3, fmt.Sprintf("<a href=\"%s\">Все матчи</a>", cfg.MiniAppURL))
+	}
+	if len(footers3) > 0 {
+		b.WriteString("\n\n" + strings.Join(footers3, " · "))
+	}
 
 	return b.String()
 }

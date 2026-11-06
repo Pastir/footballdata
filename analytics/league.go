@@ -277,6 +277,12 @@ ORDER BY pr.season_id, pr.starting_at ASC, pr.id ASC;`
 	return resp, nil
 }
 
+// GetLeagueNameAndFlag возвращает краткое название турнира и эмодзи флага.
+func GetLeagueNameAndFlag(lid int) (string, string) {
+	item := resolveLeagueMetadata(lid, "", "", "", 0, "", "", 0, "", 0, "", 0, "", "", "", true)
+	return item.DisplayName, item.CountryFlag
+}
+
 // resolveLeagueMetadata сопоставляет турниру русскоязычное имя, флаг и категорию.
 func resolveLeagueMetadata(
 	lid int, lname, shortCode, llogo string, cid int, cname, cflag string,

@@ -46,7 +46,7 @@ template/round_fixtures.png
 # === Динамические данные Telegram Mini App (генерируются бэкендом в runtime) ===
 web/viewer/data/
 web/viewer/*.json
-web/viewer/leaders.png
+web/viewer/leaders*.png
 web/viewer/media/
 web/viewer/viewer
 

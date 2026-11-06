@@ -191,6 +191,12 @@ func screenshotHTML(htmlFilePath string) ([]byte, error) {
 		opts = append(opts, chromedp.ExecPath("/usr/bin/google-chrome-stable"))
 	} else if _, statErr := os.Stat("/usr/bin/google-chrome"); statErr == nil {
 		opts = append(opts, chromedp.ExecPath("/usr/bin/google-chrome"))
+	} else if _, statErr := os.Stat("/usr/bin/chromium"); statErr == nil {
+		opts = append(opts, chromedp.ExecPath("/usr/bin/chromium"))
+	} else if _, statErr := os.Stat("/usr/bin/chromium-browser"); statErr == nil {
+		opts = append(opts, chromedp.ExecPath("/usr/bin/chromium-browser"))
+	} else if _, statErr := os.Stat("/snap/bin/chromium"); statErr == nil {
+		opts = append(opts, chromedp.ExecPath("/snap/bin/chromium"))
 	}
 
 	// Запускаем Chrome.

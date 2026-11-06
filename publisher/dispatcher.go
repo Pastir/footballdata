@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"sort"
 	"strconv"
 	"strings"
 	"sync"
@@ -71,6 +72,8 @@ func Dispatch(ctx context.Context, taskData config.TaskData) error {
 		return dispatchRoundDigest(ctx, taskData, log)
 	case "leaders", "topscorers":
 		return dispatchLeaders(ctx, taskData, log)
+	case "leadersEuro", "euroLeaders":
+		return dispatchLeadersEuro(ctx, taskData, log)
 	case "facts", "streaks", "factCard":
 		return dispatchFacts(ctx, taskData, log)
 	case "recalculateStreaks", "computeStreaks":
@@ -919,9 +922,15 @@ func dispatchLeaders(ctx context.Context, taskData config.TaskData, log *zap.Log
 		return fmt.Errorf("database pool is not initialized")
 	}
 
+	style := strings.ToLower(strings.TrimSpace(taskData.GetStyle()))
+	if style == "euro" {
+		return dispatchLeadersEuro(ctx, taskData, log)
+	}
+
 	leagueID := taskData.GetLeagueId()
 	if leagueID == 0 {
-		leagueID = 8 // Default: Premier League
+		// Вариант А: Медиа-альбом лидеров Топ-5 лиг Европы
+		return dispatchLeadersAlbum(ctx, taskData, log)
 	}
 
 	info, err := analytics.GetLeagueSeasonInfo(ctx, pool, leagueID)
@@ -1091,6 +1100,312 @@ func dispatchLeaders(ctx context.Context, taskData config.TaskData, log *zap.Log
 		}
 	}
 
+	return nil
+}
+
+// dispatchLeadersAlbum формирует инфографику лидеров сезона для всех активных топ-лиг (Топ-5)
+// и публикует их медиа-альбомом (MediaGroup) в Telegram (Вариант А).
+func dispatchLeadersAlbum(ctx context.Context, taskData config.TaskData, log *zap.Logger) error {
+	pool := db.DBx.PGxPool
+	if pool == nil {
+		return fmt.Errorf("database pool is not initialized")
+	}
+
+	catalog, err := analytics.GetActiveLeagues(ctx, pool)
+	if err != nil {
+		return fmt.Errorf("GetActiveLeagues: %w", err)
+	}
+
+	// Топ-5 европейских чемпионатов в порядке приоритета: АПЛ, Ла Лига, Бундеслига, Серия А, Лига 1
+	targetLeagues := []int{8, 564, 82, 384, 301}
+	leagueMap := make(map[int]analytics.ActiveLeagueItem)
+	for _, l := range catalog.Leagues {
+		leagueMap[l.LeagueID] = l
+	}
+
+	var imagePaths []string
+	var summaryRows []string
+	var miniAppLinks []string
+
+	botUser := "football_data_lab_bot"
+	shortName := "data_lab"
+	if config.Config.WebApp != nil {
+		if config.Config.WebApp.BotUsername != "" {
+			botUser = strings.TrimPrefix(config.Config.WebApp.BotUsername, "@")
+		}
+		if config.Config.WebApp.BotShortName != "" {
+			shortName = config.Config.WebApp.BotShortName
+		}
+	}
+
+	for _, lid := range targetLeagues {
+		lItem, exists := leagueMap[lid]
+		if !exists {
+			continue
+		}
+
+		info, lErr := analytics.GetLeagueSeasonInfo(ctx, pool, lid)
+		if lErr != nil {
+			log.Warn("GetLeagueSeasonInfo failed", zap.Int("league_id", lid), zap.Error(lErr))
+			continue
+		}
+		info.Locale = taskData.GetLocale()
+
+		leadersData, lDataErr := analytics.GetSeasonPlayerLeaders(ctx, pool, &info, 10)
+		if lDataErr != nil || leadersData == nil {
+			log.Warn("GetSeasonPlayerLeaders failed", zap.Int("league_id", lid), zap.Error(lDataErr))
+			continue
+		}
+
+		// 1. Экспорт leaders.json для Mini App
+		if leadersJSON, jErr := json.MarshalIndent(leadersData, "", "  "); jErr == nil {
+			_ = os.MkdirAll("web/viewer/data", 0755)
+			_ = os.WriteFile(fmt.Sprintf("web/viewer/data/%d_%d_leaders.json", info.LeagueID, info.SeasonID), leadersJSON, 0644)
+			if config.Config.WebApp != nil && config.Config.WebApp.MediaDir != "" {
+				publicDir := filepath.Dir(config.Config.WebApp.MediaDir)
+				seasonMediaDir := filepath.Join(config.Config.WebApp.MediaDir, strconv.Itoa(info.LeagueID), strconv.Itoa(info.SeasonID))
+				_ = os.MkdirAll(seasonMediaDir, 0755)
+				_ = os.WriteFile(filepath.Join(seasonMediaDir, "leaders.json"), leadersJSON, 0644)
+				viewerDataDir := filepath.Join(publicDir, "viewer", "data")
+				_ = os.MkdirAll(viewerDataDir, 0755)
+				_ = os.WriteFile(filepath.Join(viewerDataDir, fmt.Sprintf("%d_%d_leaders.json", info.LeagueID, info.SeasonID)), leadersJSON, 0644)
+			}
+		}
+
+		// 2. Рендеринг PNG инфографики 1920x1080
+		vm := viewmodel.BuildLeadersViewModel(leadersData)
+		tmplPath := filepath.Join("template", "leaders_template.html")
+		imgPath := fmt.Sprintf("leaders_%d.png", lid)
+
+		if rErr := renderer.RenderLeadersPNG(vm, tmplPath, imgPath); rErr != nil {
+			log.Warn("RenderLeadersPNG failed for league", zap.Int("league_id", lid), zap.Error(rErr))
+		} else {
+			imagePaths = append(imagePaths, imgPath)
+			if imgData, readErr := os.ReadFile(imgPath); readErr == nil {
+				_ = os.WriteFile(fmt.Sprintf("web/viewer/leaders_%d.png", lid), imgData, 0644)
+				if config.Config.WebApp != nil && config.Config.WebApp.MediaDir != "" {
+					publicDir := filepath.Dir(config.Config.WebApp.MediaDir)
+					seasonMediaDir := filepath.Join(config.Config.WebApp.MediaDir, strconv.Itoa(info.LeagueID), strconv.Itoa(info.SeasonID))
+					_ = os.MkdirAll(seasonMediaDir, 0755)
+					_ = os.WriteFile(filepath.Join(seasonMediaDir, "leaders.png"), imgData, 0644)
+					_ = os.WriteFile(filepath.Join(publicDir, "viewer", fmt.Sprintf("leaders_%d.png", lid)), imgData, 0644)
+				}
+			}
+		}
+
+		// Формируем строчку для подписи
+		topScorer := "—"
+		if len(leadersData.TopScorers) > 0 {
+			ts := leadersData.TopScorers[0]
+			topScorer = fmt.Sprintf("<b>%s</b> (%s) — <b>%d</b> ⚽", ts.PlayerName, ts.TeamCode, ts.PrimaryVal)
+		}
+		summaryRows = append(summaryRows, fmt.Sprintf("%s <b>%s:</b> %s", lItem.CountryFlag, lItem.DisplayName, topScorer))
+
+		miniAppLinks = append(miniAppLinks, fmt.Sprintf("<a href=\"https://t.me/%s/%s?startapp=%d_leaders\">%s</a>", botUser, shortName, lid, lItem.DisplayName))
+	}
+
+	if len(imagePaths) == 0 {
+		return fmt.Errorf("no leader infographics could be rendered")
+	}
+
+	// 3. Формирование единой подписи альбома
+	var caption strings.Builder
+	caption.WriteString("👑 <b>ЛИДЕРЫ СЕЗОНА • ТОП-5 ЛИГ ЕВРОПЫ</b>\n")
+	caption.WriteString("<i>Главные бомбардиры и индивидуальная статистика</i>\n\n")
+	for _, row := range summaryRows {
+		caption.WriteString(row + "\n")
+	}
+	caption.WriteString("\n📊 <b>Все лидеры в Mini App:</b>\n")
+	caption.WriteString(strings.Join(miniAppLinks, " · "))
+
+	if !taskData.GetPublish() {
+		fmt.Printf("\n=== [Dry Run] Альбом лидеров Топ-5 лиг (%d карточек) ===\n%s\n\n", len(imagePaths), caption.String())
+		return nil
+	}
+
+	tg := config.Config.TG
+	if tg == nil || tg.BotToken == "" || tg.ChannelID == "" {
+		return fmt.Errorf("telegram configuration missing (BotToken or ChannelID is empty)")
+	}
+
+	channelID, _ := strconv.ParseInt(tg.ChannelID, 10, 64)
+	storage := getStorage(ctx)
+
+	// Проверка идемпотентности альбома
+	if storage != nil && !taskData.GetForce() {
+		already, err := storage.IsAlreadyPublished(ctx, channelID, PubTypeLeaders, 0, 0)
+		if err == nil && already {
+			log.Info("leaders album already published, skipping duplicate (use -force to override)")
+			fmt.Printf("ℹ️ Альбом лидеров сезона уже опубликован в %s. Для повторной публикации укажите -force\n", tg.ChannelID)
+			return nil
+		}
+	}
+
+	pubCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
+	defer cancel()
+
+	fmt.Printf("📤 Отправка медиа-альбома лидеров (%d лиг) в Telegram %s...\n", len(imagePaths), tg.ChannelID)
+	msgIDs, err := SendMediaGroup(pubCtx, tg.BotToken, tg.ChannelID, imagePaths, caption.String())
+	if err != nil {
+		return fmt.Errorf("SendMediaGroup failed: %w", err)
+	}
+
+	fmt.Printf("✅ Альбом лидеров сезона успешно опубликован (сообщений: %d, первое ID=%d)!\n", len(msgIDs), msgIDs[0])
+
+	if storage != nil && len(msgIDs) > 0 {
+		pub := &Publication{
+			ChannelID:       channelID,
+			MessageID:       &msgIDs[0],
+			PublicationType: PubTypeLeaders,
+			Title:           "Лидеры сезона • Топ-5 лиг Европы (Альбом)",
+			TextContent:     caption.String(),
+			MediaURL:        imagePaths[0],
+			MediaType:       MediaTypePhoto,
+			Status:          StatusPublished,
+		}
+		if _, saveErr := storage.Create(ctx, pub); saveErr != nil {
+			log.Warn("failed to record album publication to database", zap.Error(saveErr))
+		}
+	}
+
+	return nil
+}
+
+// dispatchLeadersEuro формирует сводный пан-европейский топ бомбардиров и ассистентов (Вариант Б).
+func dispatchLeadersEuro(ctx context.Context, taskData config.TaskData, log *zap.Logger) error {
+	pool := db.DBx.PGxPool
+	if pool == nil {
+		return fmt.Errorf("database pool is not initialized")
+	}
+
+	catalog, err := analytics.GetActiveLeagues(ctx, pool)
+	if err != nil {
+		return fmt.Errorf("GetActiveLeagues: %w", err)
+	}
+
+	targetLeagues := []int{8, 564, 82, 384, 301}
+	leagueMap := make(map[int]analytics.ActiveLeagueItem)
+	for _, l := range catalog.Leagues {
+		leagueMap[l.LeagueID] = l
+	}
+
+	type euroScorerItem struct {
+		PlayerName  string
+		TeamCode    string
+		LeagueName  string
+		CountryFlag string
+		Goals       int
+		Assists     int
+	}
+
+	var allScorers []euroScorerItem
+
+	for _, lid := range targetLeagues {
+		lItem, exists := leagueMap[lid]
+		if !exists {
+			continue
+		}
+
+		info, lErr := analytics.GetLeagueSeasonInfo(ctx, pool, lid)
+		if lErr != nil {
+			continue
+		}
+		info.Locale = taskData.GetLocale()
+
+		data, dErr := analytics.GetSeasonPlayerLeaders(ctx, pool, &info, 10)
+		if dErr != nil || data == nil {
+			continue
+		}
+
+		for _, p := range data.TopScorers {
+			allScorers = append(allScorers, euroScorerItem{
+				PlayerName:  p.PlayerName,
+				TeamCode:    p.TeamCode,
+				LeagueName:  lItem.DisplayName,
+				CountryFlag: lItem.CountryFlag,
+				Goals:       p.PrimaryVal,
+				Assists:     p.SecondaryVal,
+			})
+		}
+	}
+
+	if len(allScorers) == 0 {
+		return fmt.Errorf("no scorers data found across European leagues")
+	}
+
+	// Сортируем снайперов по убыванию голов
+	sort.Slice(allScorers, func(i, j int) bool {
+		if allScorers[i].Goals == allScorers[j].Goals {
+			return allScorers[i].Assists > allScorers[j].Assists
+		}
+		return allScorers[i].Goals > allScorers[j].Goals
+	})
+
+	// Оставляем уникальных игроков топ-10
+	var top10Scorers []euroScorerItem
+	seen := make(map[string]bool)
+	for _, s := range allScorers {
+		if !seen[s.PlayerName] {
+			top10Scorers = append(top10Scorers, s)
+			seen[s.PlayerName] = true
+			if len(top10Scorers) == 10 {
+				break
+			}
+		}
+	}
+
+	botUser := "football_data_lab_bot"
+	shortName := "data_lab"
+	if config.Config.WebApp != nil {
+		if config.Config.WebApp.BotUsername != "" {
+			botUser = strings.TrimPrefix(config.Config.WebApp.BotUsername, "@")
+		}
+		if config.Config.WebApp.BotShortName != "" {
+			shortName = config.Config.WebApp.BotShortName
+		}
+	}
+
+	var b strings.Builder
+	b.WriteString("🇪🇺 <b>ЗОЛОТАЯ БУТСА • ТОП БОМБАРДИРОВ ЕВРОПЫ</b>\n")
+	b.WriteString("<i>Сводная таблица снайперов Топ-5 чемпионатов Европы</i>\n\n")
+
+	for i, s := range top10Scorers {
+		med := fmt.Sprintf("%d.", i+1)
+		if i == 0 {
+			med = "🥇"
+		} else if i == 1 {
+			med = "🥈"
+		} else if i == 2 {
+			med = "🥉"
+		}
+		b.WriteString(fmt.Sprintf("%s <b>%s</b> (%s %s) — <b>%d</b> ⚽ <i>(пас: %d)</i>\n", med, s.PlayerName, s.CountryFlag, s.TeamCode, s.Goals, s.Assists))
+	}
+
+	b.WriteString("\n📊 <b>Интерактивная статистика в Mini App:</b>\n")
+	b.WriteString(fmt.Sprintf("<a href=\"https://t.me/%s/%s?startapp=all_leaders\">Все лидеры Европы</a>", botUser, shortName))
+
+	postText := b.String()
+
+	if !taskData.GetPublish() {
+		fmt.Printf("\n=== [Dry Run] Сводный топ Европы (Вариант Б) ===\n%s\n\n", postText)
+		return nil
+	}
+
+	tg := config.Config.TG
+	if tg == nil || tg.BotToken == "" || tg.ChannelID == "" {
+		return fmt.Errorf("telegram configuration missing (BotToken or ChannelID is empty)")
+	}
+
+	pubCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	defer cancel()
+
+	var keyboard *InlineKeyboardMarkup = nil
+	msgID, err := SendTextMessageWithKeyboardAndPreview(pubCtx, tg.BotToken, tg.ChannelID, postText, keyboard, &LinkPreviewOptions{IsDisabled: true})
+	if err != nil {
+		return fmt.Errorf("SendTextMessage failed: %w", err)
+	}
+
+	fmt.Printf("✅ Сводный топ бомбардиров Европы опубликован (Message ID: %d)!\n", msgID)
 	return nil
 }
 
