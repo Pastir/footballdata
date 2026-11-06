@@ -5,6 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"image/jpeg"
+	"image/png"
 	"io"
 	"mime/multipart"
 	"net"
@@ -787,11 +789,25 @@ func SendMediaGroup(ctx context.Context, botToken, channelID string, mediaPaths 
 		}
 		defer f.Close()
 
-		part, err := w.CreateFormFile(attachName, filepath.Base(p))
+		var mediaData io.Reader = f
+		fileName := filepath.Base(p)
+		if strings.HasSuffix(strings.ToLower(p), ".png") {
+			if fi, sErr := f.Stat(); sErr == nil && fi.Size() > 1024*1024 {
+				if img, dErr := png.Decode(f); dErr == nil {
+					var buf bytes.Buffer
+					if jErr := jpeg.Encode(&buf, img, &jpeg.Options{Quality: 85}); jErr == nil {
+						mediaData = &buf
+						fileName = strings.TrimSuffix(fileName, filepath.Ext(fileName)) + ".jpg"
+					}
+				}
+			}
+		}
+
+		part, err := w.CreateFormFile(attachName, fileName)
 		if err != nil {
 			return nil, fmt.Errorf("create form file for %s: %w", attachName, err)
 		}
-		if _, err = io.Copy(part, f); err != nil {
+		if _, err = io.Copy(part, mediaData); err != nil {
 			return nil, fmt.Errorf("copy media data %s: %w", attachName, err)
 		}
 	}
