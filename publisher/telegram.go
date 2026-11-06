@@ -778,17 +778,39 @@ func SendMediaGroup(ctx context.Context, botToken, channelID string, mediaPaths 
 		return nil, fmt.Errorf("close multipart writer: %w", err)
 	}
 
+	bodyBytes := body.Bytes()
+	contentType := w.FormDataContentType()
 	url := fmt.Sprintf(tgAPISendMediaGroup, botToken)
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, &body)
-	if err != nil {
-		return nil, fmt.Errorf("new mediaGroup request: %w", err)
-	}
-	req.Header.Set("Content-Type", w.FormDataContentType())
 
-	client := &http.Client{Timeout: 60 * time.Second}
-	resp, err := client.Do(req)
-	if err != nil {
-		return nil, fmt.Errorf("http post mediaGroup: %w", err)
+	client := &http.Client{Timeout: 90 * time.Second}
+
+	var resp *http.Response
+	var lastErr error
+	for attempt := 1; attempt <= 3; attempt++ {
+		req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(bodyBytes))
+		if err != nil {
+			return nil, fmt.Errorf("new mediaGroup request: %w", err)
+		}
+		req.Header.Set("Content-Type", contentType)
+
+		resp, lastErr = client.Do(req)
+		if lastErr == nil && resp.StatusCode == http.StatusOK {
+			break
+		}
+		if resp != nil {
+			resp.Body.Close()
+		}
+		if attempt < 3 {
+			select {
+			case <-ctx.Done():
+				return nil, ctx.Err()
+			case <-time.After(time.Duration(attempt) * 2 * time.Second):
+			}
+			continue
+		}
+		if lastErr != nil {
+			return nil, fmt.Errorf("http post mediaGroup (attempt %d): %w", attempt, lastErr)
+		}
 	}
 	defer resp.Body.Close()
 

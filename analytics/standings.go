@@ -15,28 +15,38 @@ func GetCurrentStandings(ctx context.Context, pool *pgxpool.Pool, info *LeagueSe
     SELECT *
     FROM get_neighbor_rounds($1)
 ),
-target_cutoff AS (
+effective_round AS (
     SELECT 
         CASE 
-            WHEN $2::int > 0 THEN 
-                COALESCE(
-                    (SELECT (pr.ending_at + INTERVAL '1 day')::date FROM provider_rounds pr WHERE pr.id = $2::int),
-                    (CURRENT_DATE + INTERVAL '1 day')::date
-                )
-            ELSE 
-                (CURRENT_DATE + INTERVAL '1 day')::date
-        END AS cutoff_date
+            WHEN $2::int > 0 AND COALESCE((SELECT finished FROM provider_rounds WHERE id = $2::int), false) = true 
+                THEN $2::int 
+            ELSE nr.last_round_id 
+        END AS target_round_id,
+        CASE
+            WHEN $2::int > 0 AND COALESCE((SELECT finished FROM provider_rounds WHERE id = $2::int), false) = true
+                THEN (CASE WHEN $3::int > 0 THEN $3::int ELSE (SELECT id FROM provider_rounds pr2 WHERE pr2.season_id = nr.season_id AND pr2.name::int < (SELECT name::int FROM provider_rounds WHERE id = $2::int) ORDER BY pr2.name::int DESC LIMIT 1) END)
+            ELSE (CASE WHEN $3::int > 0 THEN $3::int ELSE nr.prev_round_id END)
+        END AS prev_round_id
+    FROM next_round nr
+),
+target_cutoff AS (
+    SELECT 
+        COALESCE(
+            (SELECT (pr.ending_at + INTERVAL '1 day')::date FROM provider_rounds pr WHERE pr.id = (SELECT target_round_id FROM effective_round)),
+            (CURRENT_DATE + INTERVAL '1 day')::date
+        ) AS cutoff_date
 ),
 form AS (
     SELECT
         f.participant_id,
         f.form,
         f.rounds AS form_rounds,
-        nr.last_round_id,
-        nr.prev_round_id,
+        er.target_round_id,
+        er.prev_round_id,
         nr.league_id,
         nr.season_id
     FROM next_round AS nr
+    CROSS JOIN effective_round AS er
     CROSS JOIN target_cutoff AS tc
     CROSS JOIN LATERAL get_form_5last_rounds(nr.season_id, tc.cutoff_date) AS f
 )
@@ -70,7 +80,7 @@ FROM provider_standings ps
          LEFT JOIN provider_standings AS ps_prev 
                 ON (ps_prev.participant_id = ps.participant_id 
                     AND ps_prev.season_id = form.season_id 
-                    AND ps_prev.round_id = (CASE WHEN $3::int > 0 THEN $3::int ELSE form.prev_round_id END))
+                    AND ps_prev.round_id = form.prev_round_id)
          LEFT JOIN LATERAL (
     SELECT jsonb_object_agg(
                    provider_types.developer_name,
@@ -86,7 +96,7 @@ FROM provider_standings ps
     ) AS details ON TRUE
 WHERE ps.league_id = form.league_id
   AND ps.season_id = form.season_id
-  AND ps.round_id = (CASE WHEN $2::int > 0 THEN $2::int ELSE form.last_round_id END)
+  AND ps.round_id = form.target_round_id
 ORDER BY ps.position;`
 
 	locale := "ru"

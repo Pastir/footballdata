@@ -197,6 +197,8 @@ func screenshotHTML(htmlFilePath string) ([]byte, error) {
 		opts = append(opts, chromedp.ExecPath("/usr/bin/chromium-browser"))
 	} else if _, statErr := os.Stat("/snap/bin/chromium"); statErr == nil {
 		opts = append(opts, chromedp.ExecPath("/snap/bin/chromium"))
+	} else if _, statErr := os.Stat("/usr/bin/opera"); statErr == nil {
+		opts = append(opts, chromedp.ExecPath("/usr/bin/opera"))
 	}
 
 	// Запускаем Chrome.

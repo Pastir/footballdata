@@ -705,14 +705,14 @@ func buildExpressRichTableVariantMobileCards(cfg copywriter.ExpressPostConfig, p
 
 	blocks = append(blocks, RichBlock{
 		Type: "heading",
-		Size: 3,
-		Text: fmt.Sprintf("DATA LAB | АНАЛИТИЧЕСКИЙ ЭКСПРЕСС (КЭФ %.2f)", plan.TotalOdds),
+		Size: 4,
+		Text: "DATA LAB | АНАЛИТИЧЕСКИЙ ЭКСПРЕСС",
 	})
 
 	leagueRound := fmt.Sprintf("%s · %s · Общий кэф %.2f", cfg.LeagueName, cfg.RoundName, plan.TotalOdds)
 	blocks = append(blocks, RichBlock{
 		Type: "heading",
-		Size: 4,
+		Size: 5,
 		Text: leagueRound,
 	})
 
