@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"mime/multipart"
+	"net"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -25,6 +26,35 @@ const (
 	tgAPIGetChat                = "https://api.telegram.org/bot%s/getChat"
 	httpTimeout                 = 30 * time.Second
 )
+
+var (
+	tgDialer = &net.Dialer{
+		Timeout:   15 * time.Second,
+		KeepAlive: 30 * time.Second,
+	}
+	tgTransport = &http.Transport{
+		DialContext: func(ctx context.Context, network, addr string) (net.Conn, error) {
+			// Принудительно используем IPv4 ("tcp4") для стабильной доставки в api.telegram.org
+			// и предотвращения сбросов TCP-соединений / таймаутов по IPv6.
+			return tgDialer.DialContext(ctx, "tcp4", addr)
+		},
+		TLSHandshakeTimeout:   15 * time.Second,
+		ResponseHeaderTimeout: 90 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+		MaxIdleConns:          10,
+		IdleConnTimeout:       30 * time.Second,
+	}
+)
+
+func getTelegramClient(timeout time.Duration) *http.Client {
+	if timeout <= 0 {
+		timeout = httpTimeout
+	}
+	return &http.Client{
+		Transport: tgTransport,
+		Timeout:   timeout,
+	}
+}
 
 // RichBlockTableCell описывает отдельную ячейку нативной таблицы Telegram (Bot API 10.1+).
 type RichBlockTableCell struct {
@@ -160,7 +190,7 @@ func SendTextMessageWithKeyboardAndPreview(
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{Timeout: httpTimeout}
+	client := getTelegramClient(httpTimeout)
 	resp, err := client.Do(req)
 	if err != nil {
 		return 0, fmt.Errorf("http post: %w", err)
@@ -206,7 +236,7 @@ func GetChatUsername(ctx context.Context, botToken, channelID string) (string, e
 		return "", fmt.Errorf("new getChat request: %w", err)
 	}
 
-	client := &http.Client{Timeout: httpTimeout}
+	client := getTelegramClient(httpTimeout)
 	resp, err := client.Do(req)
 	if err != nil {
 		return "", fmt.Errorf("http getChat: %w", err)
@@ -230,7 +260,7 @@ func GetLinkedChatURL(ctx context.Context, botToken, channelID string) string {
 	if err != nil {
 		return ""
 	}
-	client := &http.Client{Timeout: httpTimeout}
+	client := getTelegramClient(httpTimeout)
 	resp, err := client.Do(req)
 	if err != nil {
 		return ""
@@ -324,7 +354,7 @@ func EditMessageReplyMarkup(
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{Timeout: httpTimeout}
+	client := getTelegramClient(httpTimeout)
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("http editMessageReplyMarkup: %w", err)
@@ -445,7 +475,7 @@ func SendRichMessage(
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{Timeout: httpTimeout}
+	client := getTelegramClient(httpTimeout)
 	resp, err := client.Do(req)
 	if err != nil {
 		return 0, fmt.Errorf("http post: %w", err)
@@ -533,7 +563,7 @@ func sendFile(ctx context.Context, botToken, channelID, caption, filePath, formF
 
 	req.Header.Set("Content-Type", w.FormDataContentType())
 
-	client := &http.Client{Timeout: httpTimeout}
+	client := getTelegramClient(httpTimeout)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -682,7 +712,7 @@ func PinChatMessage(ctx context.Context, botToken, channelID string, messageID i
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	client := &http.Client{Timeout: httpTimeout}
+	client := getTelegramClient(httpTimeout)
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("http post pin: %w", err)
@@ -782,7 +812,7 @@ func SendMediaGroup(ctx context.Context, botToken, channelID string, mediaPaths 
 	contentType := w.FormDataContentType()
 	url := fmt.Sprintf(tgAPISendMediaGroup, botToken)
 
-	client := &http.Client{Timeout: 90 * time.Second}
+	client := getTelegramClient(120 * time.Second)
 
 	var resp *http.Response
 	var lastErr error
