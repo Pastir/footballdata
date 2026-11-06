@@ -611,26 +611,63 @@ func getTeamShortCode(name string) string {
 }
 
 func copyFile(src, dst string) error {
+	srcClean := filepath.Clean(src)
+	dstClean := filepath.Clean(dst)
+	if srcClean == dstClean {
+		return nil
+	}
+
+	srcInfo, err := os.Stat(src)
+	if err != nil {
+		return err
+	}
+
+	if dstInfo, err := os.Stat(dst); err == nil {
+		if os.SameFile(srcInfo, dstInfo) {
+			return nil
+		}
+	}
+
 	in, err := os.Open(src)
 	if err != nil {
 		return err
 	}
 	defer in.Close()
 
-	out, err := os.Create(dst)
+	// Атомарная запись через .tmp, чтобы исключить затирание файла в 0 байт
+	tmpDst := dst + ".tmp"
+	out, err := os.Create(tmpDst)
 	if err != nil {
 		return err
 	}
-	defer out.Close()
 
-	_, err = io.Copy(out, in)
-	return err
+	if _, err = io.Copy(out, in); err != nil {
+		out.Close()
+		_ = os.Remove(tmpDst)
+		return err
+	}
+	out.Close()
+
+	return os.Rename(tmpDst, dst)
 }
 
 func syncViewerFiles(publicDir string) {
 	if publicDir == "" {
 		return
 	}
+
+	// Если publicDir совпадает с web/viewer или является симлинком на него (Zero-Copy Deployment),
+	// копирование не требуется — веб-сервер уже отдает файлы напрямую из web/viewer.
+	if absPublic, err := filepath.Abs(publicDir); err == nil {
+		if absViewer, vErr := filepath.Abs(filepath.Join("web", "viewer")); vErr == nil {
+			realPublic, rErr := filepath.EvalSymlinks(absPublic)
+			realViewer, rvErr := filepath.EvalSymlinks(absViewer)
+			if rErr == nil && rvErr == nil && realPublic == realViewer {
+				return
+			}
+		}
+	}
+
 	viewerDir := filepath.Join(publicDir, "viewer")
 	_ = os.MkdirAll(viewerDir, 0755)
 
