@@ -26,14 +26,15 @@ func RenderStandingsPNG(
 	templatePath,
 	outputPath string,
 ) error {
-	// 1. Рендер HTML через html/template.
 	htmlContent, err := renderHTML(vm, templatePath)
 	if err != nil {
 		return fmt.Errorf("renderHTML: %w", err)
 	}
+	return renderHTMLToPNG(htmlContent, "standings-*.html", outputPath)
+}
 
-	// 2. Запись во временный HTML-файл.
-	tmpFile, err := os.CreateTemp("", "standings-*.html")
+func renderHTMLToPNG(htmlContent, tempPattern, outputPath string) error {
+	tmpFile, err := os.CreateTemp("", tempPattern)
 	if err != nil {
 		return fmt.Errorf("create temp file: %w", err)
 	}
@@ -43,23 +44,27 @@ func RenderStandingsPNG(
 		_ = tmpFile.Close()
 		return fmt.Errorf("write temp file: %w", err)
 	}
-
 	if err = tmpFile.Close(); err != nil {
 		return fmt.Errorf("close temp file: %w", err)
 	}
 
-	// 3. Скриншот .canvas через headless Chrome.
 	pngBytes, err := screenshotHTML(tmpFile.Name())
 	if err != nil {
 		return fmt.Errorf("screenshotHTML: %w", err)
 	}
 
-	// 4. Сохранение PNG.
 	if err = os.WriteFile(outputPath, pngBytes, 0644); err != nil {
 		return fmt.Errorf("write PNG: %w", err)
 	}
-
 	return nil
+}
+
+func renderTemplateToPNG(data any, templatePath, tempPattern, outputPath string) error {
+	htmlContent, err := renderRoundTemplate(data, templatePath)
+	if err != nil {
+		return fmt.Errorf("renderTemplate: %w", err)
+	}
+	return renderHTMLToPNG(htmlContent, tempPattern, outputPath)
 }
 
 // renderHTML выполняет html/template рендер и возвращает HTML-строку.
@@ -367,32 +372,7 @@ func RenderTop5StandingsPNG(
 	if err != nil {
 		return fmt.Errorf("renderTop5HTML: %w", err)
 	}
-
-	tmpFile, err := os.CreateTemp("", "top5-standings-*.html")
-	if err != nil {
-		return fmt.Errorf("create temp file: %w", err)
-	}
-	defer os.Remove(tmpFile.Name())
-
-	if _, err = tmpFile.WriteString(htmlContent); err != nil {
-		_ = tmpFile.Close()
-		return fmt.Errorf("write temp file: %w", err)
-	}
-
-	if err = tmpFile.Close(); err != nil {
-		return fmt.Errorf("close temp file: %w", err)
-	}
-
-	pngBytes, err := screenshotHTML(tmpFile.Name())
-	if err != nil {
-		return fmt.Errorf("screenshotHTML: %w", err)
-	}
-
-	if err = os.WriteFile(outputPath, pngBytes, 0644); err != nil {
-		return fmt.Errorf("write PNG: %w", err)
-	}
-
-	return nil
+	return renderHTMLToPNG(htmlContent, "top5-standings-*.html", outputPath)
 }
 
 func renderTop5HTML(

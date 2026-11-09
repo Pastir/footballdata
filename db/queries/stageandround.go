@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 	"github.com/Pastir/footballdata/db"
-	"github.com/jackc/pgconn"
 	"os"
 )
 
@@ -47,7 +46,7 @@ func GetMatchNextRound(leagueID int, seasonId int, types string) []db.ListMatche
 	//Выполняем запрос
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query, seasonId)
 	if err != nil {
-		db.PGxConnPanic("Init MatchNextRound", "GetMatchNextRound", err.(*pgconn.PgError))
+		db.PGxConnPanic("Init MatchNextRound", "GetMatchNextRound", err)
 		os.Exit(1)
 	}
 
@@ -57,7 +56,7 @@ func GetMatchNextRound(leagueID int, seasonId int, types string) []db.ListMatche
 		err = rows.Scan(&lm.MatchId, &lm.LeagueId, &lm.SeasonId, &lm.RoundId, &lm.StageId, &lm.HomeTeamId,
 			&lm.AwayTeamId, &lm.HomeTeamName, &lm.AwayTeamName, &lm.LeagueName)
 		if err != nil {
-			db.PGxConnPanic("Init MatchNextRound", "GetMatchNextRound", err.(*pgconn.PgError))
+			db.PGxConnPanic("Init MatchNextRound", "GetMatchNextRound", err)
 			os.Exit(1)
 		}
 

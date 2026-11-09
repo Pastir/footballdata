@@ -223,6 +223,7 @@ func handleSchedulerTick(ctx context.Context, taskData config.TaskData, log *zap
 	fmt.Printf("\n=== SCHEDULER TICK (UTC: %s) ===\n", now.Format("2006-01-02 15:04:05"))
 	fmt.Printf("Обнаружено созревших задач к публикации: %d\n", len(tasks))
 
+	executedCount := 0
 	if len(tasks) == 0 {
 		fmt.Println("ℹ️ На текущий момент нет задач, ожидающих публикации (все туры либо в игре, либо уже опубликованы).")
 	} else {
@@ -241,23 +242,26 @@ func handleSchedulerTick(ctx context.Context, taskData config.TaskData, log *zap
 					log.Error("failed to execute task", zap.String("title", task.Title), zap.Error(err))
 					fmt.Printf("      ❌ Ошибка: %v\n", err)
 				} else {
+					executedCount++
 					fmt.Printf("      ✅ Успешно опубликовано!\n")
 				}
 			}
 		}
 	}
 
-	// Фоновая актуализация статических данных Mini App (JSON)
-	fmt.Printf("\n🔄 Актуализация статических данных Mini App (active_leagues.json, туры, лидеры)...\n")
-	var syncTd config.TaskData
-	syncTd.Init()
-	syncTd.Args = config.LineArgs{
-		TaskName: "PublishToTelegram",
-		Type:     "syncAll",
-		Publish:  false,
-	}
-	if syncErr := publisher.Dispatch(ctx, syncTd); syncErr != nil {
-		log.Warn("scheduler tick viewer sync failed", zap.Error(syncErr))
+	// Актуализируем статику Mini App только при выполнении публикаций
+	if executedCount > 0 {
+		fmt.Printf("\n🔄 Актуализация статических данных Mini App (active_leagues.json, туры, лидеры)...\n")
+		var syncTd config.TaskData
+		syncTd.Init()
+		syncTd.Args = config.LineArgs{
+			TaskName: "PublishToTelegram",
+			Type:     "syncAll",
+			Publish:  false,
+		}
+		if syncErr := publisher.Dispatch(ctx, syncTd); syncErr != nil {
+			log.Warn("scheduler tick viewer sync failed", zap.Error(syncErr))
+		}
 	}
 }
 

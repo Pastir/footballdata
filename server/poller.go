@@ -15,17 +15,13 @@ type LivePoller struct {
 	pool         *pgxpool.Pool
 	store        *LiveStore
 	pollInterval time.Duration
-	leagues      []int
 	log          *zap.Logger
 }
 
 // NewLivePoller создает новый опросчик с настраиваемым интервалом (15-30 сек по умолчанию).
-func NewLivePoller(pool *pgxpool.Pool, store *LiveStore, interval time.Duration, leagues []int, log *zap.Logger) *LivePoller {
+func NewLivePoller(pool *pgxpool.Pool, store *LiveStore, interval time.Duration, _ []int, log *zap.Logger) *LivePoller {
 	if interval <= 0 {
 		interval = 20 * time.Second
-	}
-	if len(leagues) == 0 {
-		leagues = []int{8, 564, 384, 82, 301}
 	}
 	if log == nil {
 		l, _ := zap.NewDevelopment()
@@ -36,7 +32,6 @@ func NewLivePoller(pool *pgxpool.Pool, store *LiveStore, interval time.Duration,
 		pool:         pool,
 		store:        store,
 		pollInterval: interval,
-		leagues:      leagues,
 		log:          log,
 	}
 }
@@ -44,13 +39,6 @@ func NewLivePoller(pool *pgxpool.Pool, store *LiveStore, interval time.Duration,
 // PollInterval возвращает установленный интервал опроса.
 func (p *LivePoller) PollInterval() time.Duration {
 	return p.pollInterval
-}
-
-// SetPollInterval позволяет динамически переопределить интервал опроса.
-func (p *LivePoller) SetPollInterval(d time.Duration) {
-	if d > 0 {
-		p.pollInterval = d
-	}
 }
 
 // PollOnce выполняет одиночный цикл опроса live-данных из базы.
@@ -89,7 +77,6 @@ func (p *LivePoller) PollOnce(ctx context.Context) ([]analytics.RoundResultMatch
 func (p *LivePoller) Run(ctx context.Context) error {
 	p.log.Info("live poller daemon started",
 		zap.Duration("interval", p.pollInterval),
-		zap.Ints("leagues", p.leagues),
 	)
 
 	// Выполняем первичный опрос сразу при старте

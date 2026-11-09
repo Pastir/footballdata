@@ -140,18 +140,54 @@ func GetRoundResultsByRoundID(ctx context.Context, pool *pgxpool.Pool, roundID i
 	}
 
 	infoQuery := `
+		WITH cur AS (
+			SELECT 
+				r.id AS round_id,
+				r.name AS round_name,
+				NULLIF(regexp_replace(r.name, '[^0-9]', '', 'g'), '')::int AS round_num,
+				r.starting_at,
+				r.season_id,
+				s.name AS season_name,
+				s.league_id,
+				l.name AS league_name
+			FROM provider_rounds r
+			JOIN provider_seasons s ON s.id = r.season_id
+			JOIN provider_leagues l ON l.id = s.league_id
+			WHERE r.id = $1
+			LIMIT 1
+		)
 		SELECT 
-			r.id AS round_id,
-			r.name AS round_name,
-			r.season_id,
-			s.name AS season_name,
-			s.league_id,
-			l.name AS league_name
-		FROM provider_rounds r
-		JOIN provider_seasons s ON s.id = r.season_id
-		JOIN provider_leagues l ON l.id = s.league_id
-		WHERE r.id = $1
-		LIMIT 1
+			c.round_id,
+			c.round_name,
+			c.season_id,
+			c.season_name,
+			c.league_id,
+			c.league_name,
+			COALESCE((
+				SELECT pr_prev.id
+				FROM provider_rounds pr_prev
+				WHERE pr_prev.season_id = c.season_id
+				  AND pr_prev.id <> c.round_id
+				  AND (
+				      (c.round_num IS NOT NULL AND NULLIF(regexp_replace(pr_prev.name, '[^0-9]', '', 'g'), '')::int < c.round_num)
+				      OR (c.round_num IS NULL AND pr_prev.starting_at < c.starting_at)
+				  )
+				ORDER BY NULLIF(regexp_replace(pr_prev.name, '[^0-9]', '', 'g'), '')::int DESC NULLS LAST, pr_prev.starting_at DESC
+				LIMIT 1
+			), 0) AS prev_round_id,
+			COALESCE((
+				SELECT pr_next.id
+				FROM provider_rounds pr_next
+				WHERE pr_next.season_id = c.season_id
+				  AND pr_next.id <> c.round_id
+				  AND (
+				      (c.round_num IS NOT NULL AND NULLIF(regexp_replace(pr_next.name, '[^0-9]', '', 'g'), '')::int > c.round_num)
+				      OR (c.round_num IS NULL AND pr_next.starting_at > c.starting_at)
+				  )
+				ORDER BY NULLIF(regexp_replace(pr_next.name, '[^0-9]', '', 'g'), '')::int ASC NULLS LAST, pr_next.starting_at ASC
+				LIMIT 1
+			), 0) AS next_round_id
+		FROM cur c
 	`
 
 	var info LeagueSeasonInfo
@@ -162,11 +198,88 @@ func GetRoundResultsByRoundID(ctx context.Context, pool *pgxpool.Pool, roundID i
 		&info.SeasonName,
 		&info.LeagueID,
 		&info.LeagueName,
+		&info.PrevRoundID,
+		&info.NextRoundID,
 	); err != nil {
 		return nil, nil, fmt.Errorf("round metadata not found for round %d: %w", roundID, err)
 	}
 	info.Locale = locale
 
+	matches, err := queryFixturesDetailed(ctx, pool, "WHERE pf.round_id = $1 ORDER BY pf.starting_at ASC;", roundID, locale)
+	if err != nil {
+		return nil, nil, fmt.Errorf("GetRoundResultsByRoundID query: %w", err)
+	}
+
+	// Обогащаем предматчевой аналитикой и H2H несыгранные матчи тура (с кэшированием профилей команд)
+	profileCache := make(map[int64]TeamPreMatchStats)
+	for i := range matches {
+		m := &matches[i]
+		isUnplayed := m.StateShort == nil || *m.StateShort == "NS" || *m.StateShort == "TBD" || *m.StateShort == "POSTP"
+		if !isUnplayed || m.TeamHomeID <= 0 || m.TeamAwayID <= 0 {
+			continue
+		}
+		if h2h, hErr := GetH2HMatches(ctx, pool, m.TeamHomeID, m.TeamAwayID, locale, 10); hErr == nil {
+			m.H2H = &h2h
+		}
+		hp, ok := profileCache[m.TeamHomeID]
+		if !ok {
+			hp, _ = GetTeamPreMatchProfile(ctx, pool, m.TeamHomeID, info.SeasonID)
+			profileCache[m.TeamHomeID] = hp
+		}
+		ap, ok := profileCache[m.TeamAwayID]
+		if !ok {
+			ap, _ = GetTeamPreMatchProfile(ctx, pool, m.TeamAwayID, info.SeasonID)
+			profileCache[m.TeamAwayID] = ap
+		}
+		m.PreMatchStats = &PreMatchStatsComparison{
+			Home: hp,
+			Away: ap,
+		}
+	}
+
+	return matches, &info, nil
+}
+
+// GetFixtureLiveDetails возвращает оперативные live-данные конкретного матча.
+func GetFixtureLiveDetails(ctx context.Context, pool *pgxpool.Pool, fixtureID int64, locale string) (*RoundResultMatch, error) {
+	if pool == nil {
+		return nil, fmt.Errorf("database pool is not initialized")
+	}
+
+	matches, err := queryFixturesDetailed(ctx, pool, "WHERE pf.id = $1 LIMIT 1;", fixtureID, locale)
+	if err != nil {
+		return nil, fmt.Errorf("GetFixtureLiveDetails: %w", err)
+	}
+	if len(matches) == 0 {
+		return nil, fmt.Errorf("fixture %d not found", fixtureID)
+	}
+	return &matches[0], nil
+}
+
+// GetLiveFixtures возвращает список всех матчей, идущих прямо сейчас или запланированных на сегодня.
+func GetLiveFixtures(ctx context.Context, pool *pgxpool.Pool, leagueID int, locale string) ([]RoundResultMatch, error) {
+	if pool == nil {
+		return nil, fmt.Errorf("database pool is not initialized")
+	}
+
+	tail := `
+WHERE (pf.state_id IN (2, 3, 4, 6, 9, 21, 22, 23, 25) 
+   OR (pf.starting_at::date = CURRENT_DATE AND pf.state_id NOT IN (10, 12, 14, 15)))
+  AND ($1 = 0 OR pf.league_id = $1)
+ORDER BY pf.starting_at ASC, pf.id ASC
+LIMIT 50;`
+
+	matches, err := queryFixturesDetailed(ctx, pool, tail, leagueID, locale)
+	if err != nil {
+		return nil, fmt.Errorf("GetLiveFixtures: %w", err)
+	}
+	if matches == nil {
+		return []RoundResultMatch{}, nil
+	}
+	return matches, nil
+}
+
+func queryFixturesDetailed(ctx context.Context, pool *pgxpool.Pool, tailClause string, arg any, locale string) ([]RoundResultMatch, error) {
 	query := `
 SELECT pl.id AS league_id
      , pf.id AS fixture_id
@@ -174,7 +287,7 @@ SELECT pl.id AS league_id
      , ps.id AS season_id
      , ps.name AS season_name
      , pf.round_id
-     , pr.name AS round_name
+     , COALESCE(pr.name, '') AS round_name
      , pf.starting_at AS fixture_start
      , pf.venue_id
      , pv.name AS venue_name
@@ -224,7 +337,7 @@ SELECT pl.id AS league_id
        ) THEN TRUE ELSE FALSE END AS rivals
 
 FROM provider_fixtures AS pf 
-JOIN provider_rounds AS pr ON (pr.id = pf.round_id)
+LEFT JOIN provider_rounds AS pr ON (pr.id = pf.round_id)
 JOIN provider_seasons AS ps ON (pf.season_id = ps.id)
 LEFT JOIN provider_leagues AS pl ON (pf.league_id = pl.id)
 LEFT JOIN provider_states AS pst ON (pst.id = pf.state_id)
@@ -247,7 +360,7 @@ LEFT JOIN LATERAL (
         ),
         '{}'::jsonb
     ) AS odds_data,
-    COALESCE(pb.name, '') AS bookmaker_name
+    COALESCE(MAX(pb.name), '') AS bookmaker_name
     FROM (
         SELECT DISTINCT ON (po_sub.market_id, po_sub.label) po_sub.*
         FROM provider_odds po_sub
@@ -257,7 +370,6 @@ LEFT JOIN LATERAL (
                  po_sub.created_at DESC
     ) po
     LEFT JOIN provider_bookmakers pb ON (po.bookmaker_id = pb.id)
-    GROUP BY pb.name
 ) AS odds ON TRUE
 
 LEFT JOIN LATERAL (
@@ -290,11 +402,11 @@ LEFT JOIN LATERAL (
                 'team_id', pe.participant_id,
                 'type', COALESCE(pt.code, pt.developer_name, pt.id::text),
                 'type_name', pt.name,
-                'player', COALESCE(pp.common_name, pp.name, ''),
-                'related_player', COALESCE(prp.common_name, prp.name, ''),
+                'player', COALESCE(pp.display_name, pp.common_name, pp.name, ''),
+                'related_player', COALESCE(prp.display_name, prp.common_name, prp.name, ''),
                 'result', COALESCE(pe.result, ''),
                 'addition', COALESCE(pe.addition, '')
-            ) ORDER BY pe.minute ASC, COALESCE(pe.extra_minute, 0) ASC
+            ) ORDER BY pe.minute ASC, COALESCE(pe.extra_minute, 0) ASC, pe.id ASC
         ),
         '[]'::jsonb
     ) AS events
@@ -372,7 +484,7 @@ LEFT JOIN LATERAL (
 
 LEFT JOIN LATERAL (
     SELECT COALESCE(
-        (SELECT pp.common_name FROM provider_fixtures_referees pfr 
+        (SELECT COALESCE(pp.display_name, pp.common_name, pp.name, '') FROM provider_fixtures_referees pfr 
          JOIN provider_referees pp ON (pfr.referee_id = pp.id) 
          WHERE pfr.fixture_id = pf.id LIMIT 1),
         ''
@@ -396,7 +508,7 @@ LEFT JOIN LATERAL (
         'home', (
             SELECT jsonb_build_object(
                 'id', pch.id,
-                'name', pch.name,
+                'name', COALESCE(pch.display_name, pch.common_name, pch.name, ''),
                 'image_path', COALESCE(pch.image_path, '')
             )
             FROM provider_fixtures_coaches pfch
@@ -407,7 +519,7 @@ LEFT JOIN LATERAL (
         'away', (
             SELECT jsonb_build_object(
                 'id', pca.id,
-                'name', pca.name,
+                'name', COALESCE(pca.display_name, pca.common_name, pca.name, ''),
                 'image_path', COALESCE(pca.image_path, '')
             )
             FROM provider_fixtures_coaches pfca
@@ -418,12 +530,11 @@ LEFT JOIN LATERAL (
     ) AS coaches
 ) AS coaches ON TRUE
 
-WHERE pf.round_id = $1
-ORDER BY pf.starting_at ASC;`
+` + tailClause
 
-	rows, err := pool.Query(ctx, query, roundID, locale)
+	rows, err := pool.Query(ctx, query, arg, locale)
 	if err != nil {
-		return nil, nil, fmt.Errorf("GetRoundResultsByRoundID query: %w", err)
+		return nil, err
 	}
 	defer rows.Close()
 
@@ -477,7 +588,7 @@ ORDER BY pf.starting_at ASC;`
 			&awayXG,
 			&m.IsRival,
 		); err != nil {
-			return nil, nil, fmt.Errorf("scan match error: %w", err)
+			return nil, fmt.Errorf("scan match error: %w", err)
 		}
 
 		if bookmakerName != nil {
@@ -497,378 +608,7 @@ ORDER BY pf.starting_at ASC;`
 		matches = append(matches, m)
 	}
 
-	return matches, &info, nil
-}
-
-// GetFixtureLiveDetails возвращает оперативные live-данные конкретного матча.
-func GetFixtureLiveDetails(ctx context.Context, pool *pgxpool.Pool, fixtureID int64, locale string) (*RoundResultMatch, error) {
-	if pool == nil {
-		return nil, fmt.Errorf("database pool is not initialized")
-	}
-
-	query := `
-SELECT pl.id AS league_id
-     , pf.id AS fixture_id
-     , pl.name AS league_name
-     , ps.id AS season_id
-     , ps.name AS season_name
-     , pf.round_id
-     , COALESCE(pr.name, '') AS round_name
-     , pf.starting_at AS fixture_start
-     , pf.venue_id
-     , pv.name AS venue_name
-     , COALESCE(pl.country_id, 0) AS country_id
-     , pc.name AS country_name
-     
-     , COALESCE(fh.participant_id, 0) AS team_home_id
-     , COALESCE(
-           NULLIF(pth.locale->$2->>'short', ''),
-           NULLIF(pth.locale->$2->>'long', ''),
-           pth.name,
-           'TBD'
-       ) AS team_home_name
-     , COALESCE(pth.image_path, '') AS team_home_logo
-     , fh.winner AS team_home_winner
-     , fh.result AS team_home_result
-     
-     , COALESCE(fa.participant_id, 0) AS team_away_id
-     , COALESCE(
-           NULLIF(pta.locale->$2->>'short', ''),
-           NULLIF(pta.locale->$2->>'long', ''),
-           pta.name,
-           'TBD'
-       ) AS team_away_name
-     , COALESCE(pta.image_path, '') AS team_away_logo
-     , fa.winner AS team_away_winner
-     , fa.result AS team_away_result
-     
-     , COALESCE(pst.short_name, 'NS') AS state_short
-     , ref.referee_name
-     
-     , scores.scores
-     , events.events
-     , stats.match_stats
-     , lineups.lineups
-     , coaches.coaches
-     , odds.odds_data
-     , odds.bookmaker_name
-     
-     , xgh.value AS home_xg
-     , xga.value AS away_xg
-     
-     , FALSE AS rivals
-
-FROM provider_fixtures AS pf 
-LEFT JOIN provider_rounds AS pr ON (pr.id = pf.round_id)
-JOIN provider_seasons AS ps ON (pf.season_id = ps.id)
-LEFT JOIN provider_leagues AS pl ON (pf.league_id = pl.id)
-LEFT JOIN provider_states AS pst ON (pst.id = pf.state_id)
-LEFT JOIN provider_fixtures_participants AS fh ON (fh.fixture_id = pf.id AND fh.location = 'home')
-LEFT JOIN provider_teams AS pth ON (pth.id = fh.participant_id)
-LEFT JOIN provider_fixtures_participants AS fa ON (fa.fixture_id = pf.id AND fa.location = 'away')
-LEFT JOIN provider_teams AS pta ON (pta.id = fa.participant_id)
-LEFT JOIN provider_venues AS pv ON (pf.venue_id = pv.id)
-LEFT JOIN provider_countries AS pc ON (pl.country_id = pc.id)
-
-LEFT JOIN LATERAL (
-    SELECT COALESCE(
-        jsonb_build_object(
-            '1X2',
-            jsonb_build_object(
-                '1', MAX(CASE WHEN po.market_id = 1 AND po.label = '1' THEN po.value END),
-                'X', MAX(CASE WHEN po.market_id = 1 AND po.label = 'X' THEN po.value END),
-                '2', MAX(CASE WHEN po.market_id = 1 AND po.label = '2' THEN po.value END)
-            )
-        ),
-        '{}'::jsonb
-    ) AS odds_data,
-    COALESCE(pb.name, '') AS bookmaker_name
-    FROM (
-        SELECT DISTINCT ON (po_sub.market_id, po_sub.label) po_sub.*
-        FROM provider_odds po_sub
-        WHERE po_sub.fixture_id = pf.id AND po_sub.market_id = 1
-        ORDER BY po_sub.market_id, po_sub.label,
-                 CASE WHEN po_sub.bookmaker_id = 2 THEN 0 ELSE 1 END,
-                 po_sub.created_at DESC
-    ) po
-    LEFT JOIN provider_bookmakers pb ON (po.bookmaker_id = pb.id)
-    GROUP BY pb.name
-) AS odds ON TRUE
-
-LEFT JOIN LATERAL (
-    SELECT COALESCE(
-        jsonb_build_object(
-            'home', jsonb_build_object(
-                'current', MAX(CASE WHEN score_type.developer_name = 'CURRENT' AND pfs.participant_id = fh.participant_id THEN pfs.goals END),
-                '1ST_HALF', MAX(CASE WHEN score_type.developer_name = '1ST_HALF' AND pfs.participant_id = fh.participant_id THEN pfs.goals END),
-                '2ND_HALF', MAX(CASE WHEN score_type.developer_name = '2ND_HALF' AND pfs.participant_id = fh.participant_id THEN pfs.goals END)
-            ),
-            'away', jsonb_build_object(
-                'current', MAX(CASE WHEN score_type.developer_name = 'CURRENT' AND pfs.participant_id = fa.participant_id THEN pfs.goals END),
-                '1ST_HALF', MAX(CASE WHEN score_type.developer_name = '1ST_HALF' AND pfs.participant_id = fa.participant_id THEN pfs.goals END),
-                '2ND_HALF', MAX(CASE WHEN score_type.developer_name = '2ND_HALF' AND pfs.participant_id = fa.participant_id THEN pfs.goals END)
-            )
-        ),
-        '{}'::jsonb
-    ) AS scores
-    FROM provider_fixtures_scores pfs
-    LEFT JOIN provider_types score_type ON (pfs.type_id = score_type.id)
-    WHERE pfs.fixture_id = pf.id
-) AS scores ON TRUE
-
-LEFT JOIN LATERAL (
-    SELECT COALESCE(
-        jsonb_agg(
-            jsonb_build_object(
-                'minute', pe.minute,
-                'extra_minute', pe.extra_minute,
-                'team_id', pe.participant_id,
-                'type', COALESCE(pt.code, pt.developer_name, pt.id::text),
-                'type_name', pt.name,
-                'player', COALESCE(pp.common_name, pp.name, ''),
-                'related_player', COALESCE(prp.common_name, prp.name, ''),
-                'result', COALESCE(pe.result, ''),
-                'addition', COALESCE(pe.addition, '')
-            ) ORDER BY pe.minute ASC, COALESCE(pe.extra_minute, 0) ASC
-        ),
-        '[]'::jsonb
-    ) AS events
-    FROM provider_events pe
-    LEFT JOIN provider_types pt ON (pe.type_id = pt.id)
-    LEFT JOIN provider_players pp ON (pe.player_id = pp.id)
-    LEFT JOIN provider_players prp ON (pe.related_player_id = prp.id)
-    WHERE pe.fixture_id = pf.id
-) AS events ON TRUE
-
-LEFT JOIN LATERAL (
-    SELECT COALESCE(
-        jsonb_object_agg(
-            s.key,
-            jsonb_build_object(
-                'type_id', s.type_id,
-                'name', s.name,
-                'code', s.code,
-                'developer_name', s.developer_name,
-                'color', s.color,
-                'home', s.home,
-                'away', s.away
-            )
-        ),
-        '{}'::jsonb
-    ) AS match_stats
-    FROM (
-        SELECT COALESCE(pt.developer_name, pt.code, pt.id::text) AS key,
-               pt.id AS type_id,
-               pt.name,
-               pt.code,
-               pt.developer_name,
-               COALESCE(pt.color, '') AS color,
-               MAX(CASE WHEN pfs.location = 'home' THEN pfs.value ELSE NULL END) AS home,
-               MAX(CASE WHEN pfs.location = 'away' THEN pfs.value ELSE NULL END) AS away
-        FROM provider_fixtures_statistics pfs
-        LEFT JOIN provider_types pt ON (pfs.type_id = pt.id)
-        WHERE pfs.fixture_id = pf.id AND pfs.league_id = pf.league_id
-        GROUP BY pt.id, pt.name, pt.code, pt.developer_name, pt.color
-    ) s
-) AS stats ON TRUE
-
-LEFT JOIN LATERAL (
-    SELECT COALESCE(
-        jsonb_object_agg(
-            l.location,
-            l.players
-        ),
-        '{}'::jsonb
-    ) AS lineups
-    FROM (
-        SELECT CASE WHEN plu.team_id = fh.participant_id THEN 'home' ELSE 'away' END AS location,
-               jsonb_agg(
-                   jsonb_build_object(
-                       'player_id', plu.player_id,
-                       'name', COALESCE(ppl.display_name, ppl.common_name, ppl.name, ''),
-                       'image_path', COALESCE(ppl.image_path, ''),
-                       'number', plu.jersey_number,
-                       'position_id', plu.position_id,
-                       'formation_field', plu.formation_field,
-                       'formation_position', plu.formation_position,
-                       'is_starter', (plu.type_id = 11)
-                   ) ORDER BY plu.type_id ASC, plu.formation_position ASC NULLS LAST
-               ) AS players
-        FROM (
-            SELECT DISTINCT ON (team_id, player_id) *
-            FROM provider_lineups
-            WHERE fixture_id = pf.id AND league_id = pf.league_id
-            ORDER BY team_id, player_id, id DESC
-        ) plu
-        LEFT JOIN provider_players ppl ON (plu.player_id = ppl.id)
-        GROUP BY plu.team_id
-    ) l
-) AS lineups ON TRUE
-
-LEFT JOIN LATERAL (
-    SELECT COALESCE(
-        (SELECT pp.common_name FROM provider_fixtures_referees pfr 
-         JOIN provider_referees pp ON (pfr.referee_id = pp.id) 
-         WHERE pfr.fixture_id = pf.id LIMIT 1),
-        ''
-    ) AS referee_name
-) AS ref ON TRUE
-
-LEFT JOIN LATERAL (
-    SELECT value FROM provider_expected_fixtures 
-    WHERE fixture_id = pf.id AND type_id = 5304 AND participant_id = fh.participant_id
-    LIMIT 1
-) AS xgh ON TRUE
-
-LEFT JOIN LATERAL (
-    SELECT value FROM provider_expected_fixtures 
-    WHERE fixture_id = pf.id AND type_id = 5304 AND participant_id = fa.participant_id
-    LIMIT 1
-) AS xga ON TRUE
-
-LEFT JOIN LATERAL (
-    SELECT jsonb_build_object(
-        'home', (
-            SELECT jsonb_build_object(
-                'id', pch.id,
-                'name', pch.name,
-                'image_path', COALESCE(pch.image_path, '')
-            )
-            FROM provider_fixtures_coaches pfch
-            JOIN provider_coachs pch ON (pfch.coaches_id = pch.id)
-            WHERE pfch.fixture_id = pf.id AND pfch.participant_id = fh.participant_id
-            LIMIT 1
-        ),
-        'away', (
-            SELECT jsonb_build_object(
-                'id', pca.id,
-                'name', pca.name,
-                'image_path', COALESCE(pca.image_path, '')
-            )
-            FROM provider_fixtures_coaches pfca
-            JOIN provider_coachs pca ON (pfca.coaches_id = pca.id)
-            WHERE pfca.fixture_id = pf.id AND pfca.participant_id = fa.participant_id
-            LIMIT 1
-        )
-    ) AS coaches
-) AS coaches ON TRUE
-
-WHERE pf.id = $1
-LIMIT 1;`
-
-	var m RoundResultMatch
-	var (
-		rawScores, rawEvents, rawStats, rawLineups, rawCoaches, rawOdds []byte
-		bookmakerName                                                   *string
-		homeXG, awayXG                                                   *float64
-	)
-
-	err := pool.QueryRow(ctx, query, fixtureID, locale).Scan(
-		&m.LeagueID,
-		&m.FixtureID,
-		&m.LeagueName,
-		&m.SeasonID,
-		&m.SeasonName,
-		&m.RoundID,
-		&m.RoundName,
-		&m.FixtureStart,
-		&m.VenueID,
-		&m.VenueName,
-		&m.CountryID,
-		&m.CountryName,
-
-		&m.TeamHomeID,
-		&m.TeamHomeName,
-		&m.TeamHomeLogo,
-		&m.TeamHomeWinner,
-		&m.TeamHomeResult,
-
-		&m.TeamAwayID,
-		&m.TeamAwayName,
-		&m.TeamAwayLogo,
-		&m.TeamAwayWinner,
-		&m.TeamAwayResult,
-
-		&m.StateShort,
-		&m.RefereeName,
-
-		&rawScores,
-		&rawEvents,
-		&rawStats,
-		&rawLineups,
-		&rawCoaches,
-		&rawOdds,
-		&bookmakerName,
-
-		&homeXG,
-		&awayXG,
-		&m.IsRival,
-	)
-	if err != nil {
-		return nil, fmt.Errorf("GetFixtureLiveDetails: %w", err)
-	}
-
-	if bookmakerName != nil {
-		m.Odds.BookmakerName = *bookmakerName
-	}
-
-	if homeXG != nil {
-		v := math.Round(*homeXG*100) / 100
-		m.HomeXG = &v
-	}
-	if awayXG != nil {
-		v := math.Round(*awayXG*100) / 100
-		m.AwayXG = &v
-	}
-
-	parseMatchJSONPayload(&m, rawScores, rawEvents, rawStats, rawLineups, rawCoaches, rawOdds)
-	return &m, nil
-}
-
-// GetLiveFixtures возвращает список всех матчей, идущих прямо сейчас или запланированных на сегодня.
-func GetLiveFixtures(ctx context.Context, pool *pgxpool.Pool, leagueID int, locale string) ([]RoundResultMatch, error) {
-	if pool == nil {
-		return nil, fmt.Errorf("database pool is not initialized")
-	}
-
-	// 1. Находим ID активных / in-play матчей
-	activeQuery := `
-		SELECT pf.id 
-		FROM provider_fixtures pf 
-		WHERE (pf.state_id IN (2, 3, 4, 6, 9, 21, 22, 23, 25) 
-		   OR (pf.starting_at::date = CURRENT_DATE AND pf.state_id NOT IN (10, 12, 14, 15)))
-		  AND ($1 = 0 OR pf.league_id = $1)
-		ORDER BY pf.starting_at ASC, pf.id ASC
-		LIMIT 50;
-	`
-
-	rows, err := pool.Query(ctx, activeQuery, leagueID)
-	if err != nil {
-		return nil, fmt.Errorf("GetLiveFixtures find IDs: %w", err)
-	}
-	defer rows.Close()
-
-	var fixtureIDs []int64
-	for rows.Next() {
-		var fid int64
-		if err := rows.Scan(&fid); err == nil {
-			fixtureIDs = append(fixtureIDs, fid)
-		}
-	}
-
-	if len(fixtureIDs) == 0 {
-		return []RoundResultMatch{}, nil
-	}
-
-	res := make([]RoundResultMatch, 0, len(fixtureIDs))
-	for _, fid := range fixtureIDs {
-		m, err := GetFixtureLiveDetails(ctx, pool, fid, locale)
-		if err == nil && m != nil {
-			res = append(res, *m)
-		}
-	}
-
-	return res, nil
+	return matches, nil
 }
 
 // parseMatchJSONPayload разбирает вспомогательные jsonb поля в поля структуры RoundResultMatch.

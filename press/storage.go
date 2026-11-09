@@ -93,7 +93,7 @@ func (s *Storage) GetTopDraftArticles(ctx context.Context, limit int) ([]Article
 			created_at,
 			updated_at
 		FROM press_articles
-		WHERE status = 'draft' AND summary_ru IS NULL
+		WHERE status IN ('draft', 'ready')
 		ORDER BY published_at DESC, id DESC
 		LIMIT $1
 	`

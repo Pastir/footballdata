@@ -6,9 +6,6 @@ import (
 	"time"
 
 	"github.com/Pastir/footballdata/config"
-	"github.com/jackc/pgconn"
-	"github.com/jackc/pgx"
-	pgx2 "github.com/jackc/pgx/v4"
 )
 
 var (
@@ -75,15 +72,15 @@ func (pvs *ProviderSettings) GetSettingsProvider() error {
 
 	rows, err := DBx.PGxPool.Query(context.Background(), query, config.Config.Args.ProviderId)
 	if err != nil {
-		PGxConnPanic("Query InitData", "GetSettingsProvider", err.(*pgconn.PgError))
-		return err.(*pgconn.PgError)
+		PGxConnPanic("Query InitData", "GetSettingsProvider", err)
+		return err
 	}
 
 	for rows.Next() {
 		err = rows.Scan(&pvs.Id, &pvs.ProviderName, &pvs.GetParams)
 		if err != nil {
-			PGxScanPanic("Scan InitData", "GetSettingsProvider", err.(pgx2.ScanArgError))
-			return err.(pgx2.ScanArgError)
+			PGxScanPanic("Scan InitData", "GetSettingsProvider", err)
+			return err
 		}
 	}
 
@@ -106,8 +103,8 @@ func (pvs *ProviderSettings) GetEndpointsProvider(providerId int) error {
 
 	rows, err := DBx.PGxPool.Query(context.Background(), query, providerId)
 	if err != nil {
-		PGxConnPanic("Query InitData", "SetEndpointsProvider", err.(*pgconn.PgError))
-		return err.(*pgconn.PgError)
+		PGxConnPanic("Query InitData", "SetEndpointsProvider", err)
+		return err
 	}
 
 	for rows.Next() {
@@ -116,8 +113,8 @@ func (pvs *ProviderSettings) GetEndpointsProvider(providerId int) error {
 
 		err = rows.Scan(&t.Endpoint, &t.Name, &t.TaskName, &t.Additional, &t.UpdateFrequency, &t.Cycle)
 		if err != nil {
-			PGxScanPanic("Scan InitData", "SetEndpointsProvider", err.(pgx2.ScanArgError))
-			return err.(pgx2.ScanArgError)
+			PGxScanPanic("Scan InitData", "SetEndpointsProvider", err)
+			return err
 		}
 
 		Prov.Endpoints[t.TaskName] = t
@@ -140,8 +137,8 @@ func (pvs *ProviderSettings) GetDataFromNameCountryProvider() error {
 	query := `SELECT id, name, uid FROM provider_countries WHERE uid NOTNULL`
 	rows, err := DBx.PGxPool.Query(context.Background(), query)
 	if err != nil {
-		PGxPanic("InitData", "GetDataFromNameCountryProvider", err.(*pgx.PgError))
-		return err.(*pgx.PgError)
+		PGxPanic("InitData", "GetDataFromNameCountryProvider", err)
+		return err
 	}
 
 	for rows.Next() {
@@ -149,8 +146,8 @@ func (pvs *ProviderSettings) GetDataFromNameCountryProvider() error {
 
 		err = rows.Scan(&pc.Id, &pc.Name, &pc.Uuid)
 		if err != nil {
-			PGxScanPanic("InitData", "GetDataFromNameCountryProvider", err.(pgx2.ScanArgError))
-			return err.(pgx2.ScanArgError)
+			PGxScanPanic("InitData", "GetDataFromNameCountryProvider", err)
+			return err
 		}
 
 		pvs.CountryProviderNameData[pc.Name] = pc

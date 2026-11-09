@@ -7,8 +7,6 @@ import (
 
 	"github.com/Pastir/footballdata/config"
 	"github.com/Pastir/footballdata/db"
-	"github.com/jackc/pgconn"
-	pgx2 "github.com/jackc/pgx/v4"
 )
 
 // GetSeasons возвращает мапу SeasonId -> SeasonData
@@ -40,7 +38,7 @@ func GetSeasons(taskData config.TaskData) map[int][]db.SeasonData {
 
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
 	if err != nil {
-		db.PGxConnError("Init seasons", "GetSeasons", err.(*pgconn.PgError))
+		db.PGxConnError("Init seasons", "GetSeasons", err)
 		return nil
 	}
 
@@ -49,7 +47,7 @@ func GetSeasons(taskData config.TaskData) map[int][]db.SeasonData {
 
 		err = rows.Scan(&seasData.LeagueId, &seasData.SeasonId, &seasData.LeagueUid)
 		if err != nil {
-			db.PGxScanPanic("init seasons", "GetSeasons", err.(pgx2.ScanArgError))
+			db.PGxScanPanic("init seasons", "GetSeasons", err)
 			return nil
 		}
 		seasons[seasData.SeasonId] = append(seasons[seasData.LeagueId], seasData)
@@ -76,7 +74,7 @@ WHERE ps.is_current AND pl.active`
 
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
 	if err != nil {
-		db.PGxConnPanic("GetCurrentSeasonIDs", "Query GetCurrentSeasonIDs", err.(*pgconn.PgError))
+		db.PGxConnPanic("GetCurrentSeasonIDs", "Query GetCurrentSeasonIDs", err)
 		return nil, err
 	}
 
@@ -85,7 +83,7 @@ WHERE ps.is_current AND pl.active`
 
 		err = rows.Scan(&Id)
 		if err != nil {
-			db.PGxConnPanic("GetCurrentSeasonIDs", "Scan GetCurrentSeasonIDs", err.(*pgconn.PgError))
+			db.PGxConnPanic("GetCurrentSeasonIDs", "Scan GetCurrentSeasonIDs", err)
 			return nil, err
 		}
 

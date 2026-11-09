@@ -3,8 +3,6 @@ package queries
 import (
 	"context"
 	"github.com/Pastir/footballdata/db"
-	"github.com/jackc/pgconn"
-	pgx2 "github.com/jackc/pgx/v4"
 	"strconv"
 	"strings"
 )
@@ -26,7 +24,7 @@ func GetTeamsIdFromSeasons(seasonId int) []int {
 
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
 	if err != nil {
-		db.PGxConnError("query", "GetTeamsIdFromSeasons", err.(*pgconn.PgError))
+		db.PGxConnError("query", "GetTeamsIdFromSeasons", err)
 		return nil
 	}
 
@@ -35,7 +33,7 @@ func GetTeamsIdFromSeasons(seasonId int) []int {
 
 		err = rows.Scan(&t)
 		if err != nil {
-			db.PGxScanPanic("scan", "GetTeamsIdFromSeasons", err.(pgx2.ScanArgError))
+			db.PGxScanPanic("scan", "GetTeamsIdFromSeasons", err)
 			return nil
 		}
 		teamsId = append(teamsId, t)

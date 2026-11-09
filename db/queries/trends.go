@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 	"github.com/Pastir/footballdata/db"
-	"github.com/jackc/pgconn"
 )
 
 var ListTrendsText map[string]string
@@ -18,7 +17,7 @@ func GetListTrends() {
 	//Выполняем запрос
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
 	if err != nil {
-		db.PGxConnPanic("Init ListTrends", "GetListTrends", err.(*pgconn.PgError))
+		db.PGxConnPanic("Init ListTrends", "GetListTrends", err)
 		return
 	}
 
@@ -28,7 +27,7 @@ func GetListTrends() {
 
 		err = rows.Scan(&label, &word)
 		if err != nil {
-			db.PGxConnPanic("Init ListTrends", "GetListTrends", err.(*pgconn.PgError))
+			db.PGxConnPanic("Init ListTrends", "GetListTrends", err)
 			return
 		}
 		ListTrendsText[label] = word

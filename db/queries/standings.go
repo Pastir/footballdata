@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 	"github.com/Pastir/footballdata/db"
-	"github.com/jackc/pgconn"
 )
 
 var ListStandingRules map[string]string
@@ -15,7 +14,7 @@ func GetStandingRules() {
 	//Запрос
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query, db.Prov.Id)
 	if err != nil {
-		db.PGxConnPanic("Init StandingRules", "GetStandingRules", err.(*pgconn.PgError))
+		db.PGxConnPanic("Init StandingRules", "GetStandingRules", err)
 		return
 	}
 
@@ -25,7 +24,7 @@ func GetStandingRules() {
 
 		err = rows.Scan(&ruleUid, &rule)
 		if err != nil {
-			db.PGxConnPanic("Init StandingRules", "GetStandingRules", err.(*pgconn.PgError))
+			db.PGxConnPanic("Init StandingRules", "GetStandingRules", err)
 			return
 		}
 		ListStandingRules[rule] = ruleUid

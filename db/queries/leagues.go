@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 	"github.com/Pastir/footballdata/db"
-	"github.com/jackc/pgconn"
 	"os"
 )
 
@@ -16,7 +15,7 @@ func GetListLeaguesId() map[int]string {
 
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query, db.Prov.Id)
 	if err != nil {
-		db.PGxConnPanic("Init ListLeaguesId", "GetListLeaguesId", err.(*pgconn.PgError))
+		db.PGxConnPanic("Init ListLeaguesId", "GetListLeaguesId", err)
 		os.Exit(1)
 	}
 
@@ -26,7 +25,7 @@ func GetListLeaguesId() map[int]string {
 
 		err = rows.Scan(&leagueId, &leagueUid)
 		if err != nil {
-			db.PGxConnPanic("Init ListLeaguesId", "GetListLeaguesId", err.(*pgconn.PgError))
+			db.PGxConnPanic("Init ListLeaguesId", "GetListLeaguesId", err)
 			os.Exit(1)
 		}
 

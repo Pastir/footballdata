@@ -446,6 +446,34 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 	fmt.Printf("🚀 Запуск подготовки сводного уикенд-гида для 5 топ-лиг (Publish=%v, Force=%v, ScheduleOnly=%v, AlbumOnly=%v)...\n",
 		taskData.GetPublish(), taskData.GetForce(), scheduleOnly, albumOnly)
 
+	flagshipLeagueID := 8
+	flagshipSeasonID := 0
+	flagshipRoundID := taskData.GetRoundId()
+	if fInfo, fErr := analytics.GetLeagueSeasonInfo(ctx, pool, flagshipLeagueID); fErr == nil {
+		flagshipSeasonID = fInfo.SeasonID
+		if flagshipRoundID == 0 {
+			if fInfo.NextRoundID > 0 {
+				flagshipRoundID = fInfo.NextRoundID
+			} else {
+				flagshipRoundID = fInfo.CurrRoundID
+			}
+		}
+	}
+
+	if taskData.GetPublish() && !taskData.GetForce() && flagshipRoundID > 0 {
+		if storage := getStorage(ctx); storage != nil {
+			cID, _ := strconv.ParseInt(tg.ChannelID, 10, 64)
+			if already, err := storage.IsAlreadyPublished(ctx, cID, PubTypeRoundFixtures, flagshipLeagueID, flagshipRoundID); err == nil && already {
+				log.Info("weekend hub already published, skipping duplicate",
+					zap.Int("league_id", flagshipLeagueID),
+					zap.Int("round_id", flagshipRoundID),
+				)
+				fmt.Printf("ℹ️ Уикенд-хаб (лига %d, тур %d) уже был опубликован. Для повторной отправки укажите -force\n", flagshipLeagueID, flagshipRoundID)
+				return nil
+			}
+		}
+	}
+
 	for idx, l := range top5Leagues {
 		info, err := analytics.GetLeagueSeasonInfo(ctx, pool, l.id)
 		if err != nil {
@@ -543,21 +571,9 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 				OddsAway:     featuredMatch.OddsAway,
 			}
 
-			// If pre-generated match card exists on disk, preserve it!
-			if _, err := os.Stat(cardPath); err == nil {
-				log.Info("using existing match card", zap.String("path", cardPath))
-			} else if l.id == 564 {
-				if _, err := os.Stat("match_card_20_utc.jpg"); err == nil {
-					_ = copyFile("match_card_20_utc.jpg", cardPath)
-				} else {
-					tmplPath := filepath.Join("template", "match_header_template.html")
-					_ = renderer.RenderMatchHeaderPNG(headerVM, tmplPath, cardPath)
-				}
-			} else {
-				tmplPath := filepath.Join("template", "match_header_template.html")
-				if err := renderer.RenderMatchHeaderPNG(headerVM, tmplPath, cardPath); err != nil {
-					log.Warn("failed to render match card PNG", zap.Int("league_id", l.id), zap.Error(err))
-				}
+			tmplPath := filepath.Join("template", "match_header_template.html")
+			if err := renderer.RenderMatchHeaderPNG(headerVM, tmplPath, cardPath); err != nil {
+				log.Warn("failed to render match card PNG", zap.Int("league_id", l.id), zap.Error(err))
 			}
 
 			cardPaths = append(cardPaths, cardPath)
@@ -611,8 +627,7 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 		}
 	}
 
-	// 2. Формирование полного расписания уикенда
-	// Сортировка: Дата -> Порядок лиги (АПЛ, Ла Лига, Серия А, Бундеслига, Лига 1) -> Время (UTC)
+	// 2. Сортировка матчей уикенда: Дата -> Порядок лиги (АПЛ, Ла Лига, Серия А, Бундеслига, Лига 1) -> Время (UTC)
 	sort.Slice(allMatches, func(i, j int) bool {
 		if allMatches[i].KickoffDate != allMatches[j].KickoffDate {
 			return allMatches[i].KickoffDate < allMatches[j].KickoffDate
@@ -623,100 +638,8 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 		return allMatches[i].StartUTC.Before(allMatches[j].StartUTC)
 	})
 
-	var schedText strings.Builder
-	schedText.WriteString("📅 <b>РАСПИСАНИЕ МАТЧЕЙ УИКЕНДА</b>\n")
-	schedText.WriteString("<i>Время начала матчей указано по UTC</i>\n")
-
-	currentDate := ""
-	currentLeague := -1
-
-	daysRu := []string{"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"}
-	monthsRu := []string{
-		"", "января", "февраля", "марта", "апреля", "мая", "июня",
-		"июля", "августа", "сентября", "октября", "ноября", "декабря",
-	}
-
-	for _, m := range allMatches {
-		if m.KickoffDate != currentDate {
-			currentDate = m.KickoffDate
-			currentLeague = -1
-			weekday := daysRu[int(m.StartUTC.Weekday())]
-			mNum := int(m.StartUTC.Month())
-			monthStr := ""
-			if mNum >= 1 && mNum <= 12 {
-				monthStr = monthsRu[mNum]
-			}
-			dayHeader := fmt.Sprintf("\n🗓 <b>%s, %d %s</b>\n", strings.ToUpper(weekday), m.StartUTC.Day(), strings.ToUpper(monthStr))
-			schedText.WriteString(dayHeader)
-		}
-
-		if m.LeagueOrder != currentLeague {
-			currentLeague = m.LeagueOrder
-			schedText.WriteString(fmt.Sprintf("\n%s <b>%s</b>\n", m.LeagueFlag, m.LeagueName))
-		}
-
-		oddsPart := ""
-		if m.OddsHome != "" && m.OddsDraw != "" && m.OddsAway != "" {
-			oddsPart = fmt.Sprintf("  <i>(%s · %s · %s)</i>", m.OddsHome, m.OddsDraw, m.OddsAway)
-		}
-		schedText.WriteString(fmt.Sprintf("<code>%s  %s — %s</code>%s\n", m.KickoffTime, m.HomeTeam, m.AwayTeam, oddsPart))
-	}
-
-	// 3. Формирование ссылки на Mini App и клавиатуры
-	botUser := "football_data_lab_bot"
-	shortName := "data_lab"
-	if config.Config.WebApp != nil {
-		if config.Config.WebApp.BotUsername != "" {
-			botUser = config.Config.WebApp.BotUsername
-		}
-		if config.Config.WebApp.BotShortName != "" {
-			shortName = config.Config.WebApp.BotShortName
-		}
-	}
-	miniAppURL := fmt.Sprintf("https://t.me/%s/%s", botUser, shortName)
-	keyboard := &InlineKeyboardMarkup{
-		InlineKeyboard: [][]InlineKeyboardButton{
-			{
-				{Text: "📱 Расписание в приложении", URL: miniAppURL},
-			},
-		},
-	}
-
-	isVariantsMode := (taskData.GetType() == "postVariants" || taskData.GetType() == "variants")
-	if isVariantsMode {
-		variants := []struct {
-			name string
-			text string
-		}{
-			{"Вариант 1 (Центрированные шапки + компактные лиги)", buildWeekendScheduleVariant1(allMatches)},
-			{"Вариант 2 (Табличное центрирование тире — ось '—')", buildWeekendScheduleVariant2(allMatches)},
-			{"Вариант 3 (Моноширина только времени + разделители)", buildWeekendScheduleVariant3(allMatches)},
-			{"Вариант 4 (Центрирование точками-акцентами ▫️)", buildWeekendScheduleVariant4(allMatches)},
-		}
-
-		if taskData.GetPublish() {
-			channelID := tg.ChannelID
-			botToken := tg.BotToken
-			fmt.Printf("📤 Публикация %d вариантов расписания в тестовый канал для наглядного сравнения...\n", len(variants))
-			for _, v := range variants {
-				fmt.Printf("➡️ Отправка: %s (%d симв.)...\n", v.name, utf8.RuneCountInString(v.text))
-				msgID, err := SendTextMessageWithKeyboard(ctx, botToken, channelID, v.text, keyboard)
-				if err != nil {
-					log.Error("failed to send variant", zap.String("variant", v.name), zap.Error(err))
-				} else {
-					fmt.Printf("✅ %s опубликован (ID=%d)\n", v.name, msgID)
-				}
-				time.Sleep(1500 * time.Millisecond)
-			}
-			return nil
-		} else {
-			fmt.Println("ℹ️ [DRY RUN] Публикация вариантов отключена (-publish=false).")
-			for _, v := range variants {
-				fmt.Printf("\n--- %s (%d симв.) ---\n%s\n", v.name, utf8.RuneCountInString(v.text), v.text)
-			}
-			return nil
-		}
-	}
+	// Инлайн-клавиатура отключена (nil), чтобы отображалась нативная плашка комментариев Telegram.
+	var keyboard *InlineKeyboardMarkup = nil
 
 	if taskData.GetPublish() {
 		channelID := tg.ChannelID
@@ -740,7 +663,7 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 		var schedMsgID int64
 		if !albumOnly {
 			if topMatchesTableOnly || topMatchesHub {
-				fmt.Printf("📤 Отправка нативной таблицы топ-матчей с кнопкой Mini App...\n")
+				fmt.Printf("📤 Отправка нативной таблицы топ-матчей...\n")
 				richPayload := buildTopMatchesOnlyRichTable(centralMatches)
 				var err error
 				schedMsgID, err = SendRichMessage(ctx, botToken, channelID, richPayload, keyboard)
@@ -749,7 +672,7 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 				}
 				fmt.Printf("✅ Нативная таблица топ-матчей опубликована (ID=%d)\n", schedMsgID)
 			} else {
-				fmt.Printf("📤 Отправка Этапа 2: Полное расписание уикенда в нативной таблице с кнопкой Mini App...\n")
+				fmt.Printf("📤 Отправка Этапа 2: Полное расписание уикенда в нативной таблице...\n")
 				richPayload := buildWeekendScheduleRichTables(centralMatches, allMatches)
 				var err error
 				schedMsgID, err = SendRichMessage(ctx, botToken, channelID, richPayload, keyboard)
@@ -779,6 +702,9 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 					ChannelID:       cID,
 					MessageID:       &firstMsg,
 					PublicationType: PubTypeRoundFixtures,
+					LeagueID:        &flagshipLeagueID,
+					SeasonID:        &flagshipSeasonID,
+					RoundID:         &flagshipRoundID,
 					Title:           "Главные матчи уикенда (Топ-5 лиг) — Альбом",
 					TextContent:     albumCap.String(),
 					MediaType:       MediaTypePhoto,
@@ -794,6 +720,9 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 					ChannelID:       cID,
 					MessageID:       &schedMsgID,
 					PublicationType: PubTypeRoundFixtures,
+					LeagueID:        &flagshipLeagueID,
+					SeasonID:        &flagshipSeasonID,
+					RoundID:         &flagshipRoundID,
 					Title:           schedTitle,
 					TextContent:     "Native Rich Message Table",
 					MediaType:       MediaTypeText,
@@ -820,10 +749,6 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 	return nil
 }
 
-
-
-
-
 func padLeft(s string, width int) string {
 	rCount := utf8.RuneCountInString(s)
 	if rCount >= width {
@@ -838,219 +763,6 @@ func padRight(s string, width int) string {
 		return s
 	}
 	return s + strings.Repeat(" ", width-rCount)
-}
-
-func buildWeekendScheduleVariant1(allMatches []scheduleMatchItem) string {
-	var b strings.Builder
-	b.WriteString("⭐️ <b>ВАРИАНТ 1: Центрированные шапки + компактные лиги</b>\n")
-	b.WriteString("<i>(Флаг в строке в дни с 1 игрой, чистые компактные отступы)</i>\n\n")
-	b.WriteString("─── 📅 <b>РАСПИСАНИЕ УИКЕНДА</b> ───\n")
-	b.WriteString("<i>Время начала матчей указано по UTC</i>\n")
-
-	matchesPerDate := make(map[string]int)
-	for _, m := range allMatches {
-		matchesPerDate[m.KickoffDate]++
-	}
-
-	daysRu := []string{"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"}
-	monthsRu := []string{
-		"", "января", "февраля", "марта", "апреля", "мая", "июня",
-		"июля", "августа", "сентября", "октября", "ноября", "декабря",
-	}
-
-	currentDate := ""
-	currentLeague := -1
-
-	for _, m := range allMatches {
-		if m.KickoffDate != currentDate {
-			currentDate = m.KickoffDate
-			currentLeague = -1
-			weekday := daysRu[int(m.StartUTC.Weekday())]
-			mNum := int(m.StartUTC.Month())
-			monthStr := ""
-			if mNum >= 1 && mNum <= 12 {
-				monthStr = monthsRu[mNum]
-			}
-			b.WriteString(fmt.Sprintf("\n─────── 🗓 <b>%s, %d %s</b> ───────\n", strings.ToUpper(weekday), m.StartUTC.Day(), strings.ToUpper(monthStr)))
-		}
-
-		oddsPart := ""
-		if m.OddsHome != "" && m.OddsDraw != "" && m.OddsAway != "" {
-			oddsPart = fmt.Sprintf("  <i>(%s · %s · %s)</i>", m.OddsHome, m.OddsDraw, m.OddsAway)
-		}
-
-		if matchesPerDate[m.KickoffDate] <= 5 {
-			b.WriteString(fmt.Sprintf("%s <code>%s  %s — %s</code>%s\n", m.LeagueFlag, m.KickoffTime, m.HomeTeam, m.AwayTeam, oddsPart))
-		} else {
-			if m.LeagueOrder != currentLeague {
-				currentLeague = m.LeagueOrder
-				b.WriteString(fmt.Sprintf("\n%s <b>%s</b>\n", m.LeagueFlag, m.LeagueName))
-			}
-			b.WriteString(fmt.Sprintf("<code>%s  %s — %s</code>%s\n", m.KickoffTime, m.HomeTeam, m.AwayTeam, oddsPart))
-		}
-	}
-	return b.String()
-}
-
-func buildWeekendScheduleVariant2(allMatches []scheduleMatchItem) string {
-	var b strings.Builder
-	b.WriteString("⭐️ <b>ВАРИАНТ 2: Табличное центрирование тире в коде (Ось «—»)</b>\n")
-	b.WriteString("<i>(Все тире выстроены строго по центру в одну вертикальную линию)</i>\n\n")
-	b.WriteString("─── 📅 <b>РАСПИСАНИЕ УИКЕНДА</b> ───\n")
-	b.WriteString("<i>Время начала матчей указано по UTC</i>\n")
-
-	matchesPerDate := make(map[string]int)
-	for _, m := range allMatches {
-		matchesPerDate[m.KickoffDate]++
-	}
-
-	daysRu := []string{"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"}
-	monthsRu := []string{
-		"", "января", "февраля", "марта", "апреля", "мая", "июня",
-		"июля", "августа", "сентября", "октября", "ноября", "декабря",
-	}
-
-	currentDate := ""
-	currentLeague := -1
-	teamColWidth := 9
-
-	for _, m := range allMatches {
-		if m.KickoffDate != currentDate {
-			currentDate = m.KickoffDate
-			currentLeague = -1
-			weekday := daysRu[int(m.StartUTC.Weekday())]
-			mNum := int(m.StartUTC.Month())
-			monthStr := ""
-			if mNum >= 1 && mNum <= 12 {
-				monthStr = monthsRu[mNum]
-			}
-			b.WriteString(fmt.Sprintf("\n─────── 🗓 <b>%s, %d %s</b> ───────\n", strings.ToUpper(weekday), m.StartUTC.Day(), strings.ToUpper(monthStr)))
-		}
-
-		oddsPart := ""
-		if m.OddsHome != "" && m.OddsDraw != "" && m.OddsAway != "" {
-			oddsPart = fmt.Sprintf(" <i>(%s·%s·%s)</i>", m.OddsHome, m.OddsDraw, m.OddsAway)
-		}
-
-		hPadded := padLeft(m.HomeTeam, teamColWidth)
-		aPadded := padRight(m.AwayTeam, teamColWidth)
-		matchCode := fmt.Sprintf("<code>%s  %s — %s</code>", m.KickoffTime, hPadded, aPadded)
-
-		if matchesPerDate[m.KickoffDate] <= 5 {
-			b.WriteString(fmt.Sprintf("%s %s%s\n", m.LeagueFlag, matchCode, oddsPart))
-		} else {
-			if m.LeagueOrder != currentLeague {
-				currentLeague = m.LeagueOrder
-				b.WriteString(fmt.Sprintf("\n%s <b>%s</b>\n", m.LeagueFlag, m.LeagueName))
-			}
-			b.WriteString(fmt.Sprintf("%s%s\n", matchCode, oddsPart))
-		}
-	}
-	return b.String()
-}
-
-func buildWeekendScheduleVariant3(allMatches []scheduleMatchItem) string {
-	var b strings.Builder
-	b.WriteString("⭐️ <b>ВАРИАНТ 3: Моноширина только времени + разделители</b>\n")
-	b.WriteString("<i>(Легкий стиль: текст дышит, без широких блоков, аккуратно на смартфонах)</i>\n\n")
-	b.WriteString("─── 📅 <b>РАСПИСАНИЕ УИКЕНДА</b> ───\n")
-	b.WriteString("<i>Время начала матчей указано по UTC</i>\n")
-
-	matchesPerDate := make(map[string]int)
-	for _, m := range allMatches {
-		matchesPerDate[m.KickoffDate]++
-	}
-
-	daysRu := []string{"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"}
-	monthsRu := []string{
-		"", "января", "февраля", "марта", "апреля", "мая", "июня",
-		"июля", "августа", "сентября", "октября", "ноября", "декабря",
-	}
-
-	currentDate := ""
-	currentLeague := -1
-
-	for _, m := range allMatches {
-		if m.KickoffDate != currentDate {
-			currentDate = m.KickoffDate
-			currentLeague = -1
-			weekday := daysRu[int(m.StartUTC.Weekday())]
-			mNum := int(m.StartUTC.Month())
-			monthStr := ""
-			if mNum >= 1 && mNum <= 12 {
-				monthStr = monthsRu[mNum]
-			}
-			b.WriteString(fmt.Sprintf("\n─────── 🗓 <b>%s, %d %s</b> ───────\n", strings.ToUpper(weekday), m.StartUTC.Day(), strings.ToUpper(monthStr)))
-		}
-
-		oddsPart := ""
-		if m.OddsHome != "" && m.OddsDraw != "" && m.OddsAway != "" {
-			oddsPart = fmt.Sprintf("  <i>(%s · %s · %s)</i>", m.OddsHome, m.OddsDraw, m.OddsAway)
-		}
-
-		if matchesPerDate[m.KickoffDate] <= 5 {
-			b.WriteString(fmt.Sprintf("%s <code>%s</code>  %s — %s%s\n", m.LeagueFlag, m.KickoffTime, m.HomeTeam, m.AwayTeam, oddsPart))
-		} else {
-			if m.LeagueOrder != currentLeague {
-				currentLeague = m.LeagueOrder
-				b.WriteString(fmt.Sprintf("\n%s <b>%s</b>\n", m.LeagueFlag, m.LeagueName))
-			}
-			b.WriteString(fmt.Sprintf("<code>%s</code>  %s — %s%s\n", m.KickoffTime, m.HomeTeam, m.AwayTeam, oddsPart))
-		}
-	}
-	return b.String()
-}
-
-func buildWeekendScheduleVariant4(allMatches []scheduleMatchItem) string {
-	var b strings.Builder
-	b.WriteString("⭐️ <b>ВАРИАНТ 4: Центрирование точками-акцентами (▫️)</b>\n")
-	b.WriteString("<i>(Стиль без сплошных линий, с акцентными точками вокруг дней)</i>\n\n")
-	b.WriteString("▫️ <b>РАСПИСАНИЕ МАТЧЕЙ УИКЕНДА</b> ▫️\n")
-	b.WriteString("<i>Время начала матчей указано по UTC</i>\n")
-
-	matchesPerDate := make(map[string]int)
-	for _, m := range allMatches {
-		matchesPerDate[m.KickoffDate]++
-	}
-
-	daysRu := []string{"Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"}
-	monthsRu := []string{
-		"", "января", "февраля", "марта", "апреля", "мая", "июня",
-		"июля", "августа", "сентября", "октября", "ноября", "декабря",
-	}
-
-	currentDate := ""
-	currentLeague := -1
-
-	for _, m := range allMatches {
-		if m.KickoffDate != currentDate {
-			currentDate = m.KickoffDate
-			currentLeague = -1
-			weekday := daysRu[int(m.StartUTC.Weekday())]
-			mNum := int(m.StartUTC.Month())
-			monthStr := ""
-			if mNum >= 1 && mNum <= 12 {
-				monthStr = monthsRu[mNum]
-			}
-			b.WriteString(fmt.Sprintf("\n▫️ <b>%s, %d %s</b> ▫️\n", strings.ToUpper(weekday), m.StartUTC.Day(), strings.ToUpper(monthStr)))
-		}
-
-		oddsPart := ""
-		if m.OddsHome != "" && m.OddsDraw != "" && m.OddsAway != "" {
-			oddsPart = fmt.Sprintf("  <i>(%s · %s · %s)</i>", m.OddsHome, m.OddsDraw, m.OddsAway)
-		}
-
-		if matchesPerDate[m.KickoffDate] <= 5 {
-			b.WriteString(fmt.Sprintf("%s <code>%s  %s — %s</code>%s\n", m.LeagueFlag, m.KickoffTime, m.HomeTeam, m.AwayTeam, oddsPart))
-		} else {
-			if m.LeagueOrder != currentLeague {
-				currentLeague = m.LeagueOrder
-				b.WriteString(fmt.Sprintf("\n%s <b>%s</b>\n", m.LeagueFlag, m.LeagueName))
-			}
-			b.WriteString(fmt.Sprintf("<code>%s  %s — %s</code>%s\n", m.KickoffTime, m.HomeTeam, m.AwayTeam, oddsPart))
-		}
-	}
-	return b.String()
 }
 
 func buildWeekendScheduleRichTables(centralMatches []centralMatchInfo, allMatches []scheduleMatchItem) RichMessagePayload {

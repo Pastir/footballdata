@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 	"github.com/Pastir/footballdata/db"
-	"github.com/jackc/pgconn"
 	"os"
 )
 
@@ -30,7 +29,7 @@ func GetMarkets() {
 	//Выполняем запрос
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
 	if err != nil {
-		db.PGxConnPanic("Init Markets", "GetMarkets", err.(*pgconn.PgError))
+		db.PGxConnPanic("Init Markets", "GetMarkets", err)
 		os.Exit(1)
 	}
 
@@ -40,7 +39,7 @@ func GetMarkets() {
 
 		err = rows.Scan(&mId, &name)
 		if err != nil {
-			db.PGxConnPanic("Init Markets", "GetMarkets", err.(*pgconn.PgError))
+			db.PGxConnPanic("Init Markets", "GetMarkets", err)
 			os.Exit(1)
 		}
 

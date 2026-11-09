@@ -3,6 +3,7 @@ package press
 import (
 	"context"
 	"fmt"
+	"html"
 	"strings"
 
 	"github.com/Pastir/footballdata/config"
@@ -53,8 +54,12 @@ func (d *Dispatcher) ProcessAndPublishArticle(ctx context.Context, a Article, pu
 		summaryRu = generated
 		a.SummaryRU = summaryRu
 
-		// Сохраняем черновик выжимки в БД
-		_ = d.storage.UpdateArticleSummary(ctx, a.ID, summaryRu, "ready")
+		// Сохраняем черновик выжимки в БД (при dry-run оставляем статус 'draft', чтобы не терять статью)
+		nextStatus := "draft"
+		if publish {
+			nextStatus = "ready"
+		}
+		_ = d.storage.UpdateArticleSummary(ctx, a.ID, summaryRu, nextStatus)
 	}
 
 	// 2. Сборка финального HTML-текста поста для Telegram
@@ -78,10 +83,10 @@ func (d *Dispatcher) ProcessAndPublishArticle(ctx context.Context, a Article, pu
 
 	postText := fmt.Sprintf(
 		"<b>%s</b>\n\n%s\n\n👉 <i>Источник: <a href=\"%s\">%s</a></i>\n📊 <i><a href=\"%s\">Открыть Football Data Lab Mini App</a></i>",
-		badge,
+		html.EscapeString(badge),
 		summaryRu,
 		a.OriginalURL,
-		a.OriginalTitle,
+		html.EscapeString(a.OriginalTitle),
 		miniAppURL,
 	)
 

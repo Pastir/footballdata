@@ -39,6 +39,11 @@ func dispatchExpress(ctx context.Context, taskData config.TaskData, log *zap.Log
 			LeagueName: "Топ-чемпионаты Европы",
 			SeasonName: "2024/2025",
 		}
+		roundID = taskData.GetRoundId()
+		if roundID == 0 {
+			year, week := time.Now().UTC().ISOWeek()
+			roundID = year*100 + week
+		}
 		roundName = "Уикенд"
 		var fetchErr error
 		candidates, fetchErr = analytics.FetchAllLeaguesCandidateMatches(ctx, pool)
@@ -155,21 +160,7 @@ func dispatchExpress(ctx context.Context, taskData config.TaskData, log *zap.Log
 	var keyboard *InlineKeyboardMarkup = nil
 
 	style := strings.ToLower(strings.TrimSpace(taskData.GetStyle()))
-
 	richUserPayload := buildExpressRichTableUserVariant(postCfg, plan)
-	richMonolithPayload := buildExpressRichTableVariantMonolith(postCfg, plan)
-	richSubrowPayload := buildExpressRichTableVariantSubrow(postCfg, plan)
-	richMobilePayload := buildExpressRichTableVariantMobileCards(postCfg, plan)
-
-	fmt.Printf("\n=== [1 ТЕСТ] СТИЛЬ 1: THE ATHLETIC / EDITORIAL ===\n%s\n\n", style1Text)
-	fmt.Printf("=== [2 ТЕСТ] СТИЛЬ 2: BLOOMBERG TERMINAL ===\n%s\n\n", style2Text)
-	fmt.Printf("=== [3 ТЕСТ] СТИЛЬ 3: VISUAL SLIP POSTER CAPTION ===\n%s\n", style3Caption)
-	fmt.Printf("=== [НАТИВНЫЕ ТАБЛИЦЫ TELEGRAM (Bot API 10.1+)] ===\n")
-	fmt.Printf("  • [ВАРИАНТ ПОЛЬЗОВАТЕЛЯ] Match Cards Tables (%d блоков)\n", len(richUserPayload.Blocks))
-	fmt.Printf("  • [1 ТЕСТ • СВОЙ] Монолитный стек-купон (%d блоков)\n", len(richMonolithPayload.Blocks))
-	fmt.Printf("  • [2 ТЕСТ • СВОЙ] Биржевая матрица с подстрочником (%d блоков)\n", len(richSubrowPayload.Blocks))
-	fmt.Printf("  • [3 ТЕСТ • СВОЙ] Мобильный аналитический паспорт (%d блоков)\n", len(richMobilePayload.Blocks))
-	fmt.Printf("===================================================\n\n")
 
 	outputPath := taskData.GetOutput()
 	if outputPath == "" {
@@ -184,6 +175,7 @@ func dispatchExpress(ctx context.Context, taskData config.TaskData, log *zap.Log
 	}
 
 	if !taskData.GetPublish() {
+		fmt.Printf("\n=== ЭКСПРЕСС ТУРА (Нативная таблица: %d блоков) ===\n%s\n\n", len(richUserPayload.Blocks), style1Text)
 		fmt.Printf("🎨 Рендеринг визуального постера-купона в режиме проверки: %s...\n", outputPath)
 		if rErr := renderSlipPNG(); rErr != nil {
 			fmt.Printf("⚠️ Ошибка рендеринга постера: %v\n", rErr)
@@ -222,161 +214,49 @@ func dispatchExpress(ctx context.Context, taskData config.TaskData, log *zap.Log
 	postText := style1Text
 
 	switch style {
-	case "user":
-		fmt.Printf("📤 Отправка [ВАРИАНТ ПОЛЬЗОВАТЕЛЯ] (Нативная таблица: Карточки матчей) в Telegram %s...\n", tg.ChannelID)
-		id, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richUserPayload, keyboard)
-		if err != nil {
-			return fmt.Errorf("send user variant: %w", err)
-		}
-		msgID = id
-		postText = "[ВАРИАНТ ПОЛЬЗОВАТЕЛЯ] Нативная таблица: Карточки матчей"
-		fmt.Printf("✅ [ВАРИАНТ ПОЛЬЗОВАТЕЛЯ] успешно опубликован в Telegram (Message ID: %d)!\n", id)
-
-	case "rich1", "table1", "monolith":
-		fmt.Printf("📤 Отправка [1 ТЕСТ • СВОЙ] (Нативная таблица: Монолитный купон) в Telegram-канал %s...\n", tg.ChannelID)
-		id, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richMonolithPayload, keyboard)
-		if err != nil {
-			return fmt.Errorf("send rich 1: %w", err)
-		}
-		msgID = id
-		postText = "[1 ТЕСТ • СВОЙ] Нативная таблица: Монолитный купон"
-		fmt.Printf("✅ [1 ТЕСТ • СВОЙ] успешно опубликован в Telegram (Message ID: %d)!\n", id)
-
-	case "rich2", "table2", "subrow":
-		fmt.Printf("📤 Отправка [2 ТЕСТ • СВОЙ] (Нативная таблица: Биржевая матрица) в Telegram-канал %s...\n", tg.ChannelID)
-		id, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richSubrowPayload, keyboard)
-		if err != nil {
-			return fmt.Errorf("send rich 2: %w", err)
-		}
-		msgID = id
-		postText = "[2 ТЕСТ • СВОЙ] Нативная таблица: Биржевая матрица"
-		fmt.Printf("✅ [2 ТЕСТ • СВОЙ] успешно опубликован в Telegram (Message ID: %d)!\n", id)
-
-	case "rich3", "table3", "mobile":
-		fmt.Printf("📤 Отправка [3 ТЕСТ • СВОЙ] (Нативная таблица: Мобильный паспорт) в Telegram-канал %s...\n", tg.ChannelID)
-		id, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richMobilePayload, keyboard)
-		if err != nil {
-			return fmt.Errorf("send rich 3: %w", err)
-		}
-		msgID = id
-		postText = "[3 ТЕСТ • СВОЙ] Нативная таблица: Мобильный паспорт"
-		fmt.Printf("✅ [3 ТЕСТ • СВОЙ] успешно опубликован в Telegram (Message ID: %d)!\n", id)
-
-	case "rich", "richall", "tables", "all4":
-		fmt.Printf("🚀 Режим тестирования нативных таблиц: последовательная публикация 1 варианта пользователя + 3 вариантов своих в %s...\n", tg.ChannelID)
-
-		// 1. Отправляем [ВАРИАНТ ПОЛЬЗОВАТЕЛЯ]
-		fmt.Println("📤 Отправка [ВАРИАНТ ПОЛЬЗОВАТЕЛЯ] (Нативная таблица: Карточки матчей)...")
-		idUser, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richUserPayload, keyboard)
-		if err != nil {
-			log.Warn("failed to send user variant", zap.Error(err))
-		} else {
-			msgID = idUser
-			fmt.Printf("✅ [ВАРИАНТ ПОЛЬЗОВАТЕЛЯ] опубликован (Message ID: %d)\n", idUser)
-		}
-		time.Sleep(2 * time.Second)
-
-		// 2. Отправляем [1 ТЕСТ • СВОЙ] (Монолитный стек-купон)
-		fmt.Println("📤 Отправка [1 ТЕСТ • СВОЙ] (Нативная таблица: Монолитный купон)...")
-		id1, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richMonolithPayload, keyboard)
-		if err != nil {
-			log.Warn("failed to send rich 1", zap.Error(err))
-		} else {
-			fmt.Printf("✅ [1 ТЕСТ • СВОЙ] опубликован (Message ID: %d)\n", id1)
-		}
-		time.Sleep(2 * time.Second)
-
-		// 3. Отправляем [2 ТЕСТ • СВОЙ] (Биржевая матрица)
-		fmt.Println("📤 Отправка [2 ТЕСТ • СВОЙ] (Нативная таблица: Биржевая матрица)...")
-		id2, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richSubrowPayload, keyboard)
-		if err != nil {
-			log.Warn("failed to send rich 2", zap.Error(err))
-		} else {
-			fmt.Printf("✅ [2 ТЕСТ • СВОЙ] опубликован (Message ID: %d)\n", id2)
-		}
-		time.Sleep(2 * time.Second)
-
-		// 4. Отправляем [3 ТЕСТ • СВОЙ] (Мобильный паспорт)
-		fmt.Println("📤 Отправка [3 ТЕСТ • СВОЙ] (Нативная таблица: Мобильный паспорт)...")
-		id3, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richMobilePayload, keyboard)
-		if err != nil {
-			log.Warn("failed to send rich 3", zap.Error(err))
-		} else {
-			fmt.Printf("✅ [3 ТЕСТ • СВОЙ] опубликован (Message ID: %d)\n", id3)
-		}
-		postText = "Нативные таблицы Telegram: [ВАРИАНТ ПОЛЬЗОВАТЕЛЯ] + 3 авторских варианта"
-
 	case "1":
-		fmt.Printf("📤 Отправка [1 ТЕСТ] (Editorial Style) в Telegram-канал %s...\n", tg.ChannelID)
+		fmt.Printf("📤 Отправка (Editorial Style) в Telegram-канал %s...\n", tg.ChannelID)
 		id, err := SendTextMessageWithKeyboardAndPreview(pubCtx, tg.BotToken, tg.ChannelID, style1Text, keyboard, &LinkPreviewOptions{IsDisabled: true})
 		if err != nil {
 			return fmt.Errorf("send style 1: %w", err)
 		}
 		msgID = id
 		postText = style1Text
-		fmt.Printf("✅ [1 ТЕСТ] успешно опубликован в Telegram (Message ID: %d)!\n", id)
+		fmt.Printf("✅ Экспресс (Style 1) опубликован в Telegram (Message ID: %d)!\n", id)
 
 	case "2":
-		fmt.Printf("📤 Отправка [2 ТЕСТ] (Terminal Style) в Telegram-канал %s...\n", tg.ChannelID)
+		fmt.Printf("📤 Отправка (Terminal Style) в Telegram-канал %s...\n", tg.ChannelID)
 		id, err := SendTextMessageWithKeyboardAndPreview(pubCtx, tg.BotToken, tg.ChannelID, style2Text, keyboard, &LinkPreviewOptions{IsDisabled: true})
 		if err != nil {
 			return fmt.Errorf("send style 2: %w", err)
 		}
 		msgID = id
 		postText = style2Text
-		fmt.Printf("✅ [2 ТЕСТ] успешно опубликован в Telegram (Message ID: %d)!\n", id)
+		fmt.Printf("✅ Экспресс (Style 2) опубликован в Telegram (Message ID: %d)!\n", id)
 
 	case "3":
 		fmt.Printf("🎨 Рендеринг визуального постера-купона %s...\n", outputPath)
 		if rErr := renderSlipPNG(); rErr != nil {
 			return fmt.Errorf("render slip png: %w", rErr)
 		}
-		fmt.Printf("📤 Отправка [3 ТЕСТ] (Visual Slip Poster) в Telegram-канал %s...\n", tg.ChannelID)
+		fmt.Printf("📤 Отправка (Visual Slip Poster) в Telegram-канал %s...\n", tg.ChannelID)
 		id, err := SendPhotoWithKeyboard(pubCtx, tg.BotToken, tg.ChannelID, style3Caption, outputPath, keyboard)
 		if err != nil {
 			return fmt.Errorf("send style 3: %w", err)
 		}
 		msgID = id
 		postText = style3Caption
-		fmt.Printf("✅ [3 ТЕСТ] успешно опубликован в Telegram (Message ID: %d)!\n", id)
+		fmt.Printf("✅ Экспресс (Style 3) опубликован в Telegram (Message ID: %d)!\n", id)
 
-	default: // "all", "test", "tests" или пустой стиль — публикуем все 3 теста последовательно!
-		fmt.Printf("🚀 Режим тестирования подачи: последовательная публикация всех 3 вариантов стиля в %s...\n", tg.ChannelID)
-
-		// 1. Отправляем [1 ТЕСТ]
-		fmt.Println("📤 Отправка [1 ТЕСТ] (The Athletic / Editorial Longread)...")
-		id1, err := SendTextMessageWithKeyboardAndPreview(pubCtx, tg.BotToken, tg.ChannelID, style1Text, keyboard, &LinkPreviewOptions{IsDisabled: true})
+	default: // "user", "" и др. — боевой нативный табличный формат по умолчанию
+		fmt.Printf("📤 Отправка экспресса тура (Нативная таблица: Карточки матчей) в Telegram %s...\n", tg.ChannelID)
+		id, err := SendRichMessage(pubCtx, tg.BotToken, tg.ChannelID, richUserPayload, keyboard)
 		if err != nil {
-			log.Warn("failed to send style 1", zap.Error(err))
-		} else {
-			msgID = id1
-			fmt.Printf("✅ [1 ТЕСТ] опубликован (Message ID: %d)\n", id1)
+			return fmt.Errorf("send express rich table: %w", err)
 		}
-		time.Sleep(2 * time.Second)
-
-		// 2. Отправляем [2 ТЕСТ]
-		fmt.Println("📤 Отправка [2 ТЕСТ] (Bloomberg Terminal / ASCII Table)...")
-		id2, err := SendTextMessageWithKeyboardAndPreview(pubCtx, tg.BotToken, tg.ChannelID, style2Text, keyboard, &LinkPreviewOptions{IsDisabled: true})
-		if err != nil {
-			log.Warn("failed to send style 2", zap.Error(err))
-		} else {
-			fmt.Printf("✅ [2 ТЕСТ] опубликован (Message ID: %d)\n", id2)
-		}
-		time.Sleep(2 * time.Second)
-
-		// 3. Отправляем [3 ТЕСТ]
-		fmt.Printf("🎨 Рендеринг визуального постера-купона %s...\n", outputPath)
-		if rErr := renderSlipPNG(); rErr != nil {
-			log.Warn("render slip png failed", zap.Error(rErr))
-		} else {
-			fmt.Println("📤 Отправка [3 ТЕСТ] (Visual Slip Poster)...")
-			id3, err := SendPhotoWithKeyboard(pubCtx, tg.BotToken, tg.ChannelID, style3Caption, outputPath, keyboard)
-			if err != nil {
-				log.Warn("failed to send style 3", zap.Error(err))
-			} else {
-				fmt.Printf("✅ [3 ТЕСТ] опубликован (Message ID: %d)\n", id3)
-			}
-		}
+		msgID = id
+		postText = style1Text
+		fmt.Printf("✅ Экспресс тура успешно опубликован в Telegram (Message ID: %d)!\n", id)
 	}
 
 	// Инициализируем и сохраняем прогноз в prediction_storage
@@ -385,9 +265,13 @@ func dispatchExpress(ctx context.Context, taskData config.TaskData, log *zap.Log
 
 	var predItems []prediction.PredictionItem
 	for _, sel := range plan.Selections {
+		itemLeagueID := sel.Match.LeagueID
+		if itemLeagueID == 0 {
+			itemLeagueID = leagueID
+		}
 		predItems = append(predItems, prediction.PredictionItem{
 			FixtureID:        sel.Match.FixtureID,
-			LeagueID:         leagueID,
+			LeagueID:         itemLeagueID,
 			HomeTeamID:       sel.Match.HomeTeamID,
 			AwayTeamID:       sel.Match.AwayTeamID,
 			MatchStartingAt:  sel.Match.StartingAt,
@@ -452,7 +336,7 @@ func buildExpressRichTableUserVariant(cfg copywriter.ExpressPostConfig, plan *an
 	blocks = append(blocks, RichBlock{
 		Type: "heading",
 		Size: 3,
-		Text: fmt.Sprintf("🎯 [ВАРИАНТ ПОЛЬЗОВАТЕЛЯ] ЭКСПРЕСС ТУРА: КОЭФФИЦИЕНТ %.2f", plan.TotalOdds),
+		Text: fmt.Sprintf("🎯 ЭКСПРЕСС ТУРА: КОЭФФИЦИЕНТ %.2f", plan.TotalOdds),
 	})
 
 	leagueRound := fmt.Sprintf("🏆 %s · %s", strings.ToUpper(cfg.LeagueName), strings.ToUpper(cfg.RoundName))
@@ -522,278 +406,6 @@ func buildExpressRichTableUserVariant(cfg copywriter.ExpressPostConfig, plan *an
 		IsStriped:  true,
 		IsCompact:  true,
 		Cells:      summaryCells,
-	})
-
-	return RichMessagePayload{Blocks: blocks}
-}
-
-// buildExpressRichTableVariantMonolith формирует вариант 1 (Свой):
-// Единая монолитная таблица с группировкой матчей разделителями, рынками и сводными строками.
-func buildExpressRichTableVariantMonolith(cfg copywriter.ExpressPostConfig, plan *analytics.SmartExpressPlan) RichMessagePayload {
-	var blocks []RichBlock
-
-	blocks = append(blocks, RichBlock{
-		Type: "heading",
-		Size: 3,
-		Text: "🎯 [1 ТЕСТ • СВОЙ] DATA LAB | МОНОЛИТНЫЙ КУПОН",
-	})
-
-	leagueRound := fmt.Sprintf("🏆 %s · %s", strings.ToUpper(cfg.LeagueName), strings.ToUpper(cfg.RoundName))
-	blocks = append(blocks, RichBlock{
-		Type: "heading",
-		Size: 4,
-		Text: leagueRound,
-	})
-
-	var tableCells [][]RichBlockTableCell
-
-	for i, sel := range plan.Selections {
-		timeBadge := sel.Match.StartingAt.UTC().Format("15:04 UTC")
-		matchHeader := fmt.Sprintf("⚽ %d. %s — %s (%s)", i+1, sel.Match.HomeDisplayName(), sel.Match.AwayDisplayName(), timeBadge)
-
-		// Секционный заголовок матча на всю ширину
-		tableCells = append(tableCells, []RichBlockTableCell{
-			{Text: matchHeader, IsHeader: true, Colspan: 3, Align: "center"},
-		})
-
-		// Строка 1: Команды
-		tableCells = append(tableCells, []RichBlockTableCell{
-			{Text: sel.Match.HomeDisplayName(), Align: "right"},
-			{Text: ":", Align: "center"},
-			{Text: sel.Match.AwayDisplayName(), Align: "left"},
-		})
-
-		// Строка 2: Рынок, Выбор, Кэф
-		tableCells = append(tableCells, []RichBlockTableCell{
-			{Text: sel.MarketName, Align: "center"},
-			{Text: sel.OutcomeShortName() + " ✅", Align: "center", IsHeader: true},
-			{Text: fmt.Sprintf("%.2f", sel.Odds), Align: "center"},
-		})
-
-		// Строка 3: Фактор на всю ширину
-		tableCells = append(tableCells, []RichBlockTableCell{
-			{Text: "💡 " + sel.Reason, Colspan: 3, Align: "left"},
-		})
-	}
-
-	// Подвальные строки купона
-	tableCells = append(tableCells, []RichBlockTableCell{
-		{Text: "ИТОГОВЫЙ КОЭФФИЦИЕНТ", IsHeader: true, Colspan: 2, Align: "right"},
-		{Text: fmt.Sprintf("%.2f", plan.TotalOdds), IsHeader: true, Align: "center"},
-	})
-	tableCells = append(tableCells, []RichBlockTableCell{
-		{Text: "МАТЕМАТИЧЕСКИЙ VALUE EDGE", IsHeader: true, Colspan: 2, Align: "right"},
-		{Text: fmt.Sprintf("+%.1f%%", plan.ValueEdge), IsHeader: true, Align: "center"},
-	})
-	tableCells = append(tableCells, []RichBlockTableCell{
-		{Text: "РЕКОМЕНДУЕМЫЙ ФЛЭТ", IsHeader: true, Colspan: 2, Align: "right"},
-		{Text: fmt.Sprintf("%.1f юнит (1%%)", plan.RecommendedStake), IsHeader: true, Align: "center"},
-	})
-
-	blocks = append(blocks, RichBlock{
-		Type:       "table",
-		IsBordered: true,
-		IsStriped:  true,
-		IsCompact:  true,
-		Cells:      tableCells,
-	})
-
-	if cfg.BookmakerName != "" {
-		blocks = append(blocks, RichBlock{
-			Type: "heading",
-			Size: 4,
-			Text: "🎁 БОНУС ПАРТНЁРА ТУРА",
-		})
-		var promoCells [][]RichBlockTableCell
-		promoCells = append(promoCells, []RichBlockTableCell{
-			{Text: "Букмекер", IsHeader: true, Align: "center"},
-			{Text: "Промокод", IsHeader: true, Align: "center"},
-			{Text: "Предложение", IsHeader: true, Align: "left"},
-		})
-		promoCells = append(promoCells, []RichBlockTableCell{
-			{Text: cfg.BookmakerName, Align: "center"},
-			{Text: cfg.PromoCode, Align: "center"},
-			{Text: cfg.BonusText, Align: "left"},
-		})
-		blocks = append(blocks, RichBlock{
-			Type:       "table",
-			IsBordered: true,
-			IsStriped:  true,
-			IsCompact:  true,
-			Cells:      promoCells,
-		})
-	}
-
-	return RichMessagePayload{Blocks: blocks}
-}
-
-// buildExpressRichTableVariantSubrow формирует вариант 2 (Свой):
-// 4-колоночная биржевая таблица ордеров с подстрочным разбором xG-фактора под каждым событием.
-func buildExpressRichTableVariantSubrow(cfg copywriter.ExpressPostConfig, plan *analytics.SmartExpressPlan) RichMessagePayload {
-	var blocks []RichBlock
-
-	blocks = append(blocks, RichBlock{
-		Type: "heading",
-		Size: 3,
-		Text: "📈 [2 ТЕСТ • СВОЙ] QUANT LAB | БИРЖЕВАЯ МАТРИЦА",
-	})
-
-	leagueRound := fmt.Sprintf("⚡ %s · %s · Value Edge: +%.1f%%", strings.ToUpper(cfg.LeagueName), strings.ToUpper(cfg.RoundName), plan.ValueEdge)
-	blocks = append(blocks, RichBlock{
-		Type: "heading",
-		Size: 4,
-		Text: leagueRound,
-	})
-
-	var tableCells [][]RichBlockTableCell
-	tableCells = append(tableCells, []RichBlockTableCell{
-		{Text: "Матч (UTC)", IsHeader: true, Align: "left"},
-		{Text: "Рынок", IsHeader: true, Align: "center"},
-		{Text: "Исход", IsHeader: true, Align: "center"},
-		{Text: "Кэф", IsHeader: true, Align: "center"},
-	})
-
-	for _, sel := range plan.Selections {
-		timeStr := sel.Match.StartingAt.UTC().Format("15:04")
-		matchName := fmt.Sprintf("%s %s—%s", timeStr, sel.Match.HomeDisplayName(), sel.Match.AwayDisplayName())
-
-		tableCells = append(tableCells, []RichBlockTableCell{
-			{Text: matchName, Align: "left"},
-			{Text: sel.MarketName, Align: "center"},
-			{Text: sel.OutcomeShortName() + " 🔥", Align: "center", IsHeader: true},
-			{Text: fmt.Sprintf("%.2f", sel.Odds), Align: "center"},
-		})
-
-		tableCells = append(tableCells, []RichBlockTableCell{
-			{Text: "↳ " + sel.Reason, Colspan: 4, Align: "left"},
-		})
-	}
-
-	// Итоговые строки портфеля
-	tableCells = append(tableCells, []RichBlockTableCell{
-		{Text: "ИТОГОВЫЙ КОЭФФИЦИЕНТ ПОРТФЕЛЯ", Colspan: 3, IsHeader: true, Align: "right"},
-		{Text: fmt.Sprintf("%.2f", plan.TotalOdds), Colspan: 1, IsHeader: true, Align: "center"},
-	})
-	tableCells = append(tableCells, []RichBlockTableCell{
-		{Text: "МАТЕМАТИЧЕСКИЙ VALUE EDGE", Colspan: 3, IsHeader: true, Align: "right"},
-		{Text: fmt.Sprintf("+%.1f%%", plan.ValueEdge), Colspan: 1, IsHeader: true, Align: "center"},
-	})
-	winProb := 100.0 / plan.TotalOdds * (1.0 + plan.ValueEdge/100.0)
-	if winProb > 95.0 {
-		winProb = 95.0
-	}
-	tableCells = append(tableCells, []RichBlockTableCell{
-		{Text: "РАСЧЁТНАЯ ВЕРОЯТНОСТЬ МОДЕЛИ", Colspan: 3, IsHeader: true, Align: "right"},
-		{Text: fmt.Sprintf("%.1f%%", winProb), Colspan: 1, IsHeader: true, Align: "center"},
-	})
-
-	blocks = append(blocks, RichBlock{
-		Type:       "table",
-		IsBordered: true,
-		IsStriped:  true,
-		IsCompact:  true,
-		Cells:      tableCells,
-	})
-
-	return RichMessagePayload{Blocks: blocks}
-}
-
-// buildExpressRichTableVariantMobileCards формирует аналитический экспресс (Вариант 3):
-// Двухколоночный мобильный протокол без эмодзи, с выравниванием по левому краю, xG-фактурой для обеих команд и без фразы "Алгоритмический отбор".
-func buildExpressRichTableVariantMobileCards(cfg copywriter.ExpressPostConfig, plan *analytics.SmartExpressPlan) RichMessagePayload {
-	var blocks []RichBlock
-
-	blocks = append(blocks, RichBlock{
-		Type: "heading",
-		Size: 4,
-		Text: "DATA LAB | АНАЛИТИЧЕСКИЙ ЭКСПРЕСС",
-	})
-
-	leagueRound := fmt.Sprintf("%s · %s · Общий кэф %.2f", cfg.LeagueName, cfg.RoundName, plan.TotalOdds)
-	blocks = append(blocks, RichBlock{
-		Type: "heading",
-		Size: 5,
-		Text: leagueRound,
-	})
-
-	for i, sel := range plan.Selections {
-		timeBadge := sel.Match.StartingAt.UTC().Format("02.01 15:04 UTC")
-		var cardCells [][]RichBlockTableCell
-
-		cardCells = append(cardCells, []RichBlockTableCell{
-			{Text: fmt.Sprintf("СОБЫТИЕ %d · %s", i+1, timeBadge), Colspan: 2, IsHeader: true, Align: "left"},
-		})
-		matchTitle := fmt.Sprintf("%s — %s", sel.Match.HomeDisplayName(), sel.Match.AwayDisplayName())
-		if sel.Match.CountryFlag != "" && sel.Match.LeagueName != "" {
-			matchTitle = fmt.Sprintf("%s %s · %s", sel.Match.CountryFlag, sel.Match.LeagueName, matchTitle)
-		} else if sel.Match.CountryFlag != "" {
-			matchTitle = fmt.Sprintf("%s %s", sel.Match.CountryFlag, matchTitle)
-		}
-
-		cardCells = append(cardCells, []RichBlockTableCell{
-			{Text: "Матч", IsHeader: true, Align: "left"},
-			{Text: matchTitle, Align: "left"},
-		})
-		cardCells = append(cardCells, []RichBlockTableCell{
-			{Text: "Прогноз (+EV)", IsHeader: true, Align: "left"},
-			{Text: fmt.Sprintf("%s (кэф %.2f)", sel.OutcomeDisplayName(), sel.Odds), Align: "left"},
-		})
-		cardCells = append(cardCells, []RichBlockTableCell{
-			{Text: "xG-фактура", IsHeader: true, Align: "left"},
-			{Text: sel.Reason, Align: "left"},
-		})
-
-		blocks = append(blocks, RichBlock{
-			Type:       "table",
-			IsBordered: true,
-			IsStriped:  true,
-			IsCompact:  true,
-			Cells:      cardCells,
-		})
-	}
-
-	var teleCells [][]RichBlockTableCell
-	teleCells = append(teleCells, []RichBlockTableCell{
-		{Text: "ИТОГОВЫЙ ЭКСПРЕСС", Colspan: 2, IsHeader: true, Align: "left"},
-	})
-	teleCells = append(teleCells, []RichBlockTableCell{
-		{Text: "Итоговый коэффициент", Align: "left"},
-		{Text: fmt.Sprintf("%.2f", plan.TotalOdds), Align: "center", IsHeader: true},
-	})
-	teleCells = append(teleCells, []RichBlockTableCell{
-		{Text: "Математический перевес", Align: "left"},
-		{Text: fmt.Sprintf("+%.1f%% (+EV)", plan.ValueEdge), Align: "center"},
-	})
-	winProb := 100.0 / plan.TotalOdds * (1.0 + plan.ValueEdge/100.0)
-	bkProb := 100.0 / plan.TotalOdds
-	if winProb > 95.0 {
-		winProb = 95.0
-	}
-	teleCells = append(teleCells, []RichBlockTableCell{
-		{Text: "Вероятность модели vs БК", Align: "left"},
-		{Text: fmt.Sprintf("%.1f%% vs %.1f%%", winProb, bkProb), Align: "center"},
-	})
-	teleCells = append(teleCells, []RichBlockTableCell{
-		{Text: "Банк-менеджмент", Align: "left"},
-		{Text: fmt.Sprintf("%.1f unit (1%% флэт)", plan.RecommendedStake), Align: "center"},
-	})
-	if cfg.BookmakerName != "" {
-		teleCells = append(teleCells, []RichBlockTableCell{
-			{Text: "Партнёрский бонус", Align: "left"},
-			{Text: fmt.Sprintf("%s: %s (промокод %s)", cfg.BookmakerName, cfg.BonusText, cfg.PromoCode), Align: "center"},
-		})
-	}
-	teleCells = append(teleCells, []RichBlockTableCell{
-		{Text: "Интерактивная модель", Align: "left"},
-		{Text: "Все матчи тура и xG в Football Data Lab Mini App", Align: "center"},
-	})
-
-	blocks = append(blocks, RichBlock{
-		Type:       "table",
-		IsBordered: true,
-		IsStriped:  true,
-		IsCompact:  true,
-		Cells:      teleCells,
 	})
 
 	return RichMessagePayload{Blocks: blocks}

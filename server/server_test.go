@@ -181,3 +181,15 @@ func TestHandleLiveMatches_FromStore(t *testing.T) {
 		t.Errorf("expected fixture 555, got %d", body.Matches[0].FixtureID)
 	}
 }
+
+func TestNormalizeLocale(t *testing.T) {
+	if got := normalizeLocale("EN"); got != "en" {
+		t.Errorf("expected en, got %s", got)
+	}
+	if got := normalizeLocale("uk"); got != "ua" {
+		t.Errorf("expected ua, got %s", got)
+	}
+	if got := normalizeLocale("malicious_random_key"); got != "ru" {
+		t.Errorf("expected ru fallback, got %s", got)
+	}
+}

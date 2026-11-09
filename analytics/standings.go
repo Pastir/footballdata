@@ -15,19 +15,39 @@ func GetCurrentStandings(ctx context.Context, pool *pgxpool.Pool, info *LeagueSe
     SELECT *
     FROM get_neighbor_rounds($1)
 ),
+round_validity AS (
+    SELECT
+        nr.*,
+        (
+            $2::int > 0 AND (
+                COALESCE((SELECT finished FROM provider_rounds WHERE id = $2::int), false) = true
+                OR COALESCE((
+                    SELECT MAX(psd.value::int)
+                    FROM provider_standings ps_chk
+                    JOIN provider_standings_details psd ON psd.standing_id = ps_chk.id AND psd.type_id = 129
+                    WHERE ps_chk.season_id = nr.season_id AND ps_chk.round_id = $2::int
+                ), 0) >= GREATEST(1, COALESCE((
+                    SELECT MAX(psd.value::int)
+                    FROM provider_standings ps_last
+                    JOIN provider_standings_details psd ON psd.standing_id = ps_last.id AND psd.type_id = 129
+                    WHERE ps_last.season_id = nr.season_id AND ps_last.round_id = nr.last_round_id
+                ), 0))
+            )
+        ) AS is_valid_target
+    FROM next_round nr
+),
 effective_round AS (
     SELECT 
         CASE 
-            WHEN $2::int > 0 AND COALESCE((SELECT finished FROM provider_rounds WHERE id = $2::int), false) = true 
-                THEN $2::int 
-            ELSE nr.last_round_id 
+            WHEN rv.is_valid_target THEN $2::int 
+            ELSE rv.last_round_id 
         END AS target_round_id,
         CASE
-            WHEN $2::int > 0 AND COALESCE((SELECT finished FROM provider_rounds WHERE id = $2::int), false) = true
-                THEN (CASE WHEN $3::int > 0 THEN $3::int ELSE (SELECT id FROM provider_rounds pr2 WHERE pr2.season_id = nr.season_id AND pr2.name::int < (SELECT name::int FROM provider_rounds WHERE id = $2::int) ORDER BY pr2.name::int DESC LIMIT 1) END)
-            ELSE (CASE WHEN $3::int > 0 THEN $3::int ELSE nr.prev_round_id END)
+            WHEN rv.is_valid_target
+                THEN (CASE WHEN $3::int > 0 THEN $3::int ELSE (SELECT id FROM provider_rounds pr2 WHERE pr2.season_id = rv.season_id AND pr2.name::int < (SELECT name::int FROM provider_rounds WHERE id = $2::int) ORDER BY pr2.name::int DESC LIMIT 1) END)
+            ELSE (CASE WHEN $3::int > 0 THEN $3::int ELSE rv.prev_round_id END)
         END AS prev_round_id
-    FROM next_round nr
+    FROM round_validity rv
 ),
 target_cutoff AS (
     SELECT 

@@ -123,14 +123,54 @@ func dispatchPreviewMatch(ctx context.Context, taskData config.TaskData, log *za
 
 	log.Info("previewMatch initiated", zap.Int("fixtureId", fixtureID), zap.Int("leagueId", leagueID))
 
-	caption := fmt.Sprintf("🔥 <b>Матч-центр: Превью матча #%d</b>\nЛига ID: %d", fixtureID, leagueID)
-	fmt.Printf("Карточка матча #%d подготовлена для рендера\n", fixtureID)
+	pool := db.DBx.PGxPool
+	if pool == nil {
+		return fmt.Errorf("database pool is not initialized")
+	}
+
+	m, err := analytics.GetFixtureLiveDetails(ctx, pool, int64(fixtureID), taskData.GetLocale())
+	if err != nil {
+		return fmt.Errorf("GetFixtureLiveDetails(%d): %w", fixtureID, err)
+	}
+
+	venue := "Стадион"
+	if m.VenueName != nil && *m.VenueName != "" {
+		venue = *m.VenueName
+	}
+
+	headerVM := viewmodel.MatchHeaderViewModel{
+		LeagueName:   strings.ToUpper(m.LeagueName),
+		RoundTitle:   fmt.Sprintf("ТУР %s", m.RoundName),
+		BadgeTitle:   "ПРЕВЬЮ МАТЧА",
+		HomeTeamName: strings.ToUpper(m.TeamHomeName),
+		HomeTeamCode: getTeamShortCode(m.TeamHomeName),
+		HomeTeamLogo: m.TeamHomeLogo,
+		AwayTeamName: strings.ToUpper(m.TeamAwayName),
+		AwayTeamCode: getTeamShortCode(m.TeamAwayName),
+		AwayTeamLogo: m.TeamAwayLogo,
+		KickoffTime:  m.FixtureStart.UTC().Format("15:04"),
+		KickoffDate:  m.FixtureStart.UTC().Format("02.01"),
+		Venue:        venue,
+		Timezone:     "UTC",
+		OddsHome:     m.Odds.HomeOdds,
+		OddsDraw:     m.Odds.DrawOdds,
+		OddsAway:     m.Odds.AwayOdds,
+	}
+
+	tmplPath := filepath.Join("template", "match_header_template.html")
+	if err := renderer.RenderMatchHeaderPNG(headerVM, tmplPath, outputPath); err != nil {
+		return fmt.Errorf("RenderMatchHeaderPNG: %w", err)
+	}
+
+	caption := fmt.Sprintf("🔥 <b>%s — %s</b>\n🏆 %s · Тур %s · %s UTC",
+		m.TeamHomeName, m.TeamAwayName, m.LeagueName, m.RoundName, m.FixtureStart.UTC().Format("02.01 15:04"))
+	fmt.Printf("✅ Карточка матча #%d (%s — %s) отрендерена: %s\n", fixtureID, m.TeamHomeName, m.TeamAwayName, outputPath)
 
 	if !taskData.GetPublish() {
 		return nil
 	}
 
-	return publishToTelegram(ctx, taskData, PubTypePrediction, leagueID, 0, 0, fixtureID, fmt.Sprintf("Превью матча #%d", fixtureID), caption, outputPath, log)
+	return publishToTelegram(ctx, taskData, PubTypePrediction, m.LeagueID, m.SeasonID, m.RoundID, fixtureID, fmt.Sprintf("%s — %s", m.TeamHomeName, m.TeamAwayName), caption, outputPath, log)
 }
 
 // publishToTelegram отправляет контент в Telegram и сохраняет запись в БД.
@@ -900,11 +940,20 @@ func syncSingleLeagueData(ctx context.Context, pool *pgxpool.Pool, leagueID int,
 
 		nextMatches, nmErr := analytics.GetRoundResults(ctx, pool, &nextInfo)
 		if nmErr == nil && len(nextMatches) > 0 {
+			profileCache := make(map[int64]analytics.TeamPreMatchStats)
 			for i := range nextMatches {
 				m := &nextMatches[i]
 				h2h, _ := analytics.GetH2HMatches(ctx, pool, m.TeamHomeID, m.TeamAwayID, info.Locale, 10)
-				homeProfile, _ := analytics.GetTeamPreMatchProfile(ctx, pool, m.TeamHomeID, info.SeasonID)
-				awayProfile, _ := analytics.GetTeamPreMatchProfile(ctx, pool, m.TeamAwayID, info.SeasonID)
+				homeProfile, ok := profileCache[m.TeamHomeID]
+				if !ok {
+					homeProfile, _ = analytics.GetTeamPreMatchProfile(ctx, pool, m.TeamHomeID, info.SeasonID)
+					profileCache[m.TeamHomeID] = homeProfile
+				}
+				awayProfile, ok := profileCache[m.TeamAwayID]
+				if !ok {
+					awayProfile, _ = analytics.GetTeamPreMatchProfile(ctx, pool, m.TeamAwayID, info.SeasonID)
+					profileCache[m.TeamAwayID] = awayProfile
+				}
 				m.H2H = &h2h
 				m.PreMatchStats = &analytics.PreMatchStatsComparison{
 					Home: homeProfile,

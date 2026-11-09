@@ -18,35 +18,7 @@ func RenderRoundResultsPNG(
 	templatePath,
 	outputPath string,
 ) error {
-	htmlContent, err := renderRoundTemplate(vm, templatePath)
-	if err != nil {
-		return fmt.Errorf("renderRoundTemplate results: %w", err)
-	}
-
-	tmpFile, err := os.CreateTemp("", "results-*.html")
-	if err != nil {
-		return fmt.Errorf("create temp file: %w", err)
-	}
-	defer os.Remove(tmpFile.Name())
-
-	if _, err = tmpFile.WriteString(htmlContent); err != nil {
-		_ = tmpFile.Close()
-		return fmt.Errorf("write temp file: %w", err)
-	}
-	if err = tmpFile.Close(); err != nil {
-		return fmt.Errorf("close temp file: %w", err)
-	}
-
-	pngBytes, err := screenshotHTML(tmpFile.Name())
-	if err != nil {
-		return fmt.Errorf("screenshotHTML: %w", err)
-	}
-
-	if err = os.WriteFile(outputPath, pngBytes, 0644); err != nil {
-		return fmt.Errorf("write PNG: %w", err)
-	}
-
-	return nil
+	return renderTemplateToPNG(vm, templatePath, "results-*.html", outputPath)
 }
 
 // RenderRoundFixturesPNG рендерит HTML-шаблон расписания следующего тура в PNG через headless Chromium.
@@ -55,35 +27,7 @@ func RenderRoundFixturesPNG(
 	templatePath,
 	outputPath string,
 ) error {
-	htmlContent, err := renderRoundTemplate(vm, templatePath)
-	if err != nil {
-		return fmt.Errorf("renderRoundTemplate fixtures: %w", err)
-	}
-
-	tmpFile, err := os.CreateTemp("", "fixtures-*.html")
-	if err != nil {
-		return fmt.Errorf("create temp file: %w", err)
-	}
-	defer os.Remove(tmpFile.Name())
-
-	if _, err = tmpFile.WriteString(htmlContent); err != nil {
-		_ = tmpFile.Close()
-		return fmt.Errorf("write temp file: %w", err)
-	}
-	if err = tmpFile.Close(); err != nil {
-		return fmt.Errorf("close temp file: %w", err)
-	}
-
-	pngBytes, err := screenshotHTML(tmpFile.Name())
-	if err != nil {
-		return fmt.Errorf("screenshotHTML: %w", err)
-	}
-
-	if err = os.WriteFile(outputPath, pngBytes, 0644); err != nil {
-		return fmt.Errorf("write PNG: %w", err)
-	}
-
-	return nil
+	return renderTemplateToPNG(vm, templatePath, "fixtures-*.html", outputPath)
 }
 
 // RenderLeadersPNG рендерит HTML-шаблон лидеров сезона в PNG через headless Chromium.
@@ -92,35 +36,7 @@ func RenderLeadersPNG(
 	templatePath,
 	outputPath string,
 ) error {
-	htmlContent, err := renderRoundTemplate(vm, templatePath)
-	if err != nil {
-		return fmt.Errorf("renderRoundTemplate leaders: %w", err)
-	}
-
-	tmpFile, err := os.CreateTemp("", "leaders-*.html")
-	if err != nil {
-		return fmt.Errorf("create temp file: %w", err)
-	}
-	defer os.Remove(tmpFile.Name())
-
-	if _, err = tmpFile.WriteString(htmlContent); err != nil {
-		_ = tmpFile.Close()
-		return fmt.Errorf("write temp file: %w", err)
-	}
-	if err = tmpFile.Close(); err != nil {
-		return fmt.Errorf("close temp file: %w", err)
-	}
-
-	pngBytes, err := screenshotHTML(tmpFile.Name())
-	if err != nil {
-		return fmt.Errorf("screenshotHTML: %w", err)
-	}
-
-	if err = os.WriteFile(outputPath, pngBytes, 0644); err != nil {
-		return fmt.Errorf("write PNG: %w", err)
-	}
-
-	return nil
+	return renderTemplateToPNG(vm, templatePath, "leaders-*.html", outputPath)
 }
 
 func renderRoundTemplate(data any, templatePath string) (string, error) {

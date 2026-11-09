@@ -3,7 +3,6 @@ package queries
 import (
 	"context"
 	"github.com/Pastir/footballdata/db"
-	"github.com/jackc/pgconn"
 	"os"
 )
 
@@ -22,7 +21,7 @@ WHERE ps.is_current
 
 	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
 	if err != nil {
-		db.PGxConnPanic("GetListCountriesList", "GetListCountriesList", err.(*pgconn.PgError))
+		db.PGxConnPanic("GetListCountriesList", "GetListCountriesList", err)
 		os.Exit(1)
 	}
 
@@ -31,7 +30,7 @@ WHERE ps.is_current
 
 		err = rows.Scan(&countryId)
 		if err != nil {
-			db.PGxConnPanic("GetListCountriesList", "GetListCountriesList", err.(*pgconn.PgError))
+			db.PGxConnPanic("GetListCountriesList", "GetListCountriesList", err)
 			os.Exit(1)
 		}
 
