@@ -37,8 +37,7 @@ func main() {
 
 	switch taskData.Name() {
 	case "upsertHead2Head":
-		handler.UpsertHead2Head(taskData)
-		break
+		statistics.Matches(taskData)
 	case "prematchStatistics":
 		statistics.PrematchStatistics(taskData)
 

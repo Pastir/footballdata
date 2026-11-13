@@ -488,6 +488,27 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 			continue
 		}
 
+		// Защита от пауз на матчи сборных: если первый матч тура лиги более чем через 96 часов (4 суток)
+		// и не передан флаг -force, пропускаем эту лигу, так как на текущем уикенде она не играет.
+		if !taskData.GetForce() {
+			firstMatchStart := matches[0].FixtureStart
+			for _, m := range matches {
+				if m.FixtureStart.Before(firstMatchStart) {
+					firstMatchStart = m.FixtureStart
+				}
+			}
+			if time.Until(firstMatchStart) > 96*time.Hour {
+				log.Info("skipping league in weekend hub: next round is on international/cup break (>96h away)",
+					zap.Int("league_id", l.id),
+					zap.String("league_name", l.name),
+					zap.Time("first_match_utc", firstMatchStart.UTC()),
+				)
+				fmt.Printf("⏳ [%s] Пропуск: ближайший тур начнётся только %s UTC (пауза в чемпионате)\n",
+					l.name, firstMatchStart.UTC().Format("02.01 15:04"))
+				continue
+			}
+		}
+
 		// Standings map for ranks
 		standingsMap := make(map[int64]int)
 		if standings, sErr := analytics.GetCurrentStandings(ctx, pool, &info); sErr == nil {
@@ -596,7 +617,15 @@ func dispatchWeekendHub(ctx context.Context, taskData config.TaskData, log *zap.
 	}
 
 	if len(cardPaths) == 0 && !scheduleOnly {
+		if !taskData.GetForce() {
+			fmt.Println("ℹ️ Пауза в чемпионатах (игры сборных): матчей Топ-5 лиг на ближайший уикенд нет, публикация пропущена.")
+			return nil
+		}
 		return fmt.Errorf("no match cards could be generated for weekend hub")
+	}
+	if len(allMatches) == 0 {
+		fmt.Println("ℹ️ Пауза в чемпионатах (игры сборных): матчей Топ-5 лиг на ближайший уикенд нет, публикация пропущена.")
+		return nil
 	}
 
 	// 1. Формирование подписи к медиа-альбому (< 750 символов)

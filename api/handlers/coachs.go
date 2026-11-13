@@ -47,8 +47,8 @@ func UpsertCoachesTeamsSeasons(d *fastjson.Value, taskData config.TaskData) {
 			}
 
 			qi += fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
-				db.CastInterfaceString(v.GetInt("sport_id")),
 				db.CastInterfaceString(v.GetInt("player_id")),
+				db.CastInterfaceString(v.GetInt("sport_id")),
 				db.CastInterfaceString(v.GetInt("country_id")),
 				db.CastInterfaceString(v.GetInt("nationality_id")),
 				db.CastInterfaceString(v.GetInt("city_id")),
@@ -107,8 +107,8 @@ func UpsertCoaches(d *fastjson.Value, taskData config.TaskData) {
 	for _, v := range data {
 
 		qi += fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
-			db.CastInterfaceString(v.GetInt("sport_id")),
 			db.CastInterfaceString(v.GetInt("player_id")),
+			db.CastInterfaceString(v.GetInt("sport_id")),
 			db.CastInterfaceString(v.GetInt("country_id")),
 			db.CastInterfaceString(v.GetInt("nationality_id")),
 			db.CastInterfaceString(v.GetInt("city_id")),
@@ -189,30 +189,35 @@ func UpsertCoachesIds(d *fastjson.Value, taskData config.TaskData) {
                                                       date_of_birth        = EXCLUDED.date_of_birth,
                                                       gender               = EXCLUDED.gender,
                                                       updated_at           = NOW()`
+	v := d.Get("data")
+	if v == nil || v.GetInt("id") == 0 {
+		return
+	}
+
 	var qi string
-	qi = fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(d.GetInt("id")),
-		db.CastInterfaceString(d.GetInt("sport_id")),
-		db.CastInterfaceString(d.GetInt("player_id")),
-		db.CastInterfaceString(d.GetInt("country_id")),
-		db.CastInterfaceString(d.GetInt("nationality_id")),
-		db.CastInterfaceString(d.GetInt("city_id")),
-		db.CastInterfaceString(string(d.GetStringBytes("common_name"))),
-		db.CastInterfaceString(string(d.GetStringBytes("firstname"))),
-		db.CastInterfaceString(string(d.GetStringBytes("lastname"))),
-		db.CastInterfaceString(string(d.GetStringBytes("name"))),
-		db.CastInterfaceString(string(d.GetStringBytes("display_name"))),
-		db.CastInterfaceString(string(d.GetStringBytes("image_path"))),
-		db.CastInterfaceString(string(d.GetStringBytes("height"))),
-		db.CastInterfaceString(string(d.GetStringBytes("weight"))),
-		db.CastInterfaceString(string(d.GetStringBytes("date_of_birth"))),
-		db.CastInterfaceString(string(d.GetStringBytes("gender"))),
+	qi = fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
+		db.CastInterfaceString(v.GetInt("player_id")),
+		db.CastInterfaceString(v.GetInt("sport_id")),
+		db.CastInterfaceString(v.GetInt("country_id")),
+		db.CastInterfaceString(v.GetInt("nationality_id")),
+		db.CastInterfaceString(v.GetInt("city_id")),
+		db.CastInterfaceString(string(v.GetStringBytes("common_name"))),
+		db.CastInterfaceString(string(v.GetStringBytes("firstname"))),
+		db.CastInterfaceString(string(v.GetStringBytes("lastname"))),
+		db.CastInterfaceString(string(v.GetStringBytes("name"))),
+		db.CastInterfaceString(string(v.GetStringBytes("display_name"))),
+		db.CastInterfaceString(string(v.GetStringBytes("image_path"))),
+		db.CastInterfaceString(string(v.GetStringBytes("height"))),
+		db.CastInterfaceString(string(v.GetStringBytes("weight"))),
+		db.CastInterfaceString(string(v.GetStringBytes("date_of_birth"))),
+		db.CastInterfaceString(string(v.GetStringBytes("gender"))),
 	)
 
 	if strings.Compare(qi, "") != 0 {
 		query = query + strings.TrimRight(qi, ",") + conflictQuery
 		_, err := db.DBx.PGxPool.Exec(context.Background(), query)
 		if err != nil {
-			db.PGxConnError(taskData.Name(), "UpsertCoaches", err.(*pgconn.PgError))
+			db.PGxConnError(taskData.Name(), "UpsertCoachesIds", err.(*pgconn.PgError))
 		}
 	}
 }
@@ -257,8 +262,8 @@ func UpsertCoachesFixturesErrorFK(d *fastjson.Value, taskName string) {
 
 	for _, v := range coaches {
 		qi += fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
-			db.CastInterfaceString(v.GetInt("sport_id")),
 			db.CastInterfaceString(v.GetInt("player_id")),
+			db.CastInterfaceString(v.GetInt("sport_id")),
 			db.CastInterfaceString(v.GetInt("country_id")),
 			db.CastInterfaceString(v.GetInt("nationality_id")),
 			db.CastInterfaceString(v.GetInt("city_id")),

@@ -21,8 +21,9 @@ func UpsertMarkets(d *fastjson.Value, taskData config.TaskData) {
                                                       , has_winning_calculations = EXCLUDED.has_winning_calculations
                                                       , updated_at     = NOW()`
 
+	var qi string
 	for _, v := range data {
-		query += fmt.Sprintf("(%s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
+		qi += fmt.Sprintf("(%s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
 			db.CastInterfaceString(v.GetInt("legacy_id")),
 			db.CastInterfaceString(string(v.GetStringBytes("name"))),
 			db.CastInterfaceString(string(v.GetStringBytes("developer_name"))),
@@ -30,9 +31,11 @@ func UpsertMarkets(d *fastjson.Value, taskData config.TaskData) {
 		)
 	}
 
-	query = strings.TrimRight(query, ",") + conflictQuery
-	_, err := db.DBx.PGxPool.Exec(context.Background(), query)
-	if err != nil {
-		db.PGxConnError(taskData.Name(), "UpsertMarkets", err.(*pgconn.PgError))
+	if strings.Compare(qi, "") != 0 {
+		query = query + strings.TrimRight(qi, ",") + conflictQuery
+		_, err := db.DBx.PGxPool.Exec(context.Background(), query)
+		if err != nil {
+			db.PGxConnError(taskData.Name(), "UpsertMarkets", err.(*pgconn.PgError))
+		}
 	}
 }

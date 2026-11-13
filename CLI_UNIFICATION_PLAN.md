@@ -762,6 +762,10 @@ CLI Flags (-task, -type, -leagueId, etc.)
   - **Контекст**: В `dispatchRoundFixtures` и `dispatchWeekendSchedule` (для `topMatches` и `weekendSchedule`) всё ещё передаётся объект клавиатуры `keyboard != nil`, из-за чего Telegram автоматически скрывает нативную плашку канала «💬 Прокомментировать» со счётчиком комментариев;
   - **Решение**: Передать `keyboard = nil` во всех методах отправки расписания, а ссылку на Mini App перенести в текстовый футер поста (`📱 <a href="...">Все матчи и аналитика — в приложении</a>`), аналогично экспрессу, прессе и карточкам аномалий.
 
+- [x] **2.1. Аудит коллекторов Sportmonks (`api/handlers/*`) и защита от ложных публикаций в паузы сборных (2026-11-13)**:
+  - Полная ревизия и исправление 17 пунктов в `api/handlers/*` и `db/func.go` (см. `SPORTMONKS_COLLECTOR_AND_LIVE_ANALYSIS.md`), миграции `006_update_standings_endpoints_additional.sql` и `007_fix_provider_coachs_columns.sql`;
+  - В `scheduler/db_task_provider.go` (`checkWeekendHubDue`) добавлена верхняя граница `timeToMatch <= 60*time.Hour`, а в `publisher/dispatcher_schedule.go` (`dispatchWeekendHub`) — пропуск лиг, чей следующий тур начинается более чем через 96 часов (защита от публикаций во время международных пауз ФИФА).
+
 - [ ] **3. Live Match Anomaly Trigger (Мгновенная детекция по окончании матча)**:
   - При подключении live-коллекторов Sportmonks: переход от проверки только закрытия тура (`IsReadyForClosing`) к триггеру по факту завершения конкретного матча (`state_short == "FT"`);
   - Для экстраординарных событий (`SeverityScore >= 90.0`, например, суперкамбэк в добавленное время или сенсационный разгром) публикация карточки и поста будет происходить мгновенно по горячим следам, не дожидаясь окончания всех матчей тура;

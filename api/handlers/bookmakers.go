@@ -19,16 +19,19 @@ func UpsertBookmakers(d *fastjson.Value, taskData config.TaskData) {
                                                       , name       = EXCLUDED.name
                                                       , updated_at = NOW()`
 
+	var qi string
 	for _, v := range data {
-		query += fmt.Sprintf("(%s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
+		qi += fmt.Sprintf("(%s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
 			db.CastInterfaceString(v.GetInt("legacy_id")),
 			db.CastInterfaceString(string(v.GetStringBytes("name"))),
 		)
 	}
 
-	query = strings.TrimRight(query, ",") + conflictQuery
-	_, err := db.DBx.PGxPool.Exec(context.Background(), query)
-	if err != nil {
-		db.PGxConnError(taskData.Name(), "UpsertBookmakers", err.(*pgconn.PgError))
+	if strings.Compare(qi, "") != 0 {
+		query = query + strings.TrimRight(qi, ",") + conflictQuery
+		_, err := db.DBx.PGxPool.Exec(context.Background(), query)
+		if err != nil {
+			db.PGxConnError(taskData.Name(), "UpsertBookmakers", err.(*pgconn.PgError))
+		}
 	}
 }

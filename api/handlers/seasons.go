@@ -36,8 +36,9 @@ func UpsertSeasons(d *fastjson.Value, taskData config.TaskData) {
                                                       , games_in_current_week     = EXCLUDED.games_in_current_week
                                                       , updated_at          = NOW()`
 
+	var qi string
 	for _, v := range data {
-		query += fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
+		qi += fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
 			db.CastInterfaceString(v.GetInt("sport_id")),
 			db.CastInterfaceString(v.GetInt("league_id")),
 			db.CastInterfaceString(v.GetInt("tie_breaker_rule_id")),
@@ -53,10 +54,12 @@ func UpsertSeasons(d *fastjson.Value, taskData config.TaskData) {
 		)
 	}
 
-	query = strings.TrimRight(query, ",") + conflictQuery
-	_, err := db.DBx.PGxPool.Exec(context.Background(), query)
-	if err != nil {
-		db.PGxConnError(taskData.Name(), "UpsertSeasons", err.(*pgconn.PgError))
+	if strings.Compare(qi, "") != 0 {
+		query = query + strings.TrimRight(qi, ",") + conflictQuery
+		_, err := db.DBx.PGxPool.Exec(context.Background(), query)
+		if err != nil {
+			db.PGxConnError(taskData.Name(), "UpsertSeasons", err.(*pgconn.PgError))
+		}
 	}
 
 	UpsertSeasonsStatistics(d, taskData)

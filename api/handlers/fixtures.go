@@ -407,7 +407,7 @@ func UpsertFixturePeriods(taskName string, d *fastjson.Value) {
 				db.CastInterfaceString(v.GetInt("ended")),
 				db.CastInterfaceString(v.GetInt("counts_from")),
 				db.CastInterfaceString(v.GetInt("actual_period_start")),
-				db.CastInterfaceString(fx.GetBool("ticking")),
+				db.CastInterfaceString(v.GetBool("ticking")),
 				db.CastInterfaceString(v.GetInt("sort_order")),
 				db.CastInterfaceString(v.GetInt("time_added")),
 				db.CastInterfaceString(v.GetInt("minutes")),
@@ -540,9 +540,9 @@ func UpsertFixturePlayersStatistics(taskName string, d *fastjson.Value) {
 			if err != nil {
 				// error handling violates foreign key constraint
 				if err.(*pgconn.PgError).Code == "23503" {
-					HandlingViolatesFKError(err, query)
+					HandlingViolatesFKError(err, queryItog)
 				} else {
-					db.PGxConnError(taskName, "UpsertFixtureParticipants", err.(*pgconn.PgError))
+					db.PGxConnError(taskName, "UpsertFixturePlayersStatistics", err.(*pgconn.PgError))
 				}
 			}
 		}
@@ -730,7 +730,7 @@ func UpsertFixtureParticipants(taskName string, d *fastjson.Value) {
 
 			// error handling violates foreign key constraint
 			if err.(*pgconn.PgError).Code == "23503" {
-				HandlingViolatesFKError(err, query)
+				HandlingViolatesFKError(err, queryInsert)
 			} else {
 				db.PGxConnError(taskName, "UpsertFixtureParticipants", err.(*pgconn.PgError))
 			}
@@ -834,6 +834,8 @@ func UpsertFixturesSeasons(d *fastjson.Value, taskData config.TaskData) {
 		UpsertFixturePeriods(taskData.Name(), d.Get("data", "fixtures"))
 		UpsertFixtureMeta(taskData.Name(), d.Get("data", "fixtures"))
 		UpsertFixturePlayersStatistics(taskData.Name(), d.Get("data", "fixtures"))
+		UpsertFixtureParticipants(taskData.Name(), d.Get("data", "fixtures"))
+		UpsertFixtureCoaches(taskData.Name(), d.Get("data", "fixtures"))
 	}
 }
 
@@ -872,7 +874,7 @@ func UpsertFixturesBetweenDate(d *fastjson.Value, taskData config.TaskData) {
 		// ./prematch -conf config.yaml -task upsertFixturesBetweenDate -include periods -taskChild upsertFixturePeriods -startDate YYYY-MM-DD -endDate YYYY-MM-DD
 		UpsertFixturePeriods(taskData.Name(), d.Get("data"))
 	case "upsertFixtureMeta":
-		// ./prematch -conf config.yaml -task upsertFixturesBetweenDate -include .metadata -taskChild upsertFixtureMeta -startDate YYYY-MM-DD -endDate YYYY-MM-DD
+		// ./prematch -conf config.yaml -task upsertFixturesBetweenDate -include metadata -taskChild upsertFixtureMeta -startDate YYYY-MM-DD -endDate YYYY-MM-DD
 		UpsertFixtureMeta(taskData.Name(), d.Get("data"))
 	case "upsertFixturePlayersStatistics":
 		// ./prematch -conf config.yaml -task upsertFixturesBetweenDate -include lineups.details -taskChild upsertFixturePlayersStatistics -startDate YYYY-MM-DD -endDate YYYY-MM-DD
@@ -896,5 +898,7 @@ func UpsertFixturesBetweenDate(d *fastjson.Value, taskData config.TaskData) {
 		UpsertFixturePeriods(taskData.Name(), d.Get("data"))
 		UpsertFixtureMeta(taskData.Name(), d.Get("data"))
 		UpsertFixturePlayersStatistics(taskData.Name(), d.Get("data"))
+		UpsertFixtureParticipants(taskData.Name(), d.Get("data"))
+		UpsertFixtureCoaches(taskData.Name(), d.Get("data"))
 	}
 }

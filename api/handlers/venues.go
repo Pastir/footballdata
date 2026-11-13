@@ -3,15 +3,15 @@ package handler
 import (
 	"context"
 	"fmt"
+	"strings"
+
 	"github.com/Pastir/footballdata/config"
 	"github.com/Pastir/footballdata/db"
-	"github.com/Pastir/logger"
+	"github.com/jackc/pgconn"
 	"github.com/valyala/fastjson"
-	"go.uber.org/zap"
-	"strings"
 )
 
-// UpsertVenues - добавляет/обновляет команды
+// UpsertVenues - добавляет/обновляет стадионы
 func UpsertVenues(d *fastjson.Value, taskData config.TaskData) {
 
 	data := d.GetArray("data")
@@ -32,8 +32,9 @@ func UpsertVenues(d *fastjson.Value, taskData config.TaskData) {
                                                       , national_team = EXCLUDED.national_team
                                                       , updated_at   = NOW()`
 
+	var qi string
 	for _, v := range data {
-		qi := fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
+		qi += fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
 			db.CastInterfaceString(v.GetInt("country_id")),
 			db.CastInterfaceString(v.GetInt("city_id")),
 			db.CastInterfaceString(string(v.GetStringBytes("name"))),
@@ -45,17 +46,15 @@ func UpsertVenues(d *fastjson.Value, taskData config.TaskData) {
 			db.CastInterfaceString(string(v.GetStringBytes("image_path"))),
 			db.CastInterfaceString(string(v.GetStringBytes("city_name"))),
 			db.CastInterfaceString(string(v.GetStringBytes("surface"))),
-			db.CastInterfaceString(string(v.GetStringBytes("national_team"))),
+			db.CastInterfaceString(v.GetBool("national_team")),
 		)
-
-		if strings.Compare(qi, "") != 0 {
-			q := query + strings.TrimRight(qi, ",") + conflictQuery
-			_, err := db.DBx.PGxPool.Exec(context.Background(), q)
-			if err != nil {
-				logger.ErrorLog.Error("UpsertVenues", zap.Error(err))
-			}
-		}
-
 	}
 
+	if strings.Compare(qi, "") != 0 {
+		q := query + strings.TrimRight(qi, ",") + conflictQuery
+		_, err := db.DBx.PGxPool.Exec(context.Background(), q)
+		if err != nil {
+			db.PGxConnError(taskData.Name(), "UpsertVenues", err.(*pgconn.PgError))
+		}
+	}
 }

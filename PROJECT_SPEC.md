@@ -637,6 +637,15 @@ CREATE INDEX idx_pred_items_status ON prediction_items(settlement_status);
 - [x] **`previewMatch`** рендерит PNG перед отправкой; **`express`** без `-style` публикует боевой формат, `prediction_items.league_id` заполняется;
 - [x] **Renderer**: общие хелперы `renderHTMLToPNG` / `renderTemplateToPNG` для всех `Render*PNG`;
 - [x] **Удалён мёртвый код** (~900 строк): варианты расписаний/экспрессов, функции кнопки «Обсудить», `LivePoller.SetPollInterval` и поле `leagues`.
+- [x] **Аудит и стабилизация коллекторов Sportmonks (`api/handlers/*`, `db/func.go`) и защита расписания от пауз на сборные (2026-11-13)**:
+  - В `endpoint.go` убран `os.Exit(0)` при HTTP-ошибках и упрощена подстановка токенов `replaceToken`;
+  - В `fixtures.go` и `players.go` исправлена передача полного SQL-запроса (`queryItog`/`queryInsert`) в `HandlingViolatesFKError`;
+  - В `fixtures.go` исправлено чтение `v.GetBool("ticking")` для живых периодов матча (`UpsertFixturePeriods`) и добавлены `UpsertFixtureParticipants` / `UpsertFixtureCoaches` в `default:` ветки;
+  - В `standings.go` удалены 5 неиспользуемых функций и отключён холостой сбор `provider_standings_forms` (миграция `006_update_standings_endpoints_additional.sql`);
+  - В `coachs.go` исправлен порядок колонок `player_id, sport_id` и чтение `d.Get("data")` в `UpsertCoachesIds` (миграция `007_fix_provider_coachs_columns.sql`);
+  - В `topscorers.go` добавлена дедупликация батча и `WHERE NOT EXISTS` для защиты от дублей на стыках пагинации;
+  - В `odds.go`, `seasons.go`, `leagues.go`, `countries.go`, `bookmakers.go`, `markets.go`, `rivals.go`, `types.go` добавлена защита от пустых массивов `data`, в `venues.go` поштучный `INSERT` заменён на батч, удалены заглушки `head2head.go` и `tasks.go`, исправлен `CastInterfaceString` для `*bool` и `nil` в `db/func.go`;
+  - В `scheduler/db_task_provider.go` (`checkWeekendHubDue`) и `publisher/dispatcher_schedule.go` (`dispatchWeekendHub`) добавлено ограничение горизонта до первого матча тура (`<= 60h` в планировщике, `<= 96h` в диспетчере), исключающее преждевременную публикацию уикенд-расписания и альбома Топ-5 матчей в пятницу во время паузы на матчи сборных.
 - [ ] **Открытый вопрос**: текстовая ссылка на Mini App в Rich Message расписания уикенда — в проекте не используется тип блока Rich Message для ссылок/параграфов; ссылка остаётся в подписи альбома.
 
 ---

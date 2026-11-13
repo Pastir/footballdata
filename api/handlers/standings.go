@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"fmt"
-	"os"
 	"strconv"
 	"strings"
 
@@ -11,7 +10,6 @@ import (
 	"github.com/Pastir/footballdata/db"
 	"github.com/Pastir/footballdata/logs"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/jackc/pgconn"
 	"github.com/valyala/fastjson"
 )
 
@@ -60,7 +58,6 @@ func UpsertStandings(d *fastjson.Value, taskData config.TaskData) {
 	}
 
 	UpsertStandingsDetails(d)
-	UpsertStandingsForms(d)
 	UpsertGroup(d)
 	UpsertStandingsPositionRules(d)
 }
@@ -97,41 +94,6 @@ func UpsertStandingsPositionRules(d *fastjson.Value) {
 		}
 	}
 
-}
-
-// UpsertStandingsForms - upsert standings details processing
-func UpsertStandingsForms(d *fastjson.Value) {
-
-	data := d.GetArray("data")
-
-	query := `INSERT INTO provider_standings_forms(id, standing_type, standing_id, fixture_id, form, sort_order) VALUES `
-	conflictQuery := ` ON CONFLICT (id) DO UPDATE SET standing_id = EXCLUDED.standing_id
-                                                      ,standing_type = EXCLUDED.standing_type
-                                                      ,fixture_id = EXCLUDED.fixture_id
-                                                      ,form = EXCLUDED.form
-                                                      ,sort_order = EXCLUDED.sort_order
-                                                      ,updated_at = NOW()`
-	var qi string
-	for _, form := range data {
-		for _, v := range form.GetArray("form") {
-			qi += fmt.Sprintf("(%s, %s, %s, %s, %s, %s),",
-				db.CastInterfaceString(v.GetInt("id")),
-				db.CastInterfaceString(string(v.GetStringBytes("standing_type"))),
-				db.CastInterfaceString(v.GetInt("standing_id")),
-				db.CastInterfaceString(v.GetInt("fixture_id")),
-				db.CastInterfaceString(string(v.GetStringBytes("form"))),
-				db.CastInterfaceString(v.GetInt("sort_order")),
-			)
-		}
-	}
-
-	if strings.Compare(qi, "") != 0 {
-		q := query + strings.TrimRight(qi, ",") + conflictQuery
-		_, err := db.DBx.PGxPool.Exec(context.Background(), q)
-		if err != nil {
-			logs.ErrorLog("upsertStandings", "UpsertStandingsForms", err)
-		}
-	}
 }
 
 // UpsertStandingsDetails - upsert standings details processing
@@ -179,7 +141,7 @@ func UpsertStandingsDetails(d *fastjson.Value) {
 		q := query + strings.TrimRight(qi, ",") + conflictQuery
 		_, err := db.DBx.PGxPool.Exec(context.Background(), q)
 		if err != nil {
-			logs.ErrorLog("upsertStandings", "UpsertStandingsForms", err)
+			logs.ErrorLog("upsertStandings", "UpsertStandingsDetails", err)
 		}
 	}
 }
@@ -232,170 +194,3 @@ func UpsertGroup(d *fastjson.Value) {
 	}
 }
 
-func GetFinishedRoundsOfSeason(currentSeason bool, seasonId string) []int {
-	var rounds []int
-
-	var Where []string
-	var WhereAnd string
-
-	Where = append(Where, "pr.finished")
-
-	if strings.Compare(seasonId, "") != 0 {
-		Where = append(Where, "pr.season_id IN ("+seasonId+")")
-	}
-
-	if currentSeason {
-		Where = append(Where, "ps.is_current")
-	}
-	Where = append(Where, "pl.sub_type = 'domestic'")
-	Where = append(Where, "pl.type = 'league'")
-
-	if len(Where) > 0 {
-		WhereAnd = "WHERE " + strings.Join(Where, " AND ")
-	}
-
-	query := `SELECT pr.id
-              FROM provider_rounds AS pr 
-                  LEFT JOIN provider_seasons AS ps ON(ps.id = pr.season_id)
-                  LEFT JOIN provider_leagues pl ON(pr.league_id = pl.id)
-              ` + WhereAnd
-
-	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
-	if err != nil {
-		db.PGxConnPanic("UpsertStandingsRounds", "Query GetRoundsAllFinishSeason", err.(*pgconn.PgError))
-		os.Exit(1)
-	}
-
-	for rows.Next() {
-		var Id int
-
-		err = rows.Scan(&Id)
-		if err != nil {
-			db.PGxConnPanic("UpsertStandingsRounds", "Scan GetRoundsAllFinishSeason", err.(*pgconn.PgError))
-			os.Exit(1)
-		}
-
-		rounds = append(rounds, Id)
-	}
-
-	return rounds
-}
-
-func GetPrevRounds() []int {
-	var rounds []int
-	query := `SELECT id 
-              FROM (
-                    SELECT ROW_NUMBER() OVER(PARTITION BY season_id ORDER BY prev.name::INT DESC) AS cnt
-                         , prev.id
-                         , prev.ending_at
-                         , prev.name::INT
-                    FROM provider_rounds AS prev
-                        LEFT JOIN provider_seasons AS ps ON(prev.season_id = ps.id)
-                    WHERE ps.is_current
-                      AND prev.ending_at < NOW()
-                    ORDER BY prev.name::INT DESC) AS it
-              WHERE cnt = 1`
-
-	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
-	if err != nil {
-		db.PGxConnPanic("GetPrevRounds", "Query GetPrevRounds", err.(*pgconn.PgError))
-		os.Exit(1)
-	}
-
-	for rows.Next() {
-		var Id int
-
-		err = rows.Scan(&Id)
-		if err != nil {
-			db.PGxConnPanic("GetPrevRounds", "Scan GetPrevRounds", err.(*pgconn.PgError))
-			os.Exit(1)
-		}
-
-		rounds = append(rounds, Id)
-	}
-
-	return rounds
-}
-
-func GetCurrentRounds() []int {
-	var rounds []int
-	query := `SELECT cur.id
-              FROM provider_rounds AS cur 
-                  LEFT JOIN provider_seasons AS ps ON(cur.season_id = ps.id)
-              WHERE cur.is_current
-                AND ps.is_current`
-
-	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
-	if err != nil {
-		db.PGxConnPanic("GetCurrentRounds", "Query GetCurrentRounds", err.(*pgconn.PgError))
-		os.Exit(1)
-	}
-
-	for rows.Next() {
-		var Id int
-
-		err = rows.Scan(&Id)
-		if err != nil {
-			db.PGxConnPanic("GetCurrentRounds", "Scan GetCurrentRounds", err.(*pgconn.PgError))
-			os.Exit(1)
-		}
-
-		rounds = append(rounds, Id)
-	}
-
-	return rounds
-}
-
-func GetStageIdFromRounds(roundId int) (int, error) {
-	var stageId int
-
-	query := `SELECT stage_id FROM provider_rounds WHERE id = $1`
-
-	rows, err := db.DBx.PGxPool.Query(context.Background(), query, roundId)
-	if err != nil {
-		db.PGxConnPanic("GetStageIdFromRounds", "Query GetStageIdFromRounds", err.(*pgconn.PgError))
-		return 0, err
-	}
-
-	for rows.Next() {
-		err = rows.Scan(&stageId)
-		if err != nil {
-			db.PGxConnPanic("GetStageIdFromRounds", "Scan GetStageIdFromRounds", err.(*pgconn.PgError))
-			return 0, err
-		}
-	}
-
-	return stageId, nil
-}
-
-func GetRoundsIdFromSeasonId(season_id string, currentSeasons bool) ([]int, error) {
-	var roundsId []int
-	where := ""
-
-	if currentSeasons {
-		where = "AND (pr.finished OR pr.is_current) "
-	}
-
-	query := `SELECT pr.id
-FROM provider_rounds AS pr LEFT JOIN provider_seasons AS ps ON(pr.season_id = ps.id)
-WHERE pr.season_id IN (` + season_id + `) ` + where + `ORDER BY pr.name::INT`
-
-	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
-	if err != nil {
-		db.PGxConnPanic("GetRoundsIdFromSeasonId", "Query GetRoundsIdFromSeasonId", err.(*pgconn.PgError))
-		return roundsId, err
-	}
-
-	for rows.Next() {
-		var rId int
-		err = rows.Scan(&rId)
-		if err != nil {
-			db.PGxConnPanic("GetRoundsIdFromSeasonId", "Scan GetRoundsIdFromSeasonId", err.(*pgconn.PgError))
-			return roundsId, err
-		}
-
-		roundsId = append(roundsId, rId)
-	}
-
-	return roundsId, nil
-}

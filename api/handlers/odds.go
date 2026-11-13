@@ -39,9 +39,10 @@ func UpsertOdds(d *fastjson.Value, taskData config.TaskData) {
                                                       , original_label     = EXCLUDED.original_label
                                                       , latest_bookmaker_update = EXCLUDED.latest_bookmaker_update`
 
+	var qi string
 	for _, f := range data {
 		for _, v := range f.GetArray("odds") {
-			query += fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
+			qi += fmt.Sprintf("(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
 				db.CastInterfaceString(v.GetInt("fixture_id")),
 				db.CastInterfaceString(v.GetInt("market_id")),
 				db.CastInterfaceString(v.GetInt("bookmaker_id")),
@@ -67,9 +68,11 @@ func UpsertOdds(d *fastjson.Value, taskData config.TaskData) {
 		}
 	}
 
-	query = strings.TrimRight(query, ",") + conflictQuery
-	_, err := db.DBx.PGxPool.Exec(context.Background(), query)
-	if err != nil {
-		db.PGxConnError(taskData.Name(), "UpsertOdds", err.(*pgconn.PgError))
+	if strings.Compare(qi, "") != 0 {
+		query = query + strings.TrimRight(qi, ",") + conflictQuery
+		_, err := db.DBx.PGxPool.Exec(context.Background(), query)
+		if err != nil {
+			db.PGxConnError(taskData.Name(), "UpsertOdds", err.(*pgconn.PgError))
+		}
 	}
 }

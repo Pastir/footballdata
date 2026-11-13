@@ -222,14 +222,20 @@ func (p *DBTaskProvider) checkWeekendHubDue(ctx context.Context, now time.Time) 
 		return false, info.NextRoundID, nil
 	}
 
-	// Публикуем, если до первого матча осталось менее 12 часов, либо наступило 09:00 UTC пятницы
+	// Публикуем только если первый матч тура действительно состоится на ЭТОМ уикенде (не далее чем через 60 часов).
+	// Это защищает от ложной публикации в пятницу во время паузы на матчи сборных.
+	const maxWeekendWindow = 60 * time.Hour
 	timeToMatch := firstMatchKickoff.Sub(now)
-	if timeToMatch > 0 && timeToMatch <= 12*time.Hour {
+	if timeToMatch <= 0 || timeToMatch > maxWeekendWindow {
+		return false, info.NextRoundID, nil
+	}
+
+	if timeToMatch <= 12*time.Hour {
 		return true, info.NextRoundID, nil
 	}
 
 	fridayMorning := time.Date(now.Year(), now.Month(), now.Day(), 9, 0, 0, 0, time.UTC)
-	if now.Weekday() == time.Friday && (now.Equal(fridayMorning) || now.After(fridayMorning)) && timeToMatch > 0 {
+	if now.Weekday() == time.Friday && (now.Equal(fridayMorning) || now.After(fridayMorning)) {
 		return true, info.NextRoundID, nil
 	}
 

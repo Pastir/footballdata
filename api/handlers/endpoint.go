@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/url"
-	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -14,7 +13,6 @@ import (
 	"github.com/Pastir/footballdata/db"
 	"github.com/Pastir/footballdata/db/queries"
 	"github.com/Pastir/footballdata/logs"
-	"github.com/jackc/pgconn"
 	"github.com/valyala/fastjson"
 	"go.uber.org/zap"
 )
@@ -166,13 +164,14 @@ func RequestEndpoint(taskData config.TaskData) {
 		resp, err := client.RequestToEndpoint(url)
 		if err != nil {
 			logs.ErrorLog(taskData.Name(), "RequestToEndpoint", err)
-			os.Exit(0)
+			return
 		}
 
 		var p fastjson.Parser
 		dv, err := p.ParseBytes(resp)
 		if err != nil {
 			logs.Logs["error"].Error("endpoint parser", zap.Error(err))
+			return
 		}
 
 		// Handler
@@ -207,49 +206,45 @@ func TaskLastUpdate(taskData config.TaskData) {
 	query := "UPDATE provider_endpoints SET updated_at = NOW() WHERE task_name = $1"
 	_, err := db.DBx.PGxPool.Exec(context.Background(), query, taskData.Name())
 	if err != nil {
-		db.PGxConnError(taskData.Name(), "TaskLastUpdate", err.(*pgconn.PgError))
+		db.PGxConnError(taskData.Name(), "TaskLastUpdate", err)
+	}
+}
+
+func formatTokenValue(v interface{}) (string, bool) {
+	switch val := v.(type) {
+	case string:
+		return val, true
+	case int:
+		return strconv.Itoa(val), true
+	case int64:
+		return strconv.FormatInt(val, 10), true
+	default:
+		return "", false
 	}
 }
 
 func replaceToken(url string, replaceTokens map[string]interface{}) string {
-	for _, v := range replaceTokens {
-		switch v.(type) {
-		case string:
-			url = strings.Replace(url, "{start_date}", replaceTokens["start_date"].(string), 1)
-			url = strings.Replace(url, "{end_date}", replaceTokens["end_date"].(string), 1)
-			url = strings.Replace(url, "{date}", replaceTokens["date"].(string), 1)
+	tokenPlaceholders := map[string]string{
+		"start_date": "{start_date}",
+		"end_date":   "{end_date}",
+		"date":       "{date}",
+		"season":     "{seasonID}",
+		"team":       "{teamID}",
+		"players":    "{playersID}",
+		"coaches":    "{coachesID}",
+		"countries":  "{countryID}",
+		"rounds":     "{roundID}",
+		"fixtures":   "{fixtureID}",
+		"stage":      "{stageID}",
+	}
 
-		case int:
-			for key, _ := range replaceTokens {
-				switch key {
-				case "season":
-					url = strings.Replace(url, "{seasonID}", strconv.Itoa(replaceTokens["season"].(int)), 1)
-				case "team":
-					url = strings.Replace(url, "{teamID}", strconv.Itoa(replaceTokens["team"].(int)), 1)
-				case "players":
-					url = strings.Replace(url, "{playersID}", strconv.Itoa(replaceTokens["players"].(int)), 1)
-				case "coaches":
-					url = strings.Replace(url, "{coachesID}", strconv.Itoa(replaceTokens["coaches"].(int)), 1)
-				case "countries":
-					url = strings.Replace(url, "{countryID}", strconv.Itoa(replaceTokens["countries"].(int)), 1)
-				case "rounds":
-					fmt.Println("AAAAAA")
-					url = strings.Replace(url, "{roundID}", strconv.Itoa(replaceTokens["rounds"].(int)), 1)
-				case "fixtures":
-					url = strings.Replace(url, "{fixtureID}", strconv.Itoa(replaceTokens["fixtures"].(int)), 1)
-				case "stage":
-					url = strings.Replace(url, "{stageID}", strconv.Itoa(replaceTokens["stage"].(int)), 1)
-				}
-			}
-
-		case int64:
-			for key, _ := range replaceTokens {
-				switch key {
-				case "rounds":
-					url = strings.Replace(url, "{roundID}", strconv.FormatInt(replaceTokens["rounds"].(int64), 10), 1)
-				}
-
-			}
+	for key, v := range replaceTokens {
+		placeholder, ok := tokenPlaceholders[key]
+		if !ok {
+			continue
+		}
+		if strVal, valid := formatTokenValue(v); valid {
+			url = strings.Replace(url, placeholder, strVal, 1)
 		}
 	}
 

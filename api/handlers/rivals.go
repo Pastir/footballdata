@@ -19,18 +19,21 @@ func upsertRivals(d *fastjson.Value, taskData config.TaskData) {
                                                       , rival_id    = EXCLUDED.rival_id                                           
                                                       , updated_at     = NOW()`
 
+	var qi string
 	for _, v := range data {
 
-		query += fmt.Sprintf("(%s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
+		qi += fmt.Sprintf("(%s, %s, %s),", db.CastInterfaceString(v.GetInt("id")),
 			db.CastInterfaceString(v.GetInt("team_id")),
 			db.CastInterfaceString(v.GetInt("rival_id")),
 		)
 	}
 
-	query = strings.TrimRight(query, ",") + conflictQuery
-	_, err := db.DBx.PGxPool.Exec(context.Background(), query)
-	if err != nil {
-		db.PGxConnError(taskData.Name(), "upsertRivals", err.(*pgconn.PgError))
+	if strings.Compare(qi, "") != 0 {
+		query = query + strings.TrimRight(qi, ",") + conflictQuery
+		_, err := db.DBx.PGxPool.Exec(context.Background(), query)
+		if err != nil {
+			db.PGxConnError(taskData.Name(), "upsertRivals", err.(*pgconn.PgError))
+		}
 	}
 
 }

@@ -14,7 +14,7 @@ func CastInterfaceString(i interface{}) (s string) {
 	if reflect.ValueOf(i).Kind() == reflect.Ptr {
 		t := reflect.ValueOf(i)
 		if t.IsNil() {
-			return "NULL, "
+			return "NULL"
 		} else {
 			switch reflect.TypeOf(i).Elem().Kind() {
 			case reflect.Uint64:
@@ -28,7 +28,7 @@ func CastInterfaceString(i interface{}) (s string) {
 				v := reflect.ValueOf(i)
 				v = reflect.Indirect(v)
 				if !v.Type().ConvertibleTo(floatType) {
-					return "NULL, "
+					return "NULL"
 				}
 				fv := v.Convert(floatType)
 				return strconv.FormatFloat(fv.Float(), 'f', 2, 64)
@@ -37,10 +37,10 @@ func CastInterfaceString(i interface{}) (s string) {
 				return pq.QuoteLiteral(reflect.ValueOf(i).Elem().String())
 
 			case reflect.Bool:
-				if reflect.ValueOf(i).Elem().String() == "true" || reflect.ValueOf(i).Elem().String() == "t" {
-					return pq.QuoteLiteral(reflect.ValueOf(i).Elem().String()) + "'t'"
+				if reflect.ValueOf(i).Elem().Bool() {
+					return "'t'"
 				} else {
-					return pq.QuoteLiteral(reflect.ValueOf(i).Elem().String()) + "'f'"
+					return "'f'"
 				}
 
 			}

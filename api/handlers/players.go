@@ -119,7 +119,7 @@ func UpsertPlayersSeasons(d *fastjson.Value, taskData config.TaskData) {
 			_, err := db.DBx.PGxPool.Exec(context.Background(), queryItog)
 			if err != nil {
 				if err.(*pgconn.PgError).Code == "23503" {
-					HandlingViolatesFKError(err, query)
+					HandlingViolatesFKError(err, queryItog)
 				} else {
 					db.PGxConnError(taskData.Name(), "UpsertPlayersSeasons", err.(*pgconn.PgError))
 				}
