@@ -65,10 +65,11 @@ func (p *LivePoller) hasActiveMatchWindow(ctx context.Context) bool {
 			JOIN provider_leagues pl ON pl.id = pf.league_id
 			WHERE pl.active = true
 			  AND (
-			      (pf.starting_at BETWEEN NOW() AT TIME ZONE 'UTC' - INTERVAL '150 minutes'
-			                          AND NOW() AT TIME ZONE 'UTC' + INTERVAL '15 minutes'
+			      (pf.starting_at BETWEEN ((NOW() AT TIME ZONE 'UTC') - INTERVAL '150 minutes')
+			                          AND ((NOW() AT TIME ZONE 'UTC') + INTERVAL '15 minutes')
 			       AND COALESCE(pf.state_id, 1) NOT IN (5, 6, 7, 10, 11, 12, 13, 14, 15, 17))
-			      OR pf.state_id IN (2, 3, 4, 9, 21, 22, 23, 25)
+			      OR (pf.state_id IN (2, 3, 4, 9, 21, 22, 23, 25)
+			          AND pf.starting_at >= (NOW() AT TIME ZONE 'UTC') - INTERVAL '6 hours')
 			  )
 		)`
 	var active bool

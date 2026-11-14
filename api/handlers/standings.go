@@ -79,8 +79,8 @@ func UpsertStandingsLive(d *fastjson.Value, taskData config.TaskData) {
 				 FROM provider_fixtures pf
 				 WHERE pf.season_id = $1
 				   AND pf.round_id IS NOT NULL
-				   AND pf.starting_at BETWEEN NOW() AT TIME ZONE 'UTC' - INTERVAL '12 hours'
-				                          AND NOW() AT TIME ZONE 'UTC' + INTERVAL '12 hours'
+				   AND pf.starting_at BETWEEN ((NOW() AT TIME ZONE 'UTC') - INTERVAL '12 hours')
+				                          AND ((NOW() AT TIME ZONE 'UTC') + INTERVAL '12 hours')
 				 ORDER BY pf.starting_at DESC
 				 LIMIT 1),
 				(SELECT pr.id

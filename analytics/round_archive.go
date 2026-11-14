@@ -263,7 +263,7 @@ func GetLiveFixtures(ctx context.Context, pool *pgxpool.Pool, leagueID int, loca
 	}
 
 	tail := `
-WHERE (pf.state_id IN (2, 3, 4, 6, 9, 21, 22, 23, 25) 
+WHERE ((pf.state_id IN (2, 3, 4, 6, 9, 21, 22, 23, 25) AND pf.starting_at >= CURRENT_DATE - INTERVAL '1 day')
    OR (pf.starting_at::date = CURRENT_DATE AND pf.state_id NOT IN (10, 12, 14, 15)))
   AND ($1 = 0 OR pf.league_id = $1)
 ORDER BY pf.starting_at ASC, pf.id ASC
