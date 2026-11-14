@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/Pastir/footballdata/config"
@@ -901,4 +902,38 @@ func UpsertFixturesBetweenDate(d *fastjson.Value, taskData config.TaskData) {
 		UpsertFixtureParticipants(taskData.Name(), d.Get("data"))
 		UpsertFixtureCoaches(taskData.Name(), d.Get("data"))
 	}
+}
+
+// UpsertFixturesLive обрабатывает live-матчи из эндпоинта /v3/football/livescores
+func UpsertFixturesLive(d *fastjson.Value, taskData config.TaskData) {
+	data := d.Get("data")
+	if data == nil || len(data.GetArray()) == 0 {
+		return
+	}
+
+	var fixtureIDs []string
+	for _, fx := range data.GetArray() {
+		if fID := fx.GetInt("id"); fID > 0 {
+			fixtureIDs = append(fixtureIDs, strconv.Itoa(fID))
+		}
+	}
+
+	UpsertFixtures(taskData.Name(), data)
+	UpsertFixtureParticipants(taskData.Name(), data)
+	UpsertFixtureScores(taskData.Name(), data)
+	UpsertFixturePeriods(taskData.Name(), data)
+
+	// Очищаем старые события/таймлайн активных live-матчей перед вставкой для защиты от отменённых голов после VAR
+	if len(fixtureIDs) > 0 {
+		inClause := strings.Join(fixtureIDs, ",")
+		_, _ = db.DBx.PGxPool.Exec(context.Background(), fmt.Sprintf("DELETE FROM provider_events WHERE fixture_id IN (%s)", inClause))
+		_, _ = db.DBx.PGxPool.Exec(context.Background(), fmt.Sprintf("DELETE FROM provider_timelines WHERE fixture_id IN (%s)", inClause))
+	}
+
+	UpsertFixtureEvents(taskData.Name(), data)
+	UpsertFixtureTimeLines(taskData.Name(), data)
+	UpsertFixtureStatistics(taskData.Name(), data)
+	UpsertFixtureLineups(taskData.Name(), data)
+	UpsertFixturePlayersStatistics(taskData.Name(), data)
+	UpsertFixtureMeta(taskData.Name(), data)
 }

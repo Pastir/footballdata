@@ -99,6 +99,14 @@ func EndPoint(taskData config.TaskData) {
 			taskData.SetReplace("stage", v)
 			RequestEndpoint(taskData)
 		}
+
+	case "leagues":
+		leagueIds := queries.GetActiveLeagueIDs(taskData)
+		for _, v := range leagueIds {
+			taskData.SetReplace("leagues", v)
+			RequestEndpoint(taskData)
+		}
+
 	default:
 		RequestEndpoint(taskData)
 	}
@@ -236,6 +244,7 @@ func replaceToken(url string, replaceTokens map[string]interface{}) string {
 		"rounds":     "{roundID}",
 		"fixtures":   "{fixtureID}",
 		"stage":      "{stageID}",
+		"leagues":    "{leagueID}",
 	}
 
 	for key, v := range replaceTokens {

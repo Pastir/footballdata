@@ -13,6 +13,8 @@ import (
 
 	"github.com/Pastir/ManageServer"
 	"github.com/Pastir/footballdata/analytics"
+	handler "github.com/Pastir/footballdata/api/handlers"
+	"github.com/Pastir/footballdata/api/statistics"
 	"github.com/Pastir/footballdata/config"
 	"github.com/Pastir/footballdata/db"
 	"github.com/Pastir/footballdata/logs"
@@ -29,6 +31,7 @@ func main() {
 	mServer.AddService(&config.Config)
 	mServer.AddService(&logs.Logs)
 	mServer.AddService(&db.DBx)
+	mServer.AddService(&db.Prov)
 
 	if err := mServer.InitServices(); err != nil {
 		fmt.Fprintf(os.Stderr, "service init error: %v\n", err)
@@ -86,7 +89,17 @@ func main() {
 			os.Exit(1)
 		}
 
+	case "upsertHead2Head":
+		statistics.Matches(taskData)
+
+	case "prematchStatistics":
+		statistics.PrematchStatistics(taskData)
+
 	default:
+		if ep, ok := db.Prov.Endpoints[taskData.Name()]; ok && ep.Endpoint != "" {
+			handler.EndPoint(taskData)
+			return
+		}
 		fmt.Fprintf(os.Stderr, `Использование: ./lab -conf config.yaml -task <TASK> [ФЛАГИ]
 
 Доступные задачи (-task):
@@ -97,6 +110,7 @@ func main() {
   SettleBets         — Авторасчёт открытых ставок/экспрессов по результатам матчей и отчёт ROI
   ApiServer          — REST API сервер для отдачи live и архивных данных туров (-port, -pollInterval, -static)
   PressDigest        — Сбор европейских таблоидов, генерация выжимки через Gemini и публикация (-publish)
+  <CollectorTask>    — Любая задача сбора Sportmonks из provider_endpoints (upsertFixturesBetweenDate, upsertStandings, upsertOdds и др.), а также upsertHead2Head и prematchStatistics
 
 Доступные типы публикаций (-type для task=PublishToTelegram):
   table           — Турнирная таблица (рендер PNG + пост в Telegram)
@@ -126,7 +140,7 @@ func main() {
   -timezone string    Отображаемый часовой пояс (по умолчанию UTC)
   -force bool         Принудительная публикация (игнорировать защиту от дубликатов)
   -port string        Порт HTTP сервера для task=ApiServer (по умолчанию 8080)
-  -pollInterval dur   Интервал in-play опроса матчей (по умолчанию 20s, e.g. 15s, 30s)
+  -pollInterval dur   Интервал in-play опроса матчей (по умолчанию 1m, e.g. 30s, 1m)
   -static string      Путь к статическим файлам Mini App (по умолчанию ./web/viewer)
 `)
 		os.Exit(1)

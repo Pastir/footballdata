@@ -52,6 +52,14 @@ func TestReplaceToken(t *testing.T) {
 			},
 			want: "https://api.sportmonks.com/v3/football/seasons/23614/date/2026-11-13",
 		},
+		{
+			name: "league ID token",
+			url:  "https://api.sportmonks.com/v3/football/standings/live/leagues/{leagueID}",
+			tokens: map[string]interface{}{
+				"leagues": 8,
+			},
+			want: "https://api.sportmonks.com/v3/football/standings/live/leagues/8",
+		},
 	}
 
 	for _, tc := range tests {

@@ -354,10 +354,12 @@ WHERE pl.active = true
    * [x] Исправить чтение `d.Get("data")` и порядок колонок `player_id, sport_id` в `api/handlers/coachs.go`.
    * [x] Добавить проверку на пустой массив в `odds.go`, `seasons.go`, `leagues.go`, `countries.go`, `bookmakers.go`, `markets.go`, `rivals.go`, `types.go` и батчевую вставку в `venues.go`.
    * [x] Исправить `CastInterfaceString` для `*bool` и `nil`-указателей в `db/func.go`.
-2. **Шаг 2 (Включение `UpsertFixturesLive`):**
-   * [ ] Зарегистрировать `"UpsertFixturesLive"` в `api/handlers/function.go`.
-   * [ ] Реализовать `UpsertFixturesLive` в `api/handlers/fixtures.go` с очисткой отменённых VAR событий и фильтром по активным лигам `filters=fixtureLeagues:8,82,301,384,564`.
-3. **Шаг 3 (Умный Live-поллер и Live-таблица):**
-   * [ ] Встроить вызов Live-синхронизации в `LivePoller` (`server/poller.go`), который активируется только тогда, когда в БД есть матчи в активном временном окне (`NOW() - 150m .. NOW() + 15m` и статус $\ne$ `FT`).
-   * [ ] Реализовать снапшотную модель турнирных таблиц: заморозка при завершении тура + клонирование в следующий тур + наложение живых очков во время матчей.
+2. **Шаг 2 (Включение `UpsertFixturesLive` и `upsertStandingsLive`, единый бинарник `lab`):**
+   * [x] Объединить `prematch` (`main.go`) и `lab` (`cmd/lab/main.go`) в единый бинарник `./lab` с инициализацией `&db.Prov` и маршрутизацией всех задач коллектора из `provider_endpoints`.
+   * [x] Зарегистрировать `"UpsertFixturesLive"` и `"upsertStandingsLive"` в `api/handlers/function.go`.
+   * [x] Реализовать `UpsertFixturesLive` в `api/handlers/fixtures.go` с очисткой отменённых VAR событий и фильтром по активным лигам `filters=fixtureLeagues:8,82,301,384,564`.
+   * [x] Реализовать `UpsertStandingsLive` (`GET /v3/football/standings/live/leagues/{leagueID}`) в `api/handlers/standings.go` с записью актуальной таблицы в активный `round_id` без перезаписи `id` прошлых туров.
+3. **Шаг 3 (Умный Live-поллер с интервалом 1 минута и триггером Live-таблицы):**
+   * [x] Встроить вызов Live-синхронизации (`UpsertFixturesLive`, интервал по умолчанию `1m`) в `LivePoller` (`server/poller.go`), который активируется только тогда, когда в БД есть матчи в активном временном окне (`NOW() - 150m .. NOW() + 15m` и статус $\ne$ `FT`).
+   * [x] При изменении статуса или счёта матча в лиге автоматически вызывать `upsertStandingsLive` (`standings/live/leagues/{leagueID}`) для соответствующей лиги и тура, а при переходе матча в `FT` — докачивать xG (`upsertExpectedFixtures`).
 

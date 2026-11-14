@@ -2,9 +2,37 @@ package queries
 
 import (
 	"context"
-	"github.com/Pastir/footballdata/db"
 	"os"
+
+	"github.com/Pastir/footballdata/config"
+	"github.com/Pastir/footballdata/db"
 )
+
+// GetActiveLeagueIDs возвращает список ID активных лиг (или конкретный LeagueId из taskData).
+func GetActiveLeagueIDs(taskData config.TaskData) []int {
+	if taskData.GetLeagueId() > 0 {
+		return []int{taskData.GetLeagueId()}
+	}
+
+	var leagues []int
+	query := `SELECT id FROM provider_leagues WHERE active = 't' ORDER BY id`
+	rows, err := db.DBx.PGxPool.Query(context.Background(), query)
+	if err != nil {
+		db.PGxConnError("GetActiveLeagueIDs", "Query GetActiveLeagueIDs", err)
+		return nil
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var id int
+		if err = rows.Scan(&id); err != nil {
+			db.PGxScanPanic("GetActiveLeagueIDs", "Scan GetActiveLeagueIDs", err)
+			return nil
+		}
+		leagues = append(leagues, id)
+	}
+	return leagues
+}
 
 // GetListLeaguesId
 // Функция возвращает мапу id->uid лиг

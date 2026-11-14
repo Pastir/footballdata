@@ -280,7 +280,7 @@ func (td *TaskData) GetPort() string {
 
 func (td *TaskData) GetPollInterval() time.Duration {
 	if td.Args.PollInterval <= 0 {
-		return 20 * time.Second
+		return 60 * time.Second
 	}
 	return td.Args.PollInterval
 }
@@ -346,7 +346,7 @@ func (c *Conf) ParseCommandLine() {
 	flag.BoolVar(&c.Args.Force, "force", false, "force republication even if already published")
 	flag.StringVar(&c.Args.Style, "style", "", "-style 1|2|3 (варианты стиля подачи)")
 	flag.StringVar(&c.Args.Port, "port", "8080", "HTTP server port (default 8080)")
-	flag.DurationVar(&c.Args.PollInterval, "pollInterval", 20*time.Second, "In-play polling interval, e.g. 15s, 20s, 30s (default 20s)")
+	flag.DurationVar(&c.Args.PollInterval, "pollInterval", 60*time.Second, "In-play polling interval, e.g. 30s, 1m (default 1m)")
 	flag.StringVar(&c.Args.StaticDir, "static", "./web/viewer", "Path to static web files directory (default ./web/viewer)")
 
 	os.Args = normalizeBoolArgs(os.Args, "seasonIsCurrent", "publish", "asDocument", "force")
